@@ -1,0 +1,23 @@
+{
+  "name": "KMP Player",
+  "short_name": "KMP",
+  "description": "Личный музыкальный плеер: свои треки, микшер эффектов, лента моментов",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B0E15",
+  "theme_color": "#161A2E",
+  "categories": ["music", "entertainment"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Микшер", "url": "./#mixer" },
+    { "name": "Лента", "url": "./#feed" },
+    { "name": "Вся музыка", "url": "./#library" }
+  ]
+}
