@@ -282,7 +282,7 @@ body.is-playing .row.current .eq i{animation-play-state:running}
 .moods button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .sh-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .counter{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-@media (max-width:1000px){.feed{grid-template-columns:1fr}.feed-side{position:static;order:-1}}
+@media (max-width:1000px){.feed{grid-template-columns:1fr}.feed-side{position:static;order:2}}
 @media (max-width:760px){
   .sheet-bg{place-items:end stretch;padding:0}
   .sheet{width:100%;border-radius:24px 24px 0 0;max-height:92dvh;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));animation:sheetUp .35s var(--ease)}
@@ -290,13 +290,10 @@ body.is-playing .row.current .eq i{animation-play-state:running}
   .post{padding:14px}
   .h1{font-size:40px}
   .block-head h2{font-size:23px}
-  .presets{grid-template-columns:repeat(2,minmax(0,1fr))}
   .smart,.labs{grid-template-columns:1fr}
   .knobs{grid-template-columns:repeat(3,minmax(0,1fr))}
   .head-actions{gap:8px}.head-actions .btn{height:40px;padding:0 14px;font-size:13px;flex:1 1 auto;justify-content:center}
   .sub{font-weight:500}
-  .st-actions{gap:6px}.st-btn{height:38px;min-width:38px;padding:0 10px}
-  .st-title{font-size:clamp(34px,11vw,52px)}
   .full-top span{font-size:12px}
   .f-tools .tool-note{flex-basis:100%;order:5;margin:0}
   .menu{max-width:calc(100vw - 24px)}
@@ -573,14 +570,11 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
   .st-wave{flex-basis:100%}
 }
 @media (max-width:760px){
-  .app{grid-template-columns:1fr;padding-block:12px 170px}
+  .app{grid-template-columns:1fr}
   .rail{display:none}
   .topbar .pill-ghost,.seg-sel{display:none}
   .topbar .pill-accent{width:54px;padding:0;justify-content:center}
   .topbar .pill-accent span{display:none}
-  .stage{padding:20px;border-radius:26px;min-height:0;gap:22px}
-  .st-cover{width:120px;border-radius:16px}
-  .st-btn span{display:none}
   .lhead{display:none}
   .row{grid-template-columns:46px minmax(0,1fr) 36px 36px;gap:10px;padding:6px}
   .row .r-idx,.row .r-tag,.row .r-d{display:none}
@@ -589,18 +583,112 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
   .console>*{grid-column:span 12!important}
   .eqs input{height:96px}
   .eqs{font-size:9.5px}
-  .player{bottom:calc(72px + env(safe-area-inset-bottom,0px));left:10px;right:10px;height:64px;grid-template-columns:minmax(0,1fr) auto;gap:6px;padding:7px 10px 7px 7px;border-radius:20px;overflow:hidden}
-  .p-cover{width:48px;height:48px;border-radius:12px}
+  .player{grid-template-columns:minmax(0,1fr) auto;gap:6px}
   .p-wave,.p-vol,.p-ctrl [data-act=prev],.p-ctrl [data-act=shuffle],.p-ctrl [data-act=repeat]{display:none}
-  .play-btn{width:44px;height:44px}
-  .p-line{display:block;position:absolute;left:0;bottom:0;height:3px;background:var(--accent);width:0}
+  .p-line{display:block;position:absolute;left:0;background:var(--accent);width:0}
   .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:41;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));border-radius:0;border-inline:0;border-bottom:0;view-transition-name:tabbar}
   .tabbar button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:var(--muted);padding:4px 6px;border-radius:12px;min-width:0}
   .tabbar button[aria-current="page"]{color:var(--accent)}
-  .toast{bottom:calc(148px + env(safe-area-inset-bottom,0px))}
   .full-inner{padding-inline:16px}
   .f-ctrl{gap:2px}
 }
+/* mobile header pieces (hidden on desktop) */
+.m-logo,.m-title,.m-icon{display:none}
+.search-hint{margin-top:10px;padding:16px;border-radius:18px;border:1.5px dashed var(--wave);color:var(--muted);font-size:14px}
+.search-hint p{margin:0}
+@media (max-width:760px){
+  :root{--tabh:58px;--barh:64px}
+  .app{padding-block:0 calc(var(--tabh) + var(--barh) + 28px + env(safe-area-inset-bottom,0px));gap:0}
+  .main{gap:14px}
+  .topbar{position:sticky;top:0;z-index:35;margin-inline:-16px;padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;gap:10px;flex-wrap:wrap;background:color-mix(in srgb,var(--ground) 88%,transparent);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid transparent;transition:border-color .2s}
+  .m-logo{display:grid;width:40px;height:40px;border-radius:50%;background:var(--deep);color:var(--on-deep);place-items:center;font:600 13px/1 var(--f-display);letter-spacing:-.03em;flex:none}
+  .m-logo i{display:block;width:4px;height:4px;border-radius:50%;background:var(--accent);margin:2px auto 0}
+  .m-title{display:block;flex:1;min-width:0}
+  .m-icon,.topbar .theme-m{display:grid;width:40px;height:40px;border-radius:50%;place-items:center;background:var(--surface);border:1px solid var(--line);color:var(--ink);flex:none}
+  .m-icon .ic{width:19px;height:19px}
+  .topbar .pill-accent{width:40px;height:40px;padding:0;border-radius:50%}
+  .topbar .pill-accent .ic{width:19px;height:19px}
+  .search-pill{display:none;order:9;flex-basis:100%;height:48px;box-shadow:none}
+  body[data-view="search"] .search-pill{display:flex}
+  body[data-view="search"] .topbar [data-go="search"]{display:none}
+  .search-pill .seg{margin-block:3px}
+  .crumb,.sub.desc{display:none}
+  .page-head{padding:8px 0 0;gap:14px}
+  .h1{font-size:36px}
+  .head-actions{width:100%}
+  /* home stage: compact now-playing card */
+  .stage{min-height:0;padding:16px 16px 18px;gap:16px;border-radius:24px;grid-template-rows:auto auto auto}
+  .st-top{flex-wrap:nowrap}
+  .greet{font-size:13px;opacity:.85;white-space:nowrap}
+  .st-actions{gap:6px;flex-wrap:nowrap}
+  .st-btn{height:36px;min-width:36px;padding:0}
+  .st-btn span,.st-actions [data-act="open-full"]{display:none}
+  .st-main{grid-row:2;flex-direction:row;align-items:center;gap:14px}
+  .st-cover{width:96px;border-radius:14px;cursor:pointer}
+  .st-kick{font-size:11.5px;margin-bottom:4px}
+  .st-title{font-size:30px;line-height:1;letter-spacing:-.035em}
+  .st-artist{font-size:14px;margin-top:6px}
+  .st-meta{display:none}
+  .st-bottom{grid-row:3;flex-direction:column;align-items:stretch;gap:10px}
+  .st-wave{order:-1;flex-basis:auto}
+  .st-wave .wave{height:44px}
+  .st-ctrl{justify-content:center}
+  .st-play{width:58px;height:58px}
+  .block{margin-top:6px}
+  .shelf{grid-auto-columns:42vw;gap:12px;margin-inline:-16px;padding-inline:16px;scroll-padding-inline:16px}
+  .card-play{opacity:1;transform:none;width:38px;height:38px}
+  .card-play .ic{width:17px;height:17px}
+  .pgrid{grid-template-columns:1fr;gap:8px}
+  .pcard{padding:8px;border-radius:16px}
+  .mosaic{width:52px;height:52px;border-radius:11px}
+  .dropline{padding:14px 16px}
+  .dropline .btn{width:100%;justify-content:center}
+  /* docked mini player + tab bar */
+  .tabbar{height:calc(var(--tabh) + env(safe-area-inset-bottom,0px));padding:4px 2px env(safe-area-inset-bottom,0px);align-items:stretch;background:var(--glass-strong);border-top:1px solid var(--line);box-shadow:none}
+  .tabbar button{flex:1;justify-content:center;gap:2px;font-size:10px;padding:0;border-radius:10px}
+  .tabbar button .ic{width:22px;height:22px}
+  .player{left:0;right:0;bottom:calc(var(--tabh) + env(safe-area-inset-bottom,0px));height:var(--barh);border-radius:0;border-inline:0;border-bottom:0;box-shadow:0 -8px 24px -18px rgba(0,0,0,.35);padding:8px 8px 8px 10px;overflow:visible}
+  .p-line{top:-1px;bottom:auto;height:2px}
+  .p-cover{width:46px;height:46px;border-radius:10px}
+  .p-meta b{font-size:14.5px}
+  .p-ctrl .like-cur{width:40px;height:40px}
+  .play-btn{width:44px;height:44px;margin-inline:2px}
+  .toast{bottom:calc(var(--tabh) + var(--barh) + 12px + env(safe-area-inset-bottom,0px))}
+  .focus-pill{bottom:calc(var(--tabh) + var(--barh) + 58px + env(safe-area-inset-bottom,0px))}
+  /* lists */
+  .list{padding:4px;border-radius:18px;margin-inline:-4px}
+  .row{padding:6px 4px 6px 6px}
+  .r-cov{width:48px;height:48px}
+  .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none}
+  /* mixer: presets scroll sideways, tighter console */
+  .presets{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:148px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-16px;padding:2px 16px 8px;scrollbar-width:none}
+  .presets::-webkit-scrollbar{display:none}
+  .preset{scroll-snap-align:start;padding:12px 14px}
+  .console{margin-inline:-6px;padding:6px;border-radius:22px;gap:6px}
+  .c-card{padding:14px;border-radius:16px}
+  .eq-cv{height:140px}
+  .knob svg{width:52px;height:52px}
+  .knobs{grid-template-columns:repeat(auto-fit,minmax(58px,1fr));gap:6px 2px}
+  .kl{font-size:10.5px}
+  .meters{height:96px}
+  .block .head-actions .btn{flex:1 1 40%;font-size:12.5px;padding:0 10px}
+  .block-head .link{font-size:12px;text-align:right}
+  .tile{padding:14px 16px}
+  /* feed */
+  .composer-open{padding:10px 12px}
+  .p-track{grid-template-columns:44px minmax(0,1fr) auto;padding:8px;gap:10px}
+  .p-track img{width:44px;height:44px;border-radius:9px}
+  .mom-btn{height:34px;padding:0 12px;font-size:12.5px}
+  /* full player */
+  .full-top span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
+  .f-vol{display:none}
+  .f-stage{gap:18px}
+  .f-cover{width:min(84vw,380px)}
+  .f-title h2{font-size:30px}
+}
+@media (max-width:760px) and (min-height:760px){.f-stage{padding-top:12px}}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -669,13 +757,16 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
 
   <div class="main">
     <header class="topbar">
+      <button class="m-logo press" data-go="home" aria-label="KMP, на главную"><span>kmp<i></i></span></button>
+      <span class="m-title" id="mTitle"></span>
+      <button class="m-icon press" data-go="search" aria-label="Поиск"><svg class="ic"><use href="#i-search"/></svg></button>
       <button class="pill pill-ghost press" data-go="library"><svg class="ic"><use href="#i-library"/></svg>Вся музыка</button>
       <div class="search-pill glass-strong">
         <label class="seg seg-search"><svg class="ic"><use href="#i-search"/></svg><span class="seg-text"><small>Поиск</small><input id="q" type="search" placeholder="Трек, артист или альбом" autocomplete="off"></span></label>
         <button class="seg seg-sel" data-dd="sort" aria-haspopup="menu"><svg class="ic"><use href="#i-sort"/></svg><span class="seg-text"><small>Сортировка</small><b data-ddv="sort">Сначала новые</b></span></button>
         <button class="seg seg-sel" data-dd="filter" aria-haspopup="menu"><span class="seg-text"><small>Показать</small><b data-ddv="filter">Всё</b></span><svg class="ic"><use href="#i-down"/></svg></button>
       </div>
-      <button class="theme-m glass-strong press" data-act="theme" aria-label="Сменить тему"><svg class="ic"><use href="#i-moon"/></svg></button>
+      <button class="theme-m m-icon press" data-act="theme" aria-label="Сменить тему"><svg class="ic"><use href="#i-moon"/></svg></button>
       <button class="pill pill-accent press" data-act="upload" aria-label="Добавить треки"><svg class="ic"><use href="#i-upload"/></svg><span>Добавить</span></button>
     </header>
     <div id="view"></div>
@@ -702,7 +793,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
 
 <nav class="tabbar glass-strong" aria-label="Навигация">
   <button data-go="home"><svg class="ic"><use href="#i-home"/></svg>Главная</button>
-  <button data-act="focus-search"><svg class="ic"><use href="#i-search"/></svg>Поиск</button>
+  <button data-go="search"><svg class="ic"><use href="#i-search"/></svg>Поиск</button>
   <button data-go="library"><svg class="ic"><use href="#i-library"/></svg>Музыка</button>
   <button data-go="feed"><svg class="ic"><use href="#i-feed"/></svg>Лента</button>
   <button data-go="mixer"><svg class="ic"><use href="#i-sliders"/></svg>Микшер</button>
@@ -1490,7 +1581,7 @@ function homeHTML() {
       </div>
     </div>
     <div class="st-main">
-      <img class="st-cover" id="stCover" alt="">
+      <img class="st-cover" id="stCover" alt="" data-act="open-full" role="button" aria-label="Открыть плеер">
       <div class="st-text" id="stText"><p class="st-kick" id="stKick">Готово к воспроизведению</p><h1 class="st-title" id="stTitle"></h1><p class="st-artist" id="stArtist"></p><p class="st-meta" id="stMeta"></p></div>
     </div>
     <div class="st-bottom">
@@ -1520,7 +1611,7 @@ function homeHTML() {
   </section>`;
 }
 function headHTML(crumb, title, sub, actions, cover = '') {
-  return `<section class="page-head"><div class="ph-l">${cover}<div>${crumb ? `<p class="crumb">${crumb}</p>` : ''}<h1 class="h1">${title}</h1><p class="sub">${sub}</p></div></div><div class="head-actions">${actions}</div></section>`;
+  return `<section class="page-head"><div class="ph-l">${cover}<div>${crumb ? `<p class="crumb">${crumb}</p>` : ''}<h1 class="h1">${title}</h1><p class="sub ${String(sub).length > 70 ? 'desc' : ''}">${sub}</p></div></div><div class="head-actions">${actions}</div></section>`;
 }
 const playBtns = key => `<button class="btn btn-accent press" data-act="play-list" data-key="${key}">${ic('play')}Слушать</button><button class="btn press" data-act="shuffle-list" data-key="${key}">${ic('shuffle')}Вперемешку</button>`;
 function libraryHTML() {
@@ -1542,6 +1633,7 @@ function playlistHTML(id) {
     + `<div style="margin-top:14px">${ids.length ? listHTML(ids, 'pl') : emptyHTML('Плейлист пуст', 'Открой меню «⋯» у трека и выбери этот плейлист.', false)}</div>`;
 }
 function searchHTML() {
+  if (!S.q.trim()) return headHTML('', 'Поиск', 'Ищи в своей музыке и в интернете', '') + `<div class="search-hint"><p>Начни вводить название трека или имя артиста. Сначала покажу совпадения в твоей библиотеке, ниже будут результаты из интернета.</p></div>`;
   const q = S.q.toLowerCase().trim();
   const ids = trackObjs(S.order).filter(t => (t.title + ' ' + t.artist + ' ' + (t.album || '')).toLowerCase().includes(q)).map(t => t.id);
   return headHTML('Поиск по твоей музыке', '«' + esc(S.q) + '»', ids.length ? `${ids.length} ${plural(ids.length, 'совпадение', 'совпадения', 'совпадений')}` : 'Ничего не нашлось', '')
@@ -2024,6 +2116,13 @@ function renderMoments() {
   el.innerHTML = arr.map(x => `<button data-act="moment-go" data-t="${x}"><svg class="ic" style="width:13px;height:13px"><use href="#i-star"/></svg>${fmt(x)}<span class="x" data-act="moment-del" data-t="${x}" role="button" aria-label="Удалить момент">×</span></button>`).join('');
   $$('.lab-moments').forEach(e => e.hidden = !S.labs.moments);
 }
+/* swipe down to close the full player */
+(() => {
+  const f = $('#full'); let y0 = null, x0 = 0;
+  f.addEventListener('touchstart', e => { if (f.scrollTop > 0 || e.target.closest('.wave,.rng,.q-list,.f-queue')) { y0 = null; return; } y0 = e.touches[0].clientY; x0 = e.touches[0].clientX; }, { passive: true });
+  f.addEventListener('touchmove', e => { if (y0 == null) return; const dy = e.touches[0].clientY - y0; if (dy > 0) $('.full-inner').style.transform = `translateY(${Math.min(dy, 220) * .6}px)`; }, { passive: true });
+  f.addEventListener('touchend', e => { if (y0 == null) return; const dy = e.changedTouches[0].clientY - y0, dx = Math.abs(e.changedTouches[0].clientX - x0); y0 = null; const inner = $('.full-inner'); inner.style.transition = 'transform .3s cubic-bezier(.2,.8,.2,1)'; inner.style.transform = ''; setTimeout(() => inner.style.transition = '', 320); if (dy > 110 && dx < 80) openFull(false); }, { passive: true });
+})();
 /* swipe gestures on the player bar */
 (() => {
   let x0 = null, y0 = 0;
@@ -2095,6 +2194,8 @@ function renderView() {
     lastNowId = null;
   }
   if (v === 'feed') { Feed.load(); }
+  document.body.dataset.view = v.startsWith('pl:') ? 'pl' : v;
+  if (v === 'search' && !S.q) setTimeout(() => $('#q').focus({ preventScroll: true }), 80);
   const eqCv = $('#eqCv'); if (eqCv) { ro.observe(eqCv); sizeCanvas(eqCv); }
   const navKey = v.startsWith('pl:') ? '' : v;
   $$('.nav-btn[data-go], .tabbar [data-go]').forEach(b => b.dataset.go === navKey ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
@@ -2301,7 +2402,7 @@ document.addEventListener('click', e => {
       case 'new-pl': openModal(PL_MODAL, name => { const p = createPl(name); go('pl:' + p.id); }); break;
       case 'modal-close': closeModal(); break;
       case 'filter': S.filter = a.dataset.v; syncDD(); renderView(); break;
-      case 'focus-search': { if (FULL) openFull(false); $('#q').focus(); window.scrollTo({ top: 0, behavior: 'smooth' }); break; }
+      case 'focus-search': { if (matchMedia('(max-width:760px)').matches) { go('search'); break; } if (FULL) openFull(false); $('#q').focus(); window.scrollTo({ top: 0, behavior: 'smooth' }); break; }
       case 'play-list': playList(LISTS[a.dataset.key] || [], null); break;
       case 'shuffle-list': S.shuffle = true; renderNow(); playList(LISTS[a.dataset.key] || [], null); break;
       case 'fx-reset': FX = clone(FX_DEF); FXBASE = null; fxChanged(); toast('Эффекты сброшены'); break;
@@ -2433,7 +2534,7 @@ $('#q').addEventListener('input', e => {
   clearTimeout(qT); qT = setTimeout(() => {
     S.q = e.target.value;
     if (S.q.trim()) { if (FULL) setFull(false); S.view = 'search'; NET.items = []; NET.err = ''; NET.loading = NET.status === 'ok' && !(NET.tab === 'jamendo' && !NET.jamendo); renderView(); clearTimeout(netT); netT = setTimeout(() => netSearch(S.q), 350); }
-    else if (S.view === 'search') go('home');
+    else if (S.view === 'search') renderView();
   }, 120);
 });
 /* ---- custom dropdowns ---- */
