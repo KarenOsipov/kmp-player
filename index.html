@@ -300,6 +300,50 @@ body.is-playing .row.current .eq i{animation-play-state:running}
 }
 @keyframes sheetUp{from{transform:translateY(40%);opacity:.4}}
 button,a,[role=button],.knob,.wave{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+/* account */
+.acct-btn img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.acct-btn.has-ava{padding:0;overflow:hidden}
+.acct-btn .dot-sync{position:absolute;right:2px;top:2px;width:9px;height:9px;border-radius:50%;background:var(--accent);border:2px solid var(--glass-strong);animation:ping 1.6s infinite}
+.me{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:14px;align-items:start}
+.me .card-s{padding:20px;gap:12px}
+.me .wide{grid-column:1/-1}
+.auth{max-width:440px;margin:24px auto 0;width:100%}
+.auth .card-s{padding:24px;gap:12px}
+.auth-tabs{display:flex;gap:4px;padding:4px;border-radius:14px;background:var(--hover)}
+.auth-tabs button{flex:1;height:36px;border-radius:10px;font-weight:600;font-size:14px;color:var(--muted)}
+.auth-tabs button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.auth .perks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--ink-2)}
+.auth .perks li{display:flex;gap:8px;align-items:flex-start}.auth .perks .ic{width:16px;height:16px;color:var(--accent);margin-top:2px}
+.prof{display:flex;gap:18px;align-items:center}
+.ava-big{position:relative;width:88px;height:88px;border-radius:50%;flex:none;display:grid;place-items:center;font:500 34px/1 var(--f-display);color:#fff;overflow:hidden;cursor:pointer}
+.ava-big img{width:100%;height:100%;object-fit:cover}
+.ava-big::after{content:"Сменить";position:absolute;inset:auto 0 0;height:30px;display:grid;place-items:center;font:600 11px var(--f-body);background:rgba(0,0,0,.45);opacity:0;transition:opacity .2s}
+.ava-big:hover::after{opacity:1}
+.prof h2{margin:0;font:400 28px/1.1 var(--f-display);letter-spacing:-.02em;overflow-wrap:anywhere}
+.prof p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.form{display:flex;flex-direction:column;gap:10px}
+.form label{display:flex;flex-direction:column;gap:6px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.form textarea{min-height:80px;resize:vertical;border-radius:14px;border:1px solid var(--line);background:var(--surface-2);padding:10px 14px;font:inherit;font-size:15px;outline:none;color:var(--ink)}
+.form textarea:focus{border-color:var(--accent)}
+.at{position:relative}.at::before{content:"@";position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600}.at .field{padding-left:30px}
+.usage{height:8px;border-radius:4px;background:var(--hover);overflow:hidden}
+.usage i{display:block;height:100%;background:var(--accent);border-radius:4px;transition:width .6s var(--ease)}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kv div{padding:12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line);min-width:0}
+.kv dt{font-size:12px;color:var(--muted);font-weight:600}
+.kv dd{margin:4px 0 0;font:400 22px/1.1 var(--f-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upq{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow:auto}
+.upq div{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:8px 10px;border-radius:10px;background:var(--surface-2)}
+.upq span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.upq em{font-style:normal;color:var(--muted);flex:none}
+.upq .ok em{color:#2FA36B}.upq .bad em{color:#C9352D}
+.row-set{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.row-set b{font-weight:600;font-size:14px;display:block}.row-set small{font-size:12.5px;color:var(--muted)}
+.danger-zone{border-color:color-mix(in srgb,#C9352D 35%,var(--line))}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--ink-2)}
+.steps code{font-size:12.5px;background:var(--hover);padding:1px 6px;border-radius:6px}
+img.ava{object-fit:cover}
+@media (max-width:900px){.me{grid-template-columns:1fr}.kv{grid-template-columns:1fr 1fr 1fr}}
 /* dropdown */
 .dd-btn{height:36px;border-radius:18px;border:1px solid var(--line);background:var(--surface-2);padding:0 10px 0 12px;display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:13px;white-space:nowrap;flex:none;transition:background .2s,border-color .2s}
 .dd-btn:hover{border-color:var(--wave)}
@@ -732,6 +776,9 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 13v5.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V13"/></symbol>
     <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4.5 12a7.5 7 0 1 1 3.4 5.9L4 19l1-3.4A6.8 6.8 0 0 1 4.5 12z"/></symbol>
     <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1-4 4-5.5 7-5.5s6 1.5 7 5.5"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18.5a4.5 4.5 0 0 1-.4-9A6 6 0 0 1 18 8.6a4 4 0 0 1-.5 9.9z"/></symbol>
+    <symbol id="i-sync" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9"/><path d="M18.5 3v4.2h-4.2M5.5 21v-4.2h4.2"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M10 16l4-4-4-4M14 12H4"/></symbol>
     <symbol id="i-ab" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 3 12 3-9 2 3h4"/></symbol>
   </defs>
 </svg>
@@ -749,6 +796,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
       <button class="nav-btn press" data-go="labs" data-tip="Лаборатория" aria-label="Лаборатория"><svg class="ic"><use href="#i-flask"/></svg></button>
     </nav>
     <div class="rail-pill glass-strong">
+      <button class="nav-btn acct-btn press" data-go="me" data-tip="Аккаунт" aria-label="Аккаунт"><svg class="ic"><use href="#i-user"/></svg></button>
       <button class="nav-btn press" data-act="upload" data-tip="Добавить треки" aria-label="Добавить треки"><svg class="ic"><use href="#i-upload"/></svg></button>
       <button class="nav-btn press" data-act="new-pl" data-tip="Новый плейлист" aria-label="Новый плейлист"><svg class="ic"><use href="#i-plus"/></svg></button>
       <button class="nav-btn press" data-act="theme" data-tip="Тема" aria-label="Сменить тему"><svg class="ic"><use href="#i-moon"/></svg></button>
@@ -759,6 +807,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     <header class="topbar">
       <button class="m-logo press" data-go="home" aria-label="KMP, на главную"><span>kmp<i></i></span></button>
       <span class="m-title" id="mTitle"></span>
+      <button class="m-icon acct-btn press" data-go="me" aria-label="Аккаунт"><svg class="ic"><use href="#i-user"/></svg></button>
       <button class="m-icon press" data-go="search" aria-label="Поиск"><svg class="ic"><use href="#i-search"/></svg></button>
       <button class="pill pill-ghost press" data-go="library"><svg class="ic"><use href="#i-library"/></svg>Вся музыка</button>
       <div class="search-pill glass-strong">
@@ -877,7 +926,7 @@ const clone = o => JSON.parse(JSON.stringify(o));
 const DEMOS = [
   { id: 'd1', title: 'Ночной Алматы', artist: 'KMP Studio', key: 'ля минор', hue: 238, bpm: 84, root: 45, dur: 40, added: 4,
     prog: [[0, 'm'], [-4, 'M'], [3, 'M'], [-2, 'M']], kick: 'lofi', snare: .22, hat: 8, bass: 'long', arp: 8, arpWave: 'triangle', arpGain: .05, pad: 'triangle', padCut: 1300, padGain: .06, wet: .35, drumsFrom: 1, arpFrom: 2, hiss: true,
-    desc: 'Лоу-фай для ночной дороги: мягкий бит, тёплые аккорды и эхо. Синтезирован прямо в браузере.' },
+    desc: 'Лоу-фай для ночной дороги: мягкий бит, тёплые аккорды и эхо. ' },
   { id: 'd2', title: 'Пыль и неон', artist: 'KMP Studio', key: 'ми минор', hue: 14, bpm: 118, root: 40, dur: 40, added: 3,
     prog: [[0, 'm'], [-4, 'M'], [3, 'M'], [-2, 'M']], kick: 'four', snare: .26, hat: 16, bass: 'eighth', arp: 16, arpWave: 'square', arpGain: .03, pad: 'sawtooth', padCut: 900, padGain: .035, wet: .25, drumsFrom: 1, arpFrom: 1,
     desc: 'Драйв на 118 BPM: пульсирующий бас восьмыми, квадратное арпеджио и шестнадцатые хэты.' },
@@ -902,11 +951,11 @@ S.labs.focus = false; S.labs.amb = 'none';
 S.labsVote = store.get('labsVote', {}); S.pos = store.get('pos', {}); S.moments = store.get('moments', {});
 S.stats = store.get('stats', { days: {}, tracks: {} }); S.focusSt = null;
 const TAB = Math.random().toString(36).slice(2);
-let bc = null; try { bc = new BroadcastChannel('kmp-player'); bc.onmessage = e => { if (S.labs.oneplayer && e.data && e.data.play && e.data.play !== TAB && E.playing) { pause(); toast('Пауза: музыка включилась в другой вкладке'); } }; } catch (e) {}
+let bc = null; try { bc = new BroadcastChannel('kmp-player'); bc.onmessage = e => { if (S.labs.oneplayer && e.data && e.data.play && e.data.play !== TAB && E.playing) { pause(); toast('Пауза: музыка играет в другом окне KMP'); } }; } catch (e) {}
 S.trackFx = store.get('trackFx', {}); S.norm = store.get('norm', true); S.xfade = store.get('xfade', 0); S.sleep = null; S.loop = null;
 let FULL = false, DARK = false, COL = {};
 
-function persist() { store.set('liked', [...S.liked]); store.set('pls', S.pls); store.set('plays', S.plays); }
+function persist(fromCloud) { store.set('liked', [...S.liked]); store.set('pls', S.pls); store.set('plays', S.plays); if (!fromCloud) { try { Cloud.dataChanged(); } catch (e) {} } }
 function saveSession() { store.set('session', { queue: S.queue, qi: S.qi }); store.set('shuffle', S.shuffle); store.set('repeat', S.repeat); store.set('vol', S.vol); }
 const cur = () => T.get(S.queue[S.qi]);
 
@@ -1071,7 +1120,7 @@ async function playAt(qi, autoplay = true) {
     if (t.gain == null) t.gain = loudGain(buf);
     E.buf = buf; E.offset = startOffset(t);
     if (autoplay) { play(); S.plays[t.id] = (S.plays[t.id] || 0) + 1; persist(); }
-  } catch (e) { if (tok === playToken) toast((t.net || t.stream) && NET.status === 'off' ? 'Онлайн-треки играют в версии с GitHub Pages или в локальной (npm start)' : 'Не удалось открыть трек: формат не поддерживается или нет сети'); }
+  } catch (e) { if (tok === playToken) toast((t.net || t.stream || t.path) ? 'Трек сейчас недоступен. Проверь интернет и попробуй ещё раз' : 'Не удалось открыть трек: этот формат не поддерживается'); }
   finally { if (tok === playToken) setLoading(false); }
 }
 function onEnded() {
@@ -1343,6 +1392,7 @@ async function ensureBuffer(t) {
   let buf;
   if (t.kind === 'demo') buf = await synth(t);
   else if (t.blob) buf = await decodeCtx().decodeAudioData(await t.blob.arrayBuffer());
+  else if (t.path) { const blob = await Cloud.download(t); buf = await decodeCtx().decodeAudioData(await blob.arrayBuffer()); }
   else if (t.net || t.stream) { const r = await fetch(await resolveStream(t)); if (!r.ok) throw new Error('stream ' + r.status); buf = await decodeCtx().decodeAudioData(await r.arrayBuffer()); }
   else throw new Error('no source');
   const fresh = !t.peaksReal; if (fresh) { t.peaks = peaksOf(buf); t.peaksReal = true; }
@@ -1499,13 +1549,13 @@ async function importFiles(files, meta) {
       t.duration = buf.duration; t.peaks = peaksOf(buf); t.peaksReal = true;
       bufCache.set(t.id, buf);
       t.cover = t.coverImg || makeCover(t);
-      T.set(t.id, t); S.order.unshift(t.id); added++; firstId = firstId || t.id;
+      T.set(t.id, t); S.order.unshift(t.id); added++; firstId = firstId || t.id; try { Cloud.autoUpload(t); } catch (e) {}
       DB.put({ id: t.id, kind: 'upload', title: t.title, artist: t.artist, album: t.album, hue: t.hue, blob: f, size: t.size, ext: t.ext, added: t.added, duration: t.duration, peaks: t.peaks, coverImg: t.coverImg });
-    } catch (e) { toast(`Не получилось прочитать «${f.name}»: браузер не поддерживает этот формат`); }
+    } catch (e) { toast(`Не получилось открыть «${f.name}»: этот формат не поддерживается`); }
   }
   if (added) {
     let ups = [...bufCache.keys()].filter(k => T.get(k)?.kind === 'upload'); while (ups.length > 3) bufCache.delete(ups.shift());
-    toast(`Добавлено: ${added} ${plural(added, 'трек', 'трека', 'треков')}` + (!DB.db && !dbWarned ? '. Браузер не даёт сохранить их после закрытия вкладки' : ''));
+    toast(`Добавлено: ${added} ${plural(added, 'трек', 'трека', 'треков')}` + (!DB.db && !dbWarned ? '. Сохранить их на этом устройстве не получилось' : ''));
     if (!DB.db) dbWarned = true;
     renderView();
     if (!E.playing) { S.queue = [...S.order]; S.qi = S.queue.indexOf(firstId); E.buf = null; E.offset = 0; renderNow(); markPlaying(); }
@@ -1515,6 +1565,7 @@ function removeTrack(id) {
   const t = T.get(id); if (!t || t.kind === 'demo') return;
   const wasCur = S.queue[S.qi] === id;
   if (wasCur) { killSrc(true); E.playing = false; E.buf = null; E.offset = 0; setPlayingUI(); }
+  if (t.cloud) { try { Cloud.removeTrack(t); } catch (e) {} }
   T.delete(id); bufCache.delete(id); DB.del(id);
   S.order = S.order.filter(x => x !== id); S.liked.delete(id); S.pls.forEach(p => p.ids = p.ids.filter(x => x !== id));
   const qi = S.queue.indexOf(id);
@@ -1542,7 +1593,7 @@ function mosaic(ids, cls = '') {
 function cardHTML(t) {
   return `<button class="card" data-id="${t.id}"><span class="card-cov"><img src="${t.cover}" alt="" loading="lazy"><span class="card-play">${ic('play', 'ic-play')}${ic('pause', 'ic-pause')}</span></span><b>${esc(t.title)}</b><span>${esc(t.artist)}</span></button>`;
 }
-const tagOf = t => t.kind === 'demo' ? `Демо, ${t.bpm} BPM` : t.kind === 'net' ? 'Audius, онлайн' : t.kind === 'preview' ? 'Превью 30 сек' : t.ext;
+const tagOf = t => t.kind === 'demo' ? `Демо, ${t.bpm} BPM` : t.kind === 'net' ? 'Онлайн' : t.kind === 'preview' ? 'Превью 30 сек' : (t.uploading ? 'загрузка в облако…' : t.cloud ? `${t.ext || 'Аудио'} · в облаке` : t.ext);
 function rowHTML(t, i) {
   const liked = S.liked.has(t.id);
   return `<div class="row" data-id="${t.id}" role="button" tabindex="0" aria-label="${esc(t.title)}, ${esc(t.artist)}">
@@ -1607,7 +1658,7 @@ function homeHTML() {
     </div>
   </section>
   <section class="block">
-    <div class="dropline"><p><b>Добавь свою музыку.</b> Перетащи файлы в окно или выбери на диске. Название, артиста и обложку KMP возьмёт из тегов файла.</p><button class="btn btn-accent press" data-act="upload">${ic('upload')}Выбрать файлы</button></div>
+    <div class="dropline"><p><b>Добавь свою музыку.</b> Перетащи файлы в окно или выбери на диске. Название, артист и обложка подтянутся сами.</p><button class="btn btn-accent press" data-act="upload">${ic('upload')}Выбрать файлы</button></div>
   </section>`;
 }
 function headHTML(crumb, title, sub, actions, cover = '') {
@@ -1633,7 +1684,7 @@ function playlistHTML(id) {
     + `<div style="margin-top:14px">${ids.length ? listHTML(ids, 'pl') : emptyHTML('Плейлист пуст', 'Открой меню «⋯» у трека и выбери этот плейлист.', false)}</div>`;
 }
 function searchHTML() {
-  if (!S.q.trim()) return headHTML('', 'Поиск', 'Ищи в своей музыке и в интернете', '') + `<div class="search-hint"><p>Начни вводить название трека или имя артиста. Сначала покажу совпадения в твоей библиотеке, ниже будут результаты из интернета.</p></div>`;
+  if (!S.q.trim()) return headHTML('', 'Поиск', 'Ищи в своей музыке и в интернете', '') + `<div class="search-hint"><p>Начни вводить название трека или имя артиста. Сначала покажу твою музыку, ниже всё, что нашлось в каталоге.</p></div>`;
   const q = S.q.toLowerCase().trim();
   const ids = trackObjs(S.order).filter(t => (t.title + ' ' + t.artist + ' ' + (t.album || '')).toLowerCase().includes(q)).map(t => t.id);
   return headHTML('Поиск по твоей музыке', '«' + esc(S.q) + '»', ids.length ? `${ids.length} ${plural(ids.length, 'совпадение', 'совпадения', 'совпадений')}` : 'Ничего не нашлось', '')
@@ -1642,7 +1693,7 @@ function searchHTML() {
 /* ---- online search via local server: Audius (full tracks), Apple Music (30s previews), Jamendo (CC downloads) ---- */
 const NET = { status: 'off', mode: null, jamendo: false, tab: 'audius', q: '', loading: false, items: [], err: '' };
 const STANDALONE = !!document.querySelector('link[rel="manifest"]');
-const NET_TABS = [['audius', 'Audius', 'Полные треки, инди и малоизвестные'], ['itunes', 'Apple Music', 'Почти вся музыка, превью 30 сек'], ['jamendo', 'Jamendo', 'Свободная музыка, можно скачать']];
+const NET_TABS = [['audius', 'Треки целиком', 'Весь трек сразу'], ['itunes', 'Все артисты', 'Фрагменты по 30 секунд'], ['jamendo', 'Можно скачать', 'Сохраняются в библиотеку']];
 async function netInit() {
   if (!location.protocol.startsWith('http')) return;
   try { const r = await fetch('api/health', { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (j && j.kmp) { NET.status = 'ok'; NET.mode = 'server'; NET.jamendo = !!j.jamendo; return; } } } catch (e) {}
@@ -1669,7 +1720,7 @@ async function netQuery(src, q) {
   if (NET.mode === 'server') { const r = await fetch(`api/search?src=${src}&q=` + encodeURIComponent(q)); const j = await r.json(); if (!r.ok) throw new Error(j.error || 'сервис не ответил'); return j.items || []; }
   if (src === 'audius') { const h = await audiusHost(); const r = await fetch(`${h}/v1/tracks/search?query=${encodeURIComponent(q)}&app_name=KMP_PLAYER&limit=30`); if (!r.ok) { audHost = null; throw new Error('Audius не ответил'); } const j = await r.json(); return (j.data || []).filter(t => t.is_streamable !== false).map(mapAudius); }
   if (src === 'itunes') { const j = await jsonp(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=music&entity=song&limit=30&country=KZ`); return (j.results || []).filter(t => t.previewUrl).map(mapItunes); }
-  throw new Error('Jamendo работает в локальной версии с ключом');
+  throw new Error('раздел недоступен');
 }
 function legacyNet(t) {
   const s = t.stream || ''; let m = s.match(/src=audius&id=([^&]+)/); if (m) return { src: 'audius', raw: decodeURIComponent(m[1]) };
@@ -1688,11 +1739,10 @@ async function fetchCover(url) {
 }
 function netHTML() {
   let body;
-  if (NET.status === 'off') body = `<p class="net-note">Поиск по интернету работает в версии KMP на GitHub Pages и в локальной (<code>npm start</code>): полные треки на Audius, превью почти любой песни из Apple Music и свободная музыка Jamendo.</p>`;
-  else if (NET.tab === 'jamendo' && !NET.jamendo) body = NET.mode === 'direct' ? `<p class="net-note">Jamendo работает в локальной версии: там ключ хранится на сервере, а не в открытом коде страницы.</p>` : `<p class="net-note">Добавь <code>JAMENDO_CLIENT_ID</code> в файл <code>.env</code> и перезапусти сервер. Ключ бесплатный: devportal.jamendo.com</p>`;
+  if (NET.status === 'off') return '';
   else if (NET.loading) body = `<p class="net-note">Ищу…</p>`;
   else if (NET.err) body = `<p class="net-note">${esc(NET.err)}</p>`;
-  else if (!NET.items.length) body = `<p class="net-note">Ничего не нашлось. Попробуй другую вкладку или другое написание.</p>`;
+  else if (!NET.items.length) body = `<p class="net-note">Ничего не нашлось. Попробуй другой раздел или другое написание.</p>`;
   else {
     const curId = S.queue[S.qi];
     body = `<div class="list">${NET.items.map((r, i) => {
@@ -1703,8 +1753,8 @@ function netHTML() {
       return `<div class="orow ${curId === 'tmp:' + r.id ? 'current' : ''}" data-i="${i}"><span class="o-cov"><img src="${esc(r.cover)}" alt="" loading="lazy">${ic('play')}</span><div class="r-meta"><div class="r-t">${esc(r.title)}</div><div class="r-a">${esc(r.artist)}${r.album ? ' · ' + esc(r.album) : ''}</div></div><div class="r-d">${fmt(r.duration)}</div>${act}</div>`;
     }).join('')}</div>`;
   }
-  const tabs = NET.status === 'off' ? '' : `<div class="net-tabs">${NET_TABS.map(([v, l, d]) => `<button class="chip press" data-act="net-tab" data-v="${v}" aria-pressed="${NET.tab === v}">${l}<small>${d}</small></button>`).join('')}</div>`;
-  return `<section class="net" id="net"><div class="block-head"><h2>В интернете</h2><span class="link">Только легальные источники</span></div>${tabs}${body}</section>`;
+  const tabs = NET.status === 'off' ? '' : `<div class="net-tabs">${NET_TABS.filter(([v]) => v !== 'jamendo' || NET.jamendo).map(([v, l, d]) => `<button class="chip press" data-act="net-tab" data-v="${v}" aria-pressed="${NET.tab === v}">${l}<small>${d}</small></button>`).join('')}</div>`;
+  return `<section class="net" id="net"><div class="block-head"><h2>Найдено в каталоге</h2></div>${tabs}${body}</section>`;
 }
 function paintNet() { const el = $('#net'); if (el) el.outerHTML = netHTML(); }
 let netTok = 0;
@@ -1716,7 +1766,7 @@ async function netSearch(q) {
     if (tok !== netTok) return;
     const have = new Set(trackObjs(S.order).map(t => t.netId).filter(Boolean));
     NET.items = items.map(x => ({ ...x, added: have.has(x.id) }));
-  } catch (e) { if (tok === netTok) { NET.items = []; NET.err = 'Не получилось найти: ' + e.message; } }
+  } catch (e) { if (tok === netTok) { NET.items = []; NET.err = 'Не получилось выполнить поиск. Проверь интернет и попробуй ещё раз'; } }
   if (tok === netTok) { NET.loading = false; paintNet(); }
 }
 const netOf = r => r.src === 'audius' ? { src: 'audius', raw: r.raw } : { src: r.src, url: r.preview || r.download || r.audio };
@@ -1750,12 +1800,12 @@ async function netAdd(i, btn) {
       const t = { id, kind: 'net', title: r.title, artist: r.artist, album: r.album || '', duration: r.duration, hue: rng(r.id)() * 360 | 0, net: netOf(r), added: Date.now(), netId: r.id, coverImg, cover: coverImg || r.cover, link: r.link };
       t.peaks = seededPeaks(id); if (!t.cover) t.cover = makeCover(t);
       T.set(id, t); S.order.unshift(id); DB.put(dbRec(t));
-      toast(`«${r.title}» в библиотеке, играет онлайн через Audius`);
+      toast(`«${r.title}» добавлен в библиотеку`);
     }
     r.added = true; paintNet();
   } catch (e) { btn.disabled = false; btn.textContent = 'Повторить'; toast('Не удалось добавить: ' + e.message); }
 }
-function dbRec(t) { return { id: t.id, kind: t.kind, title: t.title, artist: t.artist, album: t.album, hue: t.hue, blob: t.blob, size: t.size, ext: t.ext, added: t.added, duration: t.duration, peaks: t.peaksReal ? t.peaks : null, coverImg: t.coverImg, cover: t.kind === 'net' && !t.coverImg ? t.cover : undefined, netId: t.netId, stream: t.stream, net: t.net, link: t.link }; }
+function dbRec(t) { return { id: t.id, kind: t.kind, title: t.title, artist: t.artist, album: t.album, hue: t.hue, blob: t.blob, size: t.size, ext: t.ext, added: t.added, duration: t.duration, peaks: t.peaksReal ? t.peaks : null, coverImg: t.coverImg, cover: t.kind === 'net' && !t.coverImg ? t.cover : undefined, netId: t.netId, stream: t.stream, net: t.net, link: t.link, cloud: t.cloud, owner: t.owner, path: t.path, gain: t.gain }; }
 function knobHTML(m) {
   return `<div class="knob" role="slider" tabindex="0" data-k="${m.k}" aria-label="${m.l}" aria-valuemin="${m.min}" aria-valuemax="${m.max}">
     <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="k-track" cx="32" cy="32" r="26" transform="rotate(135 32 32)"/><circle class="k-arc" cx="32" cy="32" r="26" transform="rotate(135 32 32)"/><g class="k-cap"><circle cx="32" cy="32" r="17"/><line x1="32" y1="32" x2="32" y2="19"/></g></svg>
@@ -1814,22 +1864,7 @@ function coverFor(tr) { const id = tr.src === 'demo' ? tr.ref : null; if (id && 
 const Feed = {
   mode: 'local', sb: null, user: null, posts: [], loading: false, open: {}, cmts: {}, err: '',
   cfg() { return window.KMP_CONFIG && window.KMP_CONFIG.supabaseUrl && window.KMP_CONFIG.supabaseKey ? window.KMP_CONFIG : null; },
-  async init() {
-    const c = this.cfg(); if (!c) return;
-    try {
-      if (!window.supabase) await new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js'; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); });
-      this.sb = window.supabase.createClient(c.supabaseUrl, c.supabaseKey); this.mode = 'cloud';
-      const { data } = await this.sb.auth.getSession(); await this.setUser(data.session && data.session.user);
-      this.sb.auth.onAuthStateChange((_e, sess) => { this.setUser(sess && sess.user).then(() => { if (S.view === 'feed') renderView(); }); });
-      if (S.view === 'feed') renderView();
-    } catch (e) { this.mode = 'local'; this.err = 'Не удалось подключиться к облаку, лента работает локально'; }
-  },
-  async setUser(u) {
-    if (!u) { this.user = null; return; }
-    let name = (u.user_metadata && u.user_metadata.name) || u.email.split('@')[0];
-    try { const { data } = await this.sb.from('profiles').select('name').eq('id', u.id).maybeSingle(); if (data) name = data.name; } catch (e) {}
-    this.user = { id: u.id, name };
-  },
+  async init() { /* the Cloud module connects Supabase and hands Feed its client and user */ },
   me() { return this.mode === 'cloud' ? this.user : { id: 'me', name: store.get('feedName', 'Я') }; },
   local() { return store.get('feedLocal', null) || FEED_SEED; },
   saveLocal(a) { store.set('feedLocal', a); },
@@ -1842,7 +1877,7 @@ const Feed = {
         const { data, error } = await q; if (error) throw error;
         let liked = new Set();
         if (this.user && data.length) { const r = await this.sb.from('post_likes').select('post_id').eq('user_id', this.user.id).in('post_id', data.map(p => p.id)); liked = new Set((r.data || []).map(x => x.post_id)); }
-        this.posts = data.map(p => ({ id: p.id, author: p.author, authorId: p.user_id, text: p.text, track: p.track, ms: p.moment_start, me: p.moment_end, mood: p.mood, created: Date.parse(p.created_at), likes: p.likes, liked: liked.has(p.id), ncmt: p.comments_count, mine: this.user && p.user_id === this.user.id }));
+        this.posts = data.map(p => ({ id: p.id, avatar: p.avatar_url, author: p.author, authorId: p.user_id, text: p.text, track: p.track, ms: p.moment_start, me: p.moment_end, mood: p.mood, created: Date.parse(p.created_at), likes: p.likes, liked: liked.has(p.id), ncmt: p.comments_count, mine: this.user && p.user_id === this.user.id }));
       } else {
         const me = this.me();
         this.posts = this.local().filter(p => S.feedTab !== 'mine' || p.authorId === 'me').map(p => ({ ...p, author: p.authorId === 'me' ? me.name : p.author, likes: (p.likedBy || []).length, liked: (p.likedBy || []).includes('me'), ncmt: (p.comments || []).length, mine: p.authorId === 'me' }));
@@ -1888,7 +1923,7 @@ function feedPostHTML(p) {
   const mom = hasM ? `<button class="mom-btn ${playing ? 'playing' : ''}" data-act="post-play" data-p="${p.id}" ${rid ? '' : 'disabled'}>${ic(playing ? 'pause' : 'play')}${fmt(p.ms)}–${fmt(p.me)}</button>` : '';
   const miss = !rid ? `<button class="btn press" data-act="post-find" data-q="${esc(tr.artist + ' ' + tr.title)}" style="height:34px;font-size:13px">${ic('search')}Найти</button>` : mom;
   return `<article class="post" data-post="${p.id}">
-    <div class="p-head"><span class="ava" style="background:${avaColor(p.authorId || p.author)}">${esc((p.author || '?').slice(0, 1))}</span><div class="p-who"><b>${esc(p.author || 'Кто-то')}</b><span>${ago(p.created)}${tr.src === 'local' ? ' · из личной библиотеки' : ''}</span></div>${p.example ? '<span class="badge">Пример</span>' : ''}${p.mine ? `<button class="r-btn press" data-act="post-del" data-p="${p.id}" aria-label="Удалить пост">${ic('trash')}</button>` : ''}</div>
+    <div class="p-head">${p.avatar ? `<img class="ava" src="${esc(p.avatar)}" alt="">` : `<span class="ava" style="background:${avaColor(p.authorId || p.author)}">${esc((p.author || '?').slice(0, 1))}</span>`}<div class="p-who"><b>${esc(p.author || 'Кто-то')}</b><span>${ago(p.created)}${tr.src === 'local' ? ' · из личной библиотеки' : ''}</span></div>${p.example ? '<span class="badge">Пример</span>' : ''}${p.mine ? `<button class="r-btn press" data-act="post-del" data-p="${p.id}" aria-label="Удалить пост">${ic('trash')}</button>` : ''}</div>
     ${p.mood ? `<span class="mood">${esc(p.mood)}</span>` : ''}
     <p class="p-text">${esc(p.text)}</p>
     <div class="p-track"><img src="${esc(cov)}" alt=""><div class="r-meta"><div class="r-t">${esc(tr.title || 'Трек')}</div><div class="r-a">${esc(tr.artist || '')}${rid ? '' : ' · нет в твоей библиотеке'}</div></div>${miss}${hasM ? `<canvas class="p-cv" data-p="${p.id}"></canvas>` : ''}</div>
@@ -1899,14 +1934,10 @@ function feedPostHTML(p) {
 }
 function feedSideHTML() {
   if (Feed.mode === 'cloud') {
-    if (Feed.user) return `<div class="card-s"><h3>${esc(Feed.user.name)}</h3><p>Ты в аккаунте. Посты видят все, кто открыл KMP.</p><button class="btn press" data-act="auth-out">Выйти</button></div>`;
-    return `<form class="card-s" id="authForm"><h3>${S.authMode === 'up' ? 'Регистрация' : 'Вход'}</h3><p>Аккаунт нужен, чтобы публиковать, ставить лайки и комментировать.</p>
-      ${S.authMode === 'up' ? '<input class="field" name="name" placeholder="Имя в ленте" minlength="2" maxlength="32" required>' : ''}
-      <input class="field" name="email" type="email" placeholder="Почта" autocomplete="email" required><input class="field" name="pass" type="password" placeholder="Пароль, минимум 6 символов" minlength="6" autocomplete="${S.authMode === 'up' ? 'new-password' : 'current-password'}" required>
-      <button class="btn btn-accent press" type="submit">${S.authMode === 'up' ? 'Создать аккаунт' : 'Войти'}</button>
-      <button class="link" type="button" data-act="auth-mode">${S.authMode === 'up' ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'}</button></form>`;
+    if (Feed.user) return `<div class="card-s"><h3>${esc(Feed.user.name)}</h3><p>Ты в аккаунте. Посты, лайки и комментарии видят все, кто пользуется KMP.</p><button class="btn press" data-go="me">${ic('user')}Мой профиль</button></div>`;
+    return `<div class="card-s"><h3>Войди, чтобы писать</h3><p>Читать ленту можно и без аккаунта. Чтобы публиковать моменты, ставить лайки и комментировать, войди или зарегистрируйся.</p><button class="btn btn-accent press" data-go="me">${ic('user')}Войти</button></div>`;
   }
-  return `<div class="card-s"><h3>Как тебя подписывать</h3><input class="field" id="feedName" maxlength="32" value="${esc(Feed.me().name)}" aria-label="Имя в ленте"><p>Сейчас лента хранится только на этом устройстве. Когда подключишь аккаунты (Supabase, инструкция в README), посты и комментарии увидят все.</p></div>`;
+  return `<div class="card-s"><h3>Как тебя подписывать</h3><input class="field" id="feedName" maxlength="32" value="${esc(Feed.me().name)}" aria-label="Имя в ленте"><p>Это имя видно под твоими постами.</p></div>`;
 }
 function feedHTML() {
   const t = curT();
@@ -1996,13 +2027,282 @@ async function postComposer(btn) {
   try { await Feed.create({ text, track: trackRef(t), ms: Math.round(CMP.a * 10) / 10, me: Math.round(CMP.b * 10) / 10, mood: CMP.mood }); closeComposer(); toast('Опубликовано'); if (S.view !== 'feed') go('feed'); }
   catch (e) { toast('Не получилось опубликовать: ' + (e.message || e)); btn.disabled = false; }
 }
+/* ================= cloud: accounts, profiles, library sync ================= */
+S.cloudAuto = store.get('cloudAuto', true); S.keepOffline = store.get('keepOffline', true); S.authMode = 'in';
+const AUDIO_TYPES = { MP3: 'audio/mpeg', M4A: 'audio/mp4', AAC: 'audio/aac', WAV: 'audio/wav', FLAC: 'audio/flac', OGG: 'audio/ogg', OPUS: 'audio/ogg', WEBM: 'audio/webm' };
+const MAX_FILE = 50 * 1024 * 1024, QUOTA = 1024 * 1024 * 1024;
+const sizeMB = b => (b / 1048576).toFixed(b > 104857600 ? 0 : 1).replace('.', ',') + ' МБ';
+function shrinkImage(src, size = 300, q = .82) {
+  return new Promise(res => { if (!src) return res(null); const im = new Image(); im.onload = () => { try { const c = document.createElement('canvas'), k = Math.min(1, size / Math.max(im.width, im.height)); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); res(c.toDataURL('image/jpeg', q)); } catch (e) { res(null); } }; im.onerror = () => res(null); im.src = src; });
+}
+const Cloud = {
+  sb: null, user: null, profile: null, ready: false, syncing: false, err: '', stats: null,
+  lastSync: store.get('lastSync', 0), queue: [], log: [], busy: false, pushT: 0,
+  cfg() { const c = window.KMP_CONFIG; return c && c.supabaseUrl && c.supabaseKey ? c : null; },
+  async init() {
+    const c = this.cfg(); if (!c) { markAccount(); return; }
+    try {
+      if (!window.supabase) await new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js'; sc.onload = res; sc.onerror = () => rej(new Error('нет соединения')); document.head.appendChild(sc); });
+      this.sb = window.supabase.createClient(c.supabaseUrl, c.supabaseKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
+      Feed.sb = this.sb; Feed.mode = 'cloud';
+      this.sb.auth.onAuthStateChange((ev, sess) => {
+        if (ev === 'PASSWORD_RECOVERY') setTimeout(() => openModal({ title: 'Придумай новый пароль', ph: 'Минимум 6 символов', type: 'password', btn: 'Сохранить', max: 72 }, async pw => { const { error } = await this.sb.auth.updateUser({ password: pw }); toast(error ? 'Ошибка: ' + error.message : 'Пароль обновлён'); }), 300);
+        setTimeout(() => this.setUser(sess && sess.user), 0);
+      });
+      const { data } = await this.sb.auth.getSession();
+      await this.setUser(data.session && data.session.user);
+      addEventListener('visibilitychange', () => { if (!document.hidden && this.user && Date.now() - this.lastSync > 60000) this.sync(); });
+      addEventListener('online', () => { if (this.user) { this.sync(); this.pump(); } });
+    } catch (e) { this.err = e.message || String(e); }
+    this.ready = true; markAccount(); if (S.view === 'me' || S.view === 'feed') renderView();
+  },
+  async setUser(u) {
+    const prev = this.user && this.user.id;
+    if (!u) { this.user = null; this.profile = null; Feed.user = null; markAccount(); if (prev && (S.view === 'me' || S.view === 'feed')) renderView(); return; }
+    if (prev === u.id) return;
+    this.user = { id: u.id, email: u.email }; S.authMode = 'in';
+    await this.loadProfile();
+    Feed.user = { id: u.id, name: this.profile.name };
+    markAccount();
+    if (S.view === 'me' || S.view === 'feed') renderView();
+    this.sync();
+  },
+  async loadProfile() {
+    const { data } = await this.sb.from('profiles').select('*').eq('id', this.user.id).maybeSingle();
+    this.profile = data || { id: this.user.id, name: this.user.email.split('@')[0], username: null, avatar_url: null, bio: '' };
+  },
+  async authSubmit(form) {
+    const f = new FormData(form), email = String(f.get('email') || '').trim(), pass = String(f.get('pass') || ''), btn = form.querySelector('[type=submit]');
+    btn.disabled = true;
+    try {
+      const redirect = location.origin + location.pathname;
+      if (S.authMode === 'forgot') { const { error } = await this.sb.auth.resetPasswordForEmail(email, { redirectTo: redirect }); if (error) throw error; toast('Письмо со ссылкой для сброса пароля отправлено'); S.authMode = 'in'; renderView(); return; }
+      if (S.authMode === 'up') {
+        const name = String(f.get('name') || '').trim();
+        const { data, error } = await this.sb.auth.signUp({ email, password: pass, options: { data: { name }, emailRedirectTo: redirect } }); if (error) throw error;
+        toast(data.session ? 'Аккаунт создан' : 'Мы отправили письмо. Подтверди почту и войди');
+        if (!data.session) { S.authMode = 'in'; renderView(); }
+      } else { const { error } = await this.sb.auth.signInWithPassword({ email, password: pass }); if (error) throw error; toast('Ты вошёл в аккаунт'); }
+    } catch (e) { toast(authError(e)); }
+    finally { if (btn.isConnected) btn.disabled = false; }
+  },
+  async signOut() {
+    const uid = this.user && this.user.id; await this.sb.auth.signOut();
+    let n = 0; for (const t of [...T.values()]) if (t.cloud && t.owner === uid) { T.delete(t.id); DB.del(t.id); bufCache.delete(t.id); S.order = S.order.filter(x => x !== t.id); n++; }
+    if (n) { S.queue = S.queue.filter(id => T.has(id)); if (!S.queue.length) { S.queue = [...S.order]; S.qi = 0; } S.qi = Math.min(S.qi, S.queue.length - 1); stopAll(); E.playing = false; E.buf = null; }
+    toast(n ? `Ты вышел. ${n} ${plural(n, 'облачный трек убран', 'облачных трека убрано', 'облачных треков убрано')} с этого устройства` : 'Ты вышел из аккаунта');
+    renderView();
+  },
+  async saveProfileForm(form) {
+    const f = new FormData(form), name = String(f.get('name') || '').trim(), username = String(f.get('username') || '').trim().toLowerCase() || null, bio = String(f.get('bio') || '').trim();
+    if (name.length < 2) { toast('Имя: минимум 2 символа'); return; }
+    if (username && !/^[a-z0-9_.]{3,24}$/.test(username)) { toast('Ник: 3–24 символа, латиница, цифры, точка и _'); return; }
+    const { error } = await this.sb.from('profiles').update({ name, username, bio }).eq('id', this.user.id);
+    if (error) { toast(/duplicate|unique/i.test(error.message) ? 'Этот ник уже занят' : 'Ошибка: ' + error.message); return; }
+    Object.assign(this.profile, { name, username, bio }); Feed.user.name = name; toast('Профиль сохранён'); markAccount();
+  },
+  async uploadAvatar(file) {
+    if (!/^image\//.test(file.type)) { toast('Нужна картинка'); return; }
+    const url0 = URL.createObjectURL(file), data = await shrinkImage(url0, 320, .85); URL.revokeObjectURL(url0);
+    if (!data) { toast('Не получилось прочитать картинку'); return; }
+    const blob = await (await fetch(data)).blob(), path = `${this.user.id}/avatar-${Date.now()}.jpg`;
+    const up = await this.sb.storage.from('avatars').upload(path, blob, { contentType: 'image/jpeg', upsert: true });
+    if (up.error) { toast('Ошибка загрузки: ' + up.error.message); return; }
+    const url = this.sb.storage.from('avatars').getPublicUrl(path).data.publicUrl;
+    const old = this.profile.avatar_url;
+    await this.sb.from('profiles').update({ avatar_url: url }).eq('id', this.user.id);
+    this.profile.avatar_url = url; markAccount(); renderView(); toast('Аватар обновлён');
+    if (old && old.includes('/avatars/')) { const op = old.split('/avatars/')[1]; if (op) this.sb.storage.from('avatars').remove([decodeURIComponent(op)]); }
+  },
+  /* ---- library ---- */
+  async sync(manual) {
+    if (!this.user || this.syncing) return;
+    this.syncing = true; this.err = ''; paintCloud(); markAccount();
+    try { await this.pullTracks(); await this.pullData(); if (S.cloudAuto) this.enqueueLocal(); this.lastSync = Date.now(); store.set('lastSync', this.lastSync); if (manual) toast('Синхронизировано'); }
+    catch (e) { this.err = 'Синхронизация не удалась. Проверь интернет и попробуй ещё раз'; if (manual) toast(this.err); }
+    this.syncing = false; paintCloud(); markAccount();
+  },
+  async pullTracks() {
+    const uid = this.user.id;
+    const { data, error } = await this.sb.from('tracks').select('id,title,artist,album,duration,peaks,gain,kind,path,cover,net,size,ext,created_at').eq('user_id', uid);
+    if (error) throw error;
+    const ids = new Set(data.map(r => r.id)); let changed = false;
+    for (const r of data) {
+      const ex = T.get(r.id);
+      if (ex) { if (!ex.cloud || ex.owner !== uid) { ex.cloud = true; ex.owner = uid; ex.path = r.path; DB.put(dbRec(ex)); } continue; }
+      const t = { id: r.id, kind: r.kind === 'audius' ? 'net' : 'upload', cloud: true, owner: uid, path: r.path, title: r.title, artist: r.artist || '', album: r.album || '', duration: r.duration, gain: r.gain, net: r.net, size: r.size, ext: r.ext, added: Date.parse(r.created_at), hue: rng(r.id)() * 360 | 0, coverImg: r.cover || null };
+      t.peaks = r.peaks && r.peaks.length ? r.peaks : seededPeaks(r.id); t.peaksReal = !!(r.peaks && r.peaks.length);
+      t.cover = t.coverImg || makeCover(t);
+      T.set(t.id, t); S.order.push(t.id); DB.put(dbRec(t)); changed = true;
+    }
+    for (const t of [...T.values()]) if (t.cloud && t.owner === uid && !ids.has(t.id) && !t.uploading) { T.delete(t.id); DB.del(t.id); bufCache.delete(t.id); S.order = S.order.filter(x => x !== t.id); changed = true; }
+    const size = data.reduce((a, r) => a + (r.size || 0), 0); this.stats = { n: data.length, size };
+    if (changed) { S.order.sort((a, b) => T.get(b).added - T.get(a).added); S.queue = S.queue.filter(id => T.has(id)); if (!S.queue.length) { S.queue = [...S.order]; S.qi = 0; } S.qi = Math.min(Math.max(0, S.qi), S.queue.length - 1); if (!['mixer', 'labs'].includes(S.view)) renderView(); }
+  },
+  localPending() { return trackObjs(S.order).filter(t => (t.kind === 'upload' && t.blob) || (t.kind === 'net' && !String(t.id).startsWith('tmp:'))).filter(t => !t.cloud && !t.uploading); },
+  enqueueLocal(manual) {
+    const list = this.localPending();
+    if (!list.length) { if (manual) toast('Все треки уже в облаке'); return; }
+    list.forEach(t => this.enqueue(t)); if (manual) toast(`В очереди на загрузку: ${list.length}`);
+  },
+  autoUpload(t) { if (this.user && S.cloudAuto) this.enqueue(t); },
+  enqueue(t) { if (this.queue.includes(t.id) || t.cloud) return; this.queue.push(t.id); t.uploading = true; this.pump(); },
+  async pump() {
+    if (this.busy || !this.user) return; this.busy = true;
+    while (this.queue.length && this.user && navigator.onLine !== false) {
+      const id = this.queue[0], t = T.get(id);
+      if (t) { try { await this.uploadTrack(t); this.log.unshift({ title: t.title, ok: true }); } catch (e) { this.log.unshift({ title: t.title, ok: false, msg: e.message || String(e) }); } t.uploading = false; }
+      this.queue.shift(); this.log = this.log.slice(0, 30); paintCloud(); markAccount();
+      $$(`.row[data-id="${id}"] .r-tag`).forEach(el => { const tt = T.get(id); if (tt) el.textContent = tagOf(tt); });
+    }
+    this.busy = false; paintCloud(); markAccount();
+    if (this.stats) this.pullStatsLater();
+  },
+  pullStatsLater() { clearTimeout(this.stT); this.stT = setTimeout(async () => { if (!this.user) return; const { data } = await this.sb.from('tracks').select('size').eq('user_id', this.user.id); if (data) { this.stats = { n: data.length, size: data.reduce((a, r) => a + (r.size || 0), 0) }; paintCloud(); } }, 800); },
+  async uploadTrack(t) {
+    const uid = this.user.id, row = { user_id: uid, id: t.id, title: t.title, artist: t.artist || '', album: t.album || '', duration: t.duration || null, peaks: t.peaksReal ? t.peaks : null, gain: t.gain || null, size: t.size || 0, ext: t.ext || null };
+    row.cover = t.coverImg ? await shrinkImage(t.coverImg, 300) : null;
+    if (t.kind === 'net') { row.kind = 'audius'; row.net = t.net || legacyNet(t); row.cover = row.cover || (/^https?:/.test(t.cover || '') ? t.cover : null); }
+    else {
+      if (!t.blob) throw new Error('файла нет на этом устройстве');
+      if (t.blob.size > MAX_FILE) throw new Error('файл больше 50 МБ');
+      if (this.stats && this.stats.size + t.blob.size > QUOTA) throw new Error('закончилось место в облаке');
+      const ext = (t.ext || 'MP3').toUpperCase(), path = `${uid}/${String(t.id).replace(/[^a-zA-Z0-9_-]/g, '_')}.${ext.toLowerCase()}`;
+      const { error } = await this.sb.storage.from('tracks').upload(path, t.blob, { contentType: AUDIO_TYPES[ext] || t.blob.type || 'audio/mpeg', upsert: true, cacheControl: '31536000' });
+      if (error) throw error;
+      row.kind = 'file'; row.path = path; row.size = t.blob.size; t.path = path;
+    }
+    const { error } = await this.sb.from('tracks').upsert(row, { onConflict: 'user_id,id' });
+    if (error) throw error;
+    t.cloud = true; t.owner = uid; DB.put(dbRec(t));
+    if (this.stats) { this.stats.n++; this.stats.size += row.size || 0; }
+  },
+  async download(t) {
+    if (!this.sb || !this.user) throw new Error('Войди в аккаунт, чтобы слушать облачные треки');
+    const { data, error } = await this.sb.storage.from('tracks').download(t.path);
+    if (error) throw error;
+    t.blob = data; if (S.keepOffline) DB.put(dbRec(t));
+    return data;
+  },
+  async removeTrack(t) {
+    if (!this.sb || !this.user || t.owner !== this.user.id) return;
+    try {
+      if (t.path) await this.sb.storage.from('tracks').remove([t.path]);
+      await this.sb.from('tracks').delete().eq('user_id', this.user.id).eq('id', t.id);
+      this.pullStatsLater();
+    } catch (e) { toast('Не удалось удалить из облака: ' + (e.message || e)); }
+  },
+  /* ---- likes, playlists, presets ---- */
+  dataChanged() { if (!this.user) return; store.set('udStamp', Date.now()); clearTimeout(this.pushT); this.pushT = setTimeout(() => this.pushData(), 1500); },
+  snapshot() { return { liked: [...S.liked], pls: S.pls, presets: userPresets, plays: S.plays }; },
+  async pushData() {
+    if (!this.user) return;
+    const { error } = await this.sb.from('user_data').upsert({ user_id: this.user.id, data: this.snapshot(), updated_at: new Date(store.get('udStamp', Date.now())).toISOString() });
+    if (error) this.err = 'Не удалось сохранить лайки и плейлисты. Попробую позже';
+  },
+  async pullData() {
+    const { data, error } = await this.sb.from('user_data').select('data,updated_at').eq('user_id', this.user.id).maybeSingle();
+    if (error) throw error;
+    const local = store.get('udStamp', 0);
+    if (data && Date.parse(data.updated_at) > local) {
+      const d = data.data || {};
+      if (Array.isArray(d.liked)) S.liked = new Set(d.liked);
+      if (Array.isArray(d.pls)) S.pls = d.pls;
+      if (Array.isArray(d.presets)) { userPresets = d.presets; store.set('fxUser', userPresets); }
+      if (d.plays && typeof d.plays === 'object') for (const k in d.plays) S.plays[k] = Math.max(S.plays[k] || 0, d.plays[k]);
+      store.set('udStamp', Date.parse(data.updated_at)); persist(true);
+      if (['home', 'liked', 'mixer'].includes(S.view) || S.view.startsWith('pl:')) renderView(); else renderNow();
+    } else if (!data || local > Date.parse(data.updated_at)) { if (!local) store.set('udStamp', Date.now()); await this.pushData(); }
+  },
+  async deleteAccount(btn) {
+    if (!btn.classList.contains('armed')) { btn.classList.add('armed'); btn.querySelector('span').textContent = 'Точно? Нажми ещё раз'; setTimeout(() => { if (btn.isConnected) { btn.classList.remove('armed'); btn.querySelector('span').textContent = 'Удалить аккаунт'; } }, 4000); return; }
+    openModal({ title: 'Напиши УДАЛИТЬ для подтверждения', ph: 'УДАЛИТЬ', btn: 'Удалить навсегда' }, async v => {
+      if (v.trim().toUpperCase() !== 'УДАЛИТЬ') { toast('Удаление отменено'); return; }
+      try {
+        const uid = this.user.id;
+        for (const bucket of ['tracks', 'avatars']) { for (;;) { const { data } = await this.sb.storage.from(bucket).list(uid, { limit: 100 }); if (!data || !data.length) break; await this.sb.storage.from(bucket).remove(data.map(o => `${uid}/${o.name}`)); if (data.length < 100) break; } }
+        const { error } = await this.sb.rpc('delete_account'); if (error) throw error;
+        store.set('udStamp', 0); await this.signOut(); toast('Аккаунт и все его данные удалены');
+      } catch (e) { toast('Не получилось удалить: ' + (e.message || e)); }
+    });
+  }
+};
+function authError(e) {
+  const m = (e && e.message) || String(e);
+  if (/Invalid login/i.test(m)) return 'Неверная почта или пароль';
+  if (/Email not confirmed/i.test(m)) return 'Сначала подтверди почту по ссылке из письма';
+  if (/already registered|already been registered/i.test(m)) return 'Такая почта уже зарегистрирована, войди';
+  if (/Password should be/i.test(m)) return 'Пароль слишком короткий, нужно минимум 6 символов';
+  if (/rate limit/i.test(m)) return 'Слишком много попыток, подожди минуту';
+  return 'Ошибка: ' + m;
+}
+function markAccount() {
+  $$('.acct-btn').forEach(b => b.hidden = !Cloud.cfg());
+  const P = Cloud.profile, busy = Cloud.syncing || Cloud.busy;
+  $$('.acct-btn').forEach(b => {
+    b.classList.toggle('has-ava', !!(P && P.avatar_url));
+    b.innerHTML = P && P.avatar_url ? `<img src="${esc(P.avatar_url)}" alt="">` : P ? `<span style="font:600 15px var(--f-display);text-transform:uppercase">${esc(P.name.slice(0, 1))}</span>` : ic('user');
+    if (busy) b.insertAdjacentHTML('beforeend', '<span class="dot-sync"></span>');
+    b.dataset.tip = P ? P.name : 'Аккаунт';
+  });
+}
+function paintCloud() { const el = $('#cloudCard'); if (el) el.outerHTML = cloudCardHTML(); }
+function cloudCardHTML() {
+  const st = Cloud.stats, used = st ? st.size : 0, pend = Cloud.localPending().length, q = Cloud.queue.length;
+  const status = Cloud.syncing ? 'Синхронизирую…' : q ? `Загружаю в облако: осталось ${q}` : Cloud.lastSync ? 'Синхронизировано ' + ago(Cloud.lastSync) : 'Ещё не синхронизировано';
+  return `<div class="card-s wide" id="cloudCard"><div class="t-top"><h3>Облачная библиотека</h3><button class="btn press" data-act="cloud-sync" ${Cloud.syncing ? 'disabled' : ''}>${ic('sync')}Синхронизировать</button></div>
+    <p>${status}. Треки, лайки, плейлисты и пресеты одинаковые на всех устройствах, где ты вошёл.</p>
+    ${Cloud.err ? `<p style="color:#C9352D">${esc(Cloud.err)}</p>` : ''}
+    <dl class="kv"><div><dt>Треков в облаке</dt><dd>${st ? st.n : '—'}</dd></div><div><dt>Занято</dt><dd>${st ? sizeMB(used) : '—'}</dd></div><div><dt>Не загружено</dt><dd>${pend}</dd></div></dl>
+    <div class="usage" title="${sizeMB(used)} из 1 ГБ"><i style="width:${Math.min(100, used / QUOTA * 100)}%"></i></div>
+    <p style="font-size:12.5px">${sizeMB(used)} из 1 ГБ. Один трек до 50 МБ.</p>
+    ${pend && !q ? `<button class="btn btn-accent press" data-act="cloud-upall">${ic('cloud')}Загрузить в облако треки с этого устройства (${pend})</button>` : ''}
+    ${Cloud.log.length ? `<div class="upq">${Cloud.log.map(l => `<div class="${l.ok ? 'ok' : 'bad'}"><span>${esc(l.title)}</span><em>${l.ok ? 'загружен' : esc(l.msg)}</em></div>`).join('')}</div>` : ''}
+    <div class="row-set"><div><b>Загружать новые треки автоматически</b><small>Всё, что добавишь на любом устройстве, сразу уйдёт в облако</small></div><button class="switch" role="switch" aria-checked="${S.cloudAuto}" data-act="cloud-auto" aria-label="Автозагрузка"></button></div>
+    <div class="row-set"><div><b>Хранить треки на этом устройстве</b><small>Играют без интернета. Выключи, если мало места</small></div><button class="switch" role="switch" aria-checked="${S.keepOffline}" data-act="cloud-offline" aria-label="Хранить офлайн"></button></div>
+  </div>`;
+}
+function meHTML() {
+  if (!Cloud.cfg()) return headHTML('', 'Аккаунт', 'Скоро', '') + `<div class="me"><div class="card-s wide"><h3>Аккаунты скоро появятся</h3><p>Пока вся музыка, плейлисты и настройки хранятся на этом устройстве.</p></div></div>`;
+  if (!Cloud.ready) return headHTML('', 'Аккаунт', 'Подключаюсь…', '');
+  if (Cloud.err && !Cloud.sb) return headHTML('', 'Аккаунт', '', '') + `<p class="net-note">Не удалось войти в сервис. Проверь интернет и обнови страницу.</p>`;
+  if (!Cloud.user) {
+    const m = S.authMode;
+    return `<div class="auth"><form class="card-s" id="authForm">
+      <h3 style="font-size:26px">${m === 'up' ? 'Создать аккаунт' : m === 'forgot' ? 'Сброс пароля' : 'Вход в KMP'}</h3>
+      ${m !== 'forgot' ? `<div class="auth-tabs"><button type="button" data-act="auth-mode" data-v="in" aria-pressed="${m === 'in'}">Вход</button><button type="button" data-act="auth-mode" data-v="up" aria-pressed="${m === 'up'}">Регистрация</button></div>` : '<p>Пришлём письмо со ссылкой, по ней задашь новый пароль.</p>'}
+      ${m === 'up' ? '<input class="field" name="name" placeholder="Как тебя зовут" minlength="2" maxlength="32" autocomplete="nickname" required>' : ''}
+      <input class="field" name="email" type="email" placeholder="Почта" autocomplete="email" required>
+      ${m !== 'forgot' ? `<input class="field" name="pass" type="password" placeholder="Пароль, минимум 6 символов" minlength="6" maxlength="72" autocomplete="${m === 'up' ? 'new-password' : 'current-password'}" required>` : ''}
+      <button class="btn btn-accent press" type="submit" style="justify-content:center">${m === 'up' ? 'Зарегистрироваться' : m === 'forgot' ? 'Отправить письмо' : 'Войти'}</button>
+      ${m === 'in' ? '<button class="link" type="button" data-act="auth-mode" data-v="forgot">Забыл пароль</button>' : m === 'forgot' ? '<button class="link" type="button" data-act="auth-mode" data-v="in">Назад ко входу</button>' : ''}
+      <ul class="perks"><li>${ic('cloud')}Треки, лайки и плейлисты на всех твоих устройствах</li><li>${ic('feed')}Публикации, лайки и комментарии в ленте</li><li>${ic('sliders')}Твои пресеты микшера везде с тобой</li></ul>
+    </form></div>`;
+  }
+  const P = Cloud.profile;
+  return headHTML('', 'Аккаунт', esc(Cloud.user.email), `<button class="btn press" data-act="auth-out">${ic('logout')}Выйти</button>`)
+    + `<div class="me">
+      <div class="card-s"><div class="prof"><div class="ava-big" data-act="ava-pick" role="button" aria-label="Сменить аватар" style="background:${avaColor(P.id)}">${P.avatar_url ? `<img src="${esc(P.avatar_url)}" alt="">` : esc(P.name.slice(0, 1).toUpperCase())}</div><div style="min-width:0"><h2>${esc(P.name)}</h2><p>${P.username ? '@' + esc(P.username) : 'Ник не задан'}</p></div></div>
+        <input type="file" id="avaFile" accept="image/*" hidden>
+        <form class="form" id="profForm">
+          <label>Имя<input class="field" name="name" value="${esc(P.name)}" minlength="2" maxlength="32" required></label>
+          <label>Ник<span class="at"><input class="field" name="username" value="${esc(P.username || '')}" maxlength="24" placeholder="karen" autocapitalize="off" spellcheck="false"></span></label>
+          <label>О себе<textarea name="bio" maxlength="160" placeholder="Что слушаешь, что любишь">${esc(P.bio || '')}</textarea></label>
+          <button class="btn btn-accent press" type="submit" style="align-self:flex-start">Сохранить профиль</button>
+        </form></div>
+      <div class="card-s"><h3>Моя активность</h3><p>Треков в библиотеке: <strong>${trackObjs(S.order).filter(t => t.kind !== 'demo').length}</strong>, в любимом: <strong>${S.liked.size}</strong>, плейлистов: <strong>${S.pls.length}</strong>, своих пресетов: <strong>${userPresets.length}</strong>.</p><button class="btn press" data-go="feed">${ic('feed')}Мои посты в ленте</button></div>
+      ${cloudCardHTML()}
+      <div class="card-s wide danger-zone"><h3>Удаление аккаунта</h3><p>Удалит профиль, все треки из облака, посты, комментарии и лайки. Треки на этом устройстве останутся.</p><button class="btn btn-danger press" data-act="acct-delete" style="align-self:flex-start">${ic('trash')}<span>Удалить аккаунт</span></button></div>
+    </div>`;
+}
+if (window.KMP_DEBUG) window.__kmp = { Cloud, T, S, E };
 /* ================= labs ================= */
 const LABS = [
-  { k: 'oneplayer', t: 'Один плеер на все вкладки', d: 'Если KMP открыт в двух вкладках, играет только одна. Защищает от двойного звука.' },
+  { k: 'oneplayer', t: 'Один плеер', d: 'Если KMP открыт в двух окнах, играет только одно. Защищает от двойного звука.' },
   { k: 'silence', t: 'Пропуск тишины', d: 'Обрезает тишину в начале и в конце трека, музыка идёт без пауз.' },
   { k: 'resume', t: 'Продолжать с места', d: 'Для миксов и треков дольше 6 минут запоминает, где ты остановился.' },
   { k: 'moments', t: 'Моменты', d: 'Сохраняй любимые места в треке и прыгай к ним одним кликом.', how: 'Кнопка со звездой в полноэкранном плеере или клавиша <kbd>K</kbd>.' },
-  { k: 'amb', t: 'Атмосфера', d: 'Подмешивает дождь, камин, ветер или мягкий шум. Звучит и без музыки, генерируется прямо в браузере.', dd: true },
+  { k: 'amb', t: 'Атмосфера', d: 'Подмешивает дождь, камин, ветер или мягкий шум. Звучит и без музыки.', dd: true },
   { k: 'focus', t: 'Фокус-таймер', d: '25 минут работы и 5 минут отдыха. На перерыве музыка становится тише, потом возвращается.' },
   { k: 'lullaby', t: 'Колыбельная', d: 'Работает с таймером сна: последние 10 минут звук становится мягче и тише, чтобы легче уснуть.' },
   { k: 'gestures', t: 'Жесты на телефоне', d: 'Смахни нижнюю панель плеера влево или вправо, чтобы переключить трек.' }
@@ -2183,6 +2483,7 @@ function renderView() {
   else if (v === 'mixer') html = mixerHTML();
   else if (v === 'labs') html = labsHTML();
   else if (v === 'feed') html = feedHTML();
+  else if (v === 'me') html = meHTML();
   else if (v.startsWith('pl:')) html = playlistHTML(v.slice(3));
   else html = homeHTML();
   $('#view').innerHTML = html;
@@ -2223,7 +2524,7 @@ function renderNow() {
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   const src = (id, v) => { const el = document.getElementById(id); if (el && el.getAttribute('src') !== v) el.src = v; };
   const artist = t.artist + (t.album ? ' · ' + t.album : '');
-  const meta = t.kind === 'demo' ? `${t.key}, ${t.bpm} BPM · ${fmt(t.duration)} · демо, синтезировано в браузере` : t.kind === 'net' ? `Audius, онлайн · ${fmt(t.duration)}` : t.kind === 'preview' ? 'Превью 30 секунд из Apple Music' : `${t.ext}, ${(t.size / 1048576).toFixed(1).replace('.', ',')} МБ · ${fmt(t.duration)} · прослушано ${S.plays[t.id] || 0} ${plural(S.plays[t.id] || 0, 'раз', 'раза', 'раз')}`;
+  const meta = t.kind === 'demo' ? `${t.key}, ${t.bpm} BPM · ${fmt(t.duration)} · демо-трек` : t.kind === 'net' ? `Онлайн · ${fmt(t.duration)}` : t.kind === 'preview' ? 'Фрагмент 30 секунд' : `${t.ext}, ${(t.size / 1048576).toFixed(1).replace('.', ',')} МБ · ${fmt(t.duration)} · прослушано ${S.plays[t.id] || 0} ${plural(S.plays[t.id] || 0, 'раз', 'раза', 'раз')}`;
   src('pCover', t.cover); set('pTitle', t.title); set('pArtist', artist);
   src('fCover', t.cover); set('fTitle', t.title); set('fArtist', artist);
   const changed = lastNowId !== t.id; lastNowId = t.id;
@@ -2283,7 +2584,7 @@ function toggleLike(id) {
   if (S.view === 'liked') renderView();
 }
 let modalCb = null;
-function openModal(opts, cb) { modalCb = cb; $('#modalTitle').textContent = opts.title; const i = $('#plName'); i.placeholder = opts.ph || ''; i.value = opts.value || ''; i.maxLength = opts.max || 60; $('#modalOk').textContent = opts.btn || 'Сохранить'; $('#modal').hidden = false; setTimeout(() => { i.focus(); i.select(); }, 30); }
+function openModal(opts, cb) { modalCb = cb; $('#modalTitle').textContent = opts.title; const i = $('#plName'); i.placeholder = opts.ph || ''; i.value = opts.value || ''; i.maxLength = opts.max || 60; i.type = opts.type || 'text'; $('#modalOk').textContent = opts.btn || 'Сохранить'; $('#modal').hidden = false; setTimeout(() => { i.focus(); i.select(); }, 30); }
 function closeModal() { $('#modal').hidden = true; modalCb = null; }
 const PL_MODAL = { title: 'Новый плейлист', ph: 'Например: дорога домой' };
 function createPl(name, trackId) {
@@ -2310,7 +2611,7 @@ function openPresetMenu(anchor, id) {
   let y = r.bottom + 8; if (y + mh > innerHeight - 12) y = r.top - mh - 8;
   menu.style.left = Math.max(12, Math.min(r.right - mw, innerWidth - mw - 12)) + 'px'; menu.style.top = Math.max(12, y) + 'px';
 }
-function savePresets() { store.set('fxUser', userPresets); const el = $('#presets'); if (el) el.innerHTML = presetsHTML(); FXP = matchPreset(); syncMixerUI(); markFXBtn(); }
+function savePresets() { store.set('fxUser', userPresets); try { Cloud.dataChanged(); } catch (e) {} const el = $('#presets'); if (el) el.innerHTML = presetsHTML(); FXP = matchPreset(); syncMixerUI(); markFXBtn(); }
 function addPreset(name, params) {
   const p = { id: 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name, d: 'Твой пресет', hue: Math.round(Math.random() * 360), p: clone(params) };
   userPresets.push(p); FXBASE = p.id; store.set('fxBase', FXBASE); savePresets(); return p;
@@ -2429,8 +2730,14 @@ document.addEventListener('click', e => {
       case 'post-like': { const p = Feed.posts.find(x => x.id === a.dataset.p); if (!p) break; const on = !p.liked; Feed.like(p.id, on).then(ok => { if (!ok) return; p.liked = on; p.likes = (p.likes || 0) + (on ? 1 : -1); a.setAttribute('aria-pressed', on); a.innerHTML = ic(on ? 'heart-f' : 'heart') + `<span>${p.likes}</span>`; }); break; }
       case 'post-cmts': { const id = a.dataset.p; Feed.open[id] = !Feed.open[id]; if (Feed.open[id]) Feed.comments(id).then(c => { Feed.cmts[id] = c; paintFeed(); }); else paintFeed(); break; }
       case 'post-del': { if (!a.classList.contains('armed')) { a.classList.add('armed'); a.style.color = '#C9352D'; toast('Нажми ещё раз, чтобы удалить пост'); setTimeout(() => { a.classList.remove('armed'); a.style.color = ''; }, 3000); break; } Feed.remove(a.dataset.p); break; }
-      case 'auth-mode': S.authMode = S.authMode === 'up' ? 'in' : 'up'; renderView(); break;
-      case 'auth-out': Feed.sb.auth.signOut(); break;
+      case 'auth-mode': S.authMode = a.dataset.v || (S.authMode === 'up' ? 'in' : 'up'); renderView(); break;
+      case 'auth-out': Cloud.signOut(); break;
+      case 'cloud-sync': Cloud.sync(true); break;
+      case 'cloud-upall': Cloud.enqueueLocal(true); break;
+      case 'cloud-auto': S.cloudAuto = !S.cloudAuto; store.set('cloudAuto', S.cloudAuto); a.setAttribute('aria-checked', S.cloudAuto); break;
+      case 'cloud-offline': S.keepOffline = !S.keepOffline; store.set('keepOffline', S.keepOffline); a.setAttribute('aria-checked', S.keepOffline); toast(S.keepOffline ? 'Треки будут храниться на устройстве' : 'Треки будут скачиваться из облака при каждом запуске'); break;
+      case 'ava-pick': $('#avaFile').click(); break;
+      case 'acct-delete': Cloud.deleteAccount(a); break;
       case 'lab': { const k = a.dataset.k, on = !labOn(k);
         if (k === 'focus') setFocus(on); else { S.labs[k] = on; }
         store.set('labs', S.labs); a.setAttribute('aria-checked', on); a.closest('.lab').classList.toggle('off', !on);
@@ -2515,11 +2822,8 @@ document.addEventListener('keydown', e => {
 document.addEventListener('submit', async e => {
   const cf = e.target.closest('[data-cf]');
   if (cf) { e.preventDefault(); const inp = cf.querySelector('input'), text = inp.value.trim(), id = cf.dataset.cf; if (!text) return; inp.disabled = true; if (await Feed.comment(id, text)) { Feed.cmts[id] = await Feed.comments(id); const p = Feed.posts.find(x => x.id === id); if (p) p.ncmt = Feed.cmts[id].length; paintFeed(); const n = $(`[data-cf="${id}"] input`); if (n) n.focus(); } else inp.disabled = false; return; }
-  if (e.target.id === 'authForm') {
-    e.preventDefault(); const f = new FormData(e.target), email = f.get('email'), pass = f.get('pass');
-    const r = S.authMode === 'up' ? await Feed.sb.auth.signUp({ email, password: pass, options: { data: { name: f.get('name') } } }) : await Feed.sb.auth.signInWithPassword({ email, password: pass });
-    if (r.error) toast('Ошибка: ' + r.error.message); else toast(S.authMode === 'up' && !r.data.session ? 'Проверь почту и подтверди регистрацию' : 'Готово, ты в аккаунте');
-  }
+  if (e.target.id === 'authForm') { e.preventDefault(); Cloud.authSubmit(e.target); return; }
+  if (e.target.id === 'profForm') { e.preventDefault(); Cloud.saveProfileForm(e.target); return; }
 });
 document.addEventListener('input', e => {
   if (e.target.id === 'feedName') { store.set('feedName', e.target.value.trim() || 'Я'); }
@@ -2528,6 +2832,7 @@ document.addEventListener('input', e => {
 $('#sheet').addEventListener('click', e => { if (e.target.id === 'sheet') closeComposer(); });
 $('#modalForm').addEventListener('submit', e => { e.preventDefault(); const n = $('#plName').value.trim(); if (!n) { $('#plName').focus(); return; } const cb = modalCb; closeModal(); cb && cb(n); });
 $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+document.addEventListener('change', e => { if (e.target.id === 'avaFile' && e.target.files[0]) { Cloud.uploadAvatar(e.target.files[0]); e.target.value = ''; } });
 $('#file').addEventListener('change', e => { importFiles(e.target.files); e.target.value = ''; });
 let qT, netT;
 $('#q').addEventListener('input', e => {
@@ -2546,7 +2851,7 @@ function setSleep(v) {
 }
 const DD = {
   sort: { title: 'Сортировка', opts: [['recent', 'Сначала новые'], ['title', 'По названию'], ['dur', 'По длине'], ['plays', 'Часто слушаю']], get: () => S.sort, set: v => { S.sort = v; S.view === 'library' ? renderView() : go('library'); } },
-  filter: { title: 'Показать', opts: [['all', 'Всё'], ['upload', 'Мои загрузки'], ['net', 'Онлайн (Audius)'], ['demo', 'Демо']], get: () => S.filter, set: v => { S.filter = v; S.view === 'library' ? renderView() : go('library'); } },
+  filter: { title: 'Показать', opts: [['all', 'Всё'], ['upload', 'Мои загрузки'], ['net', 'Онлайн'], ['demo', 'Демо']], get: () => S.filter, set: v => { S.filter = v; S.view === 'library' ? renderView() : go('library'); } },
   xfade: { title: 'Плавный переход', opts: [['0', 'Выключен'], ['3', '3 секунды'], ['6', '6 секунд'], ['10', '10 секунд'], ['15', '15 секунд']], get: () => String(S.xfade), set: v => { S.xfade = +v; store.set('xfade', S.xfade); toast(S.xfade ? `Плавный переход: ${S.xfade} сек` : 'Плавный переход выключен'); } },
   sleep: { title: 'Таймер сна', opts: [['0', 'Выключен'], ['15', '15 минут'], ['30', '30 минут'], ['45', '45 минут'], ['60', '1 час'], ['90', '1,5 часа'], ['track', 'После этого трека']], get: () => S.sleep ? (S.sleep.mode === 'track' ? 'track' : String(S.sleep.min)) : '0', set: setSleep,
     label: v => v === '0' ? '' : v === 'track' ? 'После трека' : `${Math.max(1, Math.ceil((S.sleep.end - Date.now()) / 60000))} мин` },
@@ -2777,9 +3082,9 @@ async function boot() {
   applyTrackFx(cur(), true); FXP = matchPreset(); syncMirror();
   netInit().then(() => { if (S.view === 'search') paintNet(); if (S.view === 'feed') renderView(); });
   if (STANDALONE && 'serviceWorker' in navigator && location.protocol === 'https:' || STANDALONE && location.hostname === 'localhost') { try { navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (e) {} }
-  Feed.init();
+  Cloud.init();
   const t0 = cur(); if (t0) { PAL.target = await ensurePalette(t0); PAL.cur = clone(PAL.target); }
-  { const h = location.hash.slice(1); if (['feed', 'mixer', 'labs', 'library', 'liked'].includes(h)) S.view = h; }
+  { const h = location.hash.slice(1); if (['feed', 'mixer', 'labs', 'library', 'liked', 'me'].includes(h)) S.view = h; }
   document.body.classList.add('boot'); setTimeout(() => document.body.classList.remove('boot'), 1600);
   renderView(); syncVolUI();
   requestAnimationFrame(loop);
