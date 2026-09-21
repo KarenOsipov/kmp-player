@@ -3,6 +3,6 @@
 // Project URL и anon public key из Settings → API. Anon-ключ можно хранить в открытом коде,
 // доступ защищён правилами (RLS) в schema.sql.
 window.KMP_CONFIG = {
-  supabaseUrl: 'https://nejlpzqtokrgvzsgqsud.supabase.co/rest',
+  supabaseUrl: 'https://nejlpzqtokrgvzsgqsud.supabase.co',
   supabaseKey: 'sb_publishable_lmLGtezi77Qvrfb4CIqcGg_Y0lN9iFL'
 };
