@@ -4,5 +4,6 @@
 // доступ защищён правилами (RLS) в schema.sql.
 window.KMP_CONFIG = {
   supabaseUrl: 'https://nejlpzqtokrgvzsgqsud.supabase.co',
-  supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lamxwenF0b2tyZ3Z6c2dxc3VkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5NjQ4MTQsImV4cCI6MjEwNTU0MDgxNH0.5yTXtGi7_85U6wLnXm3VBBlJrVAkxGUCIN1mkReo0rI'
+  supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lamxwenF0b2tyZ3Z6c2dxc3VkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5NjQ4MTQsImV4cCI6MjEwNTU0MDgxNH0.5yTXtGi7_85U6wLnXm3VBBlJrVAkxGUCIN1mkReo0rI',
+  jamendoClientId: '5c3169c8'
 };

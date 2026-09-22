@@ -2074,8 +2074,10 @@ const NET_TABS = [['audius', 'Треки целиком', 'Инди и новы�
 async function netInit() {
   if (!location.protocol.startsWith('http')) return;
   try { const r = await fetch('api/health', { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (j && j.kmp) { NET.status = 'ok'; NET.mode = 'server'; NET.jamendo = !!j.jamendo; return; } } } catch (e) {}
-  if (STANDALONE) { NET.status = 'ok'; NET.mode = 'direct'; }
+  if (STANDALONE) { NET.status = 'ok'; NET.mode = 'direct'; NET.jamendo = !!jamendoId(); }
 }
+function jamendoId() { const c = window.KMP_CONFIG || {}; return String(c.jamendoClientId || c.jamendoClientID || c.jamendo || '').trim(); }
+const mapJamendo = t => ({ src: 'jamendo', id: 'jamendo:' + t.id, title: t.name, artist: t.artist_name, album: t.album_name || '', duration: t.duration, cover: t.image || t.album_image || '', audio: t.audio, download: t.audiodownload_allowed ? t.audiodownload : '', link: t.shareurl || '' });
 let audHost = null;
 async function audiusHost() {
   if (audHost) return audHost;
@@ -2136,6 +2138,12 @@ async function netQuery(src, q) {
   if (NET.mode === 'server') { const r = await fetch(`api/search?src=${src}&q=` + encodeURIComponent(q)); const j = await r.json(); if (!r.ok) throw new Error(j.error || 'сервис не ответил'); return j.items || []; }
   if (src === 'audius') { const h = await audiusHost(); const r = await fetch(`${h}/v1/tracks/search?query=${encodeURIComponent(q)}&app_name=KMP_PLAYER&limit=30`); if (!r.ok) { audHost = null; throw new Error('Audius не ответил'); } const j = await r.json(); return (j.data || []).filter(t => t.is_streamable !== false).map(mapAudius); }
   if (src === 'itunes') { const j = await jsonp(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=music&entity=song&limit=30&country=KZ`); return (j.results || []).filter(t => t.previewUrl).map(mapItunes); }
+  if (src === 'jamendo' && jamendoId()) {
+    const u = `https://api.jamendo.com/v3.0/tracks/?client_id=${encodeURIComponent(jamendoId())}&format=json&limit=30&audioformat=mp32&imagesize=300&order=relevance&search=${encodeURIComponent(q)}`;
+    let j; try { const r = await fetch(u); j = await r.json(); } catch (e) { j = await jsonp(u); }
+    if (j.headers && j.headers.status && j.headers.status !== 'success') throw new Error('поиск недоступен');
+    return (j.results || []).filter(t => t.audio).map(mapJamendo);
+  }
   throw new Error('раздел недоступен');
 }
 function legacyNet(t) {
@@ -2168,7 +2176,7 @@ function netHTML() {
       if (r.src === 'audius' || r.src === 'archive' || r.src === 'radio') act = `<button class="btn press" data-act="net-add" data-i="${i}" ${r.added ? 'disabled' : ''}>${r.added ? 'В библиотеке' : ic('plus') + 'В библиотеку'}</button>`;
       else if (r.src === 'jamendo') act = `<button class="btn press" data-act="net-add" data-i="${i}" ${r.added ? 'disabled' : ''}>${r.added ? 'В библиотеке' : ic('upload') + 'Скачать'}</button>`;
       else if (r.link) act = `<a class="btn" href="${esc(r.link)}" target="_blank" rel="noopener">Открыть</a>`;
-      if (r.src === 'archive' || (r.src === 'audius' && r.dl)) act = `<button class="cbtn press" data-act="net-dl" data-i="${i}" aria-label="Скачать на устройство" data-tip="Скачать">${ic('download')}</button>` + act;
+      if (r.src === 'archive' || (r.src === 'audius' && r.dl) || (r.src === 'jamendo' && r.download)) act = `<button class="cbtn press" data-act="net-dl" data-i="${i}" aria-label="Скачать на устройство" data-tip="Скачать">${ic('download')}</button>` + act;
       return `<div class="orow ${curId === 'tmp:' + r.id ? 'current' : ''}" data-i="${i}"><span class="o-cov"><img src="${esc(r.cover)}" alt="" loading="lazy">${ic('play')}</span><div class="r-meta"><div class="r-t">${esc(r.title)}</div><div class="r-a">${esc(r.artist)}${r.album ? ' · ' + esc(r.album) : ''}</div></div><div class="r-d">${r.live ? 'Эфир' : r.duration ? fmt(r.duration) : ''}</div>${act}</div>`;
     }).join('')}</div>`;
   }
@@ -2225,13 +2233,16 @@ async function netAdd(i, btn) {
   try {
     let coverImg = null;
     coverImg = await fetchCover(r.cover);
-    if (r.src === 'jamendo') {
-      const a = await fetch(await resolveStream({ net: netOf(r) })); if (!a.ok) throw new Error('файл недоступен');
+    let jblob = null;
+    if (r.src === 'jamendo') { try { const a = await fetch(await resolveStream({ net: netOf(r) })); if (a.ok) jblob = a; } catch (e) {} }
+    if (r.src === 'jamendo' && jblob) {
+      const a = jblob;
       const blob = await a.blob(), before = new Set(S.order);
       await importFiles([new File([blob], `${r.artist} - ${r.title}.mp3`, { type: blob.type || 'audio/mpeg' })], { title: r.title, artist: r.artist, album: r.album, coverImg });
       const nid = S.order.find(id => !before.has(id)); if (nid) { const t = T.get(nid); t.netId = r.id; DB.put(dbRec(t)); }
     } else {
       const id = 'net:' + r.id;
+      if (r.src === 'jamendo') r._stream = true;
       const t = { id, kind: r.src === 'radio' ? 'radio' : 'net', live: !!r.live, stream: r.stream, title: r.title, artist: r.artist, album: r.album || '', duration: r.duration, hue: rng(r.id)() * 360 | 0, net: netOf(r), added: Date.now(), netId: r.id, coverImg, cover: coverImg || r.cover, link: r.link };
       t.peaks = seededPeaks(id); if (!t.cover) t.cover = makeCover(t);
       T.set(id, t); S.order.unshift(id); DB.put(dbRec(t));
