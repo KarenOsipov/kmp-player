@@ -400,6 +400,21 @@ img.ava{object-fit:cover}
 .topbar .theme-m{display:none}
 @media (max-width:1180px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:760px){.stats{grid-template-columns:1fr}.stat.wide{grid-column:auto}.topbar .theme-m{display:grid;width:54px;height:54px;border-radius:50%;place-items:center}.focus-pill{bottom:calc(144px + env(safe-area-inset-bottom,0px))}}
+/* tricks pads */
+.mp-pads{padding:16px}
+.pads{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pad{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:118px;padding:14px;border-radius:18px;text-align:left;color:var(--c-ink,#fff);background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:transform .12s var(--ease),background .2s,border-color .2s,box-shadow .2s;overflow:hidden}
+.pad svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:auto;opacity:.9}
+.pad b{font-size:14px;font-weight:600}
+.pad small{font-size:11.5px;color:var(--c-mute,rgba(255,255,255,.55));line-height:1.3}
+.pad kbd{position:absolute;top:12px;right:12px;font:600 11px/1 var(--f-display,inherit);padding:4px 6px;border-radius:6px;background:rgba(255,255,255,.08);color:var(--c-mute,rgba(255,255,255,.6))}
+.pad:hover{border-color:rgba(255,255,255,.18)}
+.pad.on{transform:scale(.96);background:radial-gradient(120% 120% at 30% 20%,color-mix(in srgb,var(--accent) 70%,#fff 0%),color-mix(in srgb,var(--accent) 35%,#000 0%));border-color:transparent;box-shadow:0 0 0 1px var(--accent),0 12px 40px -8px color-mix(in srgb,var(--accent) 70%,transparent)}
+.pad.on small{color:rgba(255,255,255,.8)}
+.pad.on svg{animation:padPulse .5s ease-in-out infinite alternate}
+@keyframes padPulse{to{transform:scale(1.12)}}
+.pads-note{margin:12px 2px 0;font-size:12.5px;color:var(--c-mute,rgba(255,255,255,.55))}
+@media (max-width:760px){.pads{grid-template-columns:repeat(2,minmax(0,1fr))}.pad{min-height:104px}}
 /* account entry points */
 .acct-chip{display:flex;align-items:center;gap:9px;height:50px;padding:0 16px 0 6px;border-radius:25px;background:var(--glass-strong);border:1px solid var(--line);font-weight:600;font-size:14px;color:var(--ink);flex:none;max-width:200px;box-shadow:var(--shadow)}
 .acct-chip:hover{background:var(--surface)}
@@ -1087,6 +1102,23 @@ S.labs = Object.assign({ silence: false, resume: true, moments: true, gestures: 
 S.labs.focus = false; S.labs.amb = 'none';
 S.labsVote = store.get('labsVote', {}); S.pos = store.get('pos', {}); S.moments = store.get('moments', {});
 S.stats = store.get('stats', { days: {}, tracks: {} }); S.focusSt = null;
+S.devId = store.get('devId', '') || (() => { const v = Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); store.set('devId', v); return v; })();
+S.statsRemote = store.get('statsRemote', {});
+const statSum = st => st && st.days ? Object.values(st.days).reduce((a, b) => a + (+b || 0), 0) : 0;
+function statsAll() {
+  const out = { days: {}, tracks: {} };
+  for (const st of [S.stats, ...Object.values(S.statsRemote)]) { if (!st) continue;
+    for (const k in st.days || {}) out.days[k] = (out.days[k] || 0) + (+st.days[k] || 0);
+    for (const k in st.tracks || {}) out.tracks[k] = (out.tracks[k] || 0) + (+st.tracks[k] || 0); }
+  return out;
+}
+function mergeStats(remote) {
+  if (!remote || typeof remote !== 'object') return false; let ch = false;
+  for (const dev in remote) { if (dev === S.devId) continue; const r = remote[dev]; if (!r || !r.days) continue;
+    if (!S.statsRemote[dev] || statSum(r) > statSum(S.statsRemote[dev])) { S.statsRemote[dev] = r; ch = true; } }
+  if (ch) store.set('statsRemote', S.statsRemote);
+  return ch;
+}
 const TAB = Math.random().toString(36).slice(2);
 let bc = null; try { bc = new BroadcastChannel('kmp-player'); bc.onmessage = e => { if (S.labs.oneplayer && e.data && e.data.play && e.data.play !== TAB && E.playing) { pause(); toast('Пауза: музыка играет в другом окне KMP'); } }; } catch (e) {}
 S.trackFx = store.get('trackFx', {}); S.norm = store.get('norm', true); S.xfade = store.get('xfade', 0); S.sleep = null; S.loop = null;
@@ -1402,7 +1434,7 @@ function playList(ids, startId) {
 /* ================= effects chain ================= */
 const EQF = [32, 64, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
 const flabel = f => f >= 1000 ? (f / 1000) + 'к' : String(f);
-const FX_DEF = { eq: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], bass: 0, air: 0, drive: 0, filter: 0, comp: 0, crush: 0, vinyl: 0, wow: 0, chorus: 0, flanger: 0, tremolo: 0, width: 100, reverb: 0, room: 50, echo: 0, rotate: 0, speed: 100, karaoke: 0 };
+const FX_DEF = { eq: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], bass: 0, air: 0, drive: 0, filter: 0, comp: 0, crush: 0, vinyl: 0, wow: 0, chorus: 0, flanger: 0, tremolo: 0, width: 100, reverb: 0, room: 50, echo: 0, rotate: 0, speed: 100, karaoke: 0, harm: 0, phaser: 0, wah: 0, pingpong: 0, gate: 0 };
 const pct = { min: 0, max: 100, step: 1, u: '%' };
 const KNOBS = [
   { k: 'bass', l: 'Бас+', min: 0, max: 12, step: .5, u: ' дБ', g: 'tone' },
@@ -1410,17 +1442,22 @@ const KNOBS = [
   { k: 'drive', l: 'Тепло', ...pct, g: 'tone' },
   { k: 'filter', l: 'Фильтр', min: -100, max: 100, step: 1, bi: true, center: 0, fmt: v => v === 0 ? 'выкл' : (v < 0 ? 'НЧ ' + (-v) : 'ВЧ ' + v), g: 'tone' },
   { k: 'comp', l: 'Плотность', ...pct, g: 'tone' },
+  { k: 'harm', l: 'Саб-гармоники', ...pct, g: 'tone' },
   { k: 'crush', l: 'Биткраш', ...pct, g: 'tex' },
   { k: 'vinyl', l: 'Винил', ...pct, g: 'tex' },
   { k: 'wow', l: 'Плёнка', ...pct, g: 'tex' },
   { k: 'chorus', l: 'Хорус', ...pct, g: 'mod' },
   { k: 'flanger', l: 'Флэнжер', ...pct, g: 'mod' },
   { k: 'tremolo', l: 'Тремоло', ...pct, g: 'mod' },
+  { k: 'phaser', l: 'Фэйзер', ...pct, g: 'mod' },
+  { k: 'wah', l: 'Авто-вау', ...pct, g: 'mod' },
   { k: 'reverb', l: 'Реверб', ...pct, g: 'space' },
   { k: 'room', l: 'Размер зала', ...pct, g: 'space' },
   { k: 'echo', l: 'Эхо', ...pct, g: 'space' },
+  { k: 'pingpong', l: 'Пинг-понг', ...pct, g: 'space' },
   { k: 'width', l: 'Ширина', min: 0, max: 200, step: 1, u: '%', bi: true, center: 100, g: 'space' },
   { k: 'rotate', l: '8D', ...pct, g: 'move' },
+  { k: 'gate', l: 'Транс-гейт', ...pct, g: 'move' },
   { k: 'speed', l: 'Скорость', min: 50, max: 150, step: 1, bi: true, center: 100, fmt: v => (v / 100).toFixed(2).replace('.', ',') + '×', g: 'move' },
   { k: 'karaoke', l: 'Без голоса', ...pct, g: 'move' }
 ];
@@ -1445,6 +1482,11 @@ const PRESETS = [
   { id: 'pulse', cat: 'fx', name: 'Пульс', d: 'Громкость дышит волнами', hue: 350, p: { tremolo: 55, comp: 30 } },
   { id: 'water', cat: 'fx', name: 'Под водой', d: 'Как из соседней комнаты', hue: 200, p: { filter: -72, reverb: 38, room: 60, width: 80, chorus: 20 } },
   { id: 'phone', cat: 'fx', name: 'Телефон', d: 'Узкая полоса, моно', hue: 90, p: { eq: [-12, -12, -10, -4, 2, 5, 6, 0, -10, -12], filter: 40, drive: 25, width: 0 } },
+  { id: 'space', cat: 'mood', name: 'Космос', d: 'Фэйзер, эхо между ушами, бесконечный зал', hue: 250, p: { phaser: 55, reverb: 48, room: 88, pingpong: 30, width: 150, air: 2 } },
+  { id: 'funk', cat: 'fx', name: 'Фанк', d: 'Квакающий вау и плотный низ', hue: 28, p: { wah: 72, comp: 35, bass: 2, drive: 10 } },
+  { id: 'trance', cat: 'power', name: 'Транс', d: 'Звук режется в ритм трека', hue: 292, p: { gate: 75, reverb: 25, room: 60, pingpong: 22, width: 130 } },
+  { id: 'sub', cat: 'power', name: 'Саб', d: 'Бас слышно даже в телефоне', hue: 6, p: { harm: 75, bass: 4, comp: 30, eq: [3, 2, 1, 0, 0, 0, 0, 0, 0, 0] } },
+  { id: 'psy', cat: 'fx', name: 'Психоделика', d: 'Всё плывёт, кружится и отражается', hue: 140, p: { phaser: 70, rotate: 35, pingpong: 35, chorus: 25, reverb: 25, room: 65 } },
   { id: 'night', cat: 'mood', name: 'Тихий вечер', d: 'Ровная громкость, мягкий низ', hue: 240, p: { comp: 70, eq: [-3, -2, 0, 0, 0, 0, 0, -1, -2, -2] } }
 ];
 const presetParams = p => { const o = clone(FX_DEF); for (const k in p || {}) if (k in FX_DEF) o[k] = clone(p[k]); return o; };
@@ -1476,6 +1518,18 @@ function buildFX(c) {
   F.chDl = c.createDelay(.1); F.chDl.delayTime.value = .022; F.chAmt = G(); F.chAmt.gain.value = .004; O('sine', 1.3).connect(F.chAmt); F.chAmt.connect(F.chDl.delayTime); F.chWet = G(); F.chWet.gain.value = 0;
   F.flDl = c.createDelay(.05); F.flDl.delayTime.value = .004; F.flAmt = G(); F.flAmt.gain.value = .0032; O('sine', .22).connect(F.flAmt); F.flAmt.connect(F.flDl.delayTime); F.flFb = G(); F.flFb.gain.value = 0; F.flWet = G(); F.flWet.gain.value = 0;
   F.trem = G(); F.tremAmt = G(); F.tremAmt.gain.value = 0; O('sine', 5.5).connect(F.tremAmt); F.tremAmt.connect(F.trem.gain);
+  // phaser: 4 all-pass stages swept by a slow LFO
+  F.ph = [0, 1, 2, 3].map(() => BQ('allpass', 800, .6)); F.phAmt = G(); F.phAmt.gain.value = 0; F.phLfo = O('sine', .28); F.phLfo.connect(F.phAmt); F.ph.forEach(a => F.phAmt.connect(a.frequency)); F.phWet = G(); F.phWet.gain.value = 0;
+  for (let i = 0; i < 3; i++) F.ph[i].connect(F.ph[i + 1]); F.ph[3].connect(F.phWet);
+  // auto-wah: resonant band-pass swept by LFO
+  F.wah = BQ('bandpass', 850, 3.2); F.wahAmt = G(); F.wahAmt.gain.value = 0; F.wahLfo = O('sine', 1.8); F.wahLfo.connect(F.wahAmt); F.wahAmt.connect(F.wah.frequency); F.wahWet = G(); F.wahWet.gain.value = 0; F.wah.connect(F.wahWet);
+  // trance gate: smoothed square LFO chops the level
+  F.gate = G(); F.gateAmt = G(); F.gateAmt.gain.value = 0; F.gateLfo = O('square', 4); F.gateLp = BQ('lowpass', 38); F.gateLfo.connect(F.gateLp); F.gateLp.connect(F.gateAmt); F.gateAmt.connect(F.gate.gain);
+  // sub harmonics: low band driven into a shaper, harmonics mixed back
+  F.hLp = BQ('lowpass', 120); F.hSh = c.createWaveShaper(); F.hSh.curve = (() => { const n = 1024, cv = new Float32Array(n); for (let i = 0; i < n; i++) { const x = i / (n - 1) * 2 - 1; cv[i] = Math.tanh(5 * x) * .7 + Math.abs(x) * .3; } return cv; })();
+  F.hHp = BQ('highpass', 70); F.hTop = BQ('lowpass', 520); F.hWet = G(); F.hWet.gain.value = 0; F.hLp.connect(F.hSh); F.hSh.connect(F.hHp); F.hHp.connect(F.hTop); F.hTop.connect(F.hWet);
+  // tricks (stutter / reverse / freeze) live at the very start of the chain
+  F.tIn = G(); F.tDry = G(); F.tWet = G(); F.tWet.gain.value = 0;
   // stereo + karaoke
   F.pre = G(); F.pre.channelCount = 2; F.pre.channelCountMode = 'explicit'; F.pre.channelInterpretation = 'speakers';
   F.split = c.createChannelSplitter(2); F.merge = c.createChannelMerger(2);
@@ -1489,23 +1543,101 @@ function buildFX(c) {
   // space
   F.dry = G(); F.conv = c.createConvolver(); F.rvWet = G(); F.rvWet.gain.value = 0;
   F.dl = c.createDelay(2); F.dl.delayTime.value = .34; F.dlFb = G(); F.dlLp = BQ('lowpass', 3200); F.echoWet = G(); F.echoWet.gain.value = 0;
+  F.ppIn = G(); F.ppIn.channelCount = 1; F.ppIn.channelCountMode = 'explicit'; F.ppL = c.createDelay(2); F.ppR = c.createDelay(2); F.ppA = G(); F.ppB = G(); F.ppMg = c.createChannelMerger(2); F.ppLp = BQ('lowpass', 4200); F.ppWet = G(); F.ppWet.gain.value = 0;
+  F.ppIn.connect(F.ppL); F.ppL.connect(F.ppMg, 0, 0); F.ppL.connect(F.ppA); F.ppA.connect(F.ppR); F.ppR.connect(F.ppMg, 0, 1); F.ppR.connect(F.ppB); F.ppB.connect(F.ppL); F.ppMg.connect(F.ppLp); F.ppLp.connect(F.ppWet);
   // wiring
-  let n = F.input; for (const b of F.eq) { n.connect(b); n = b; }
+  F.input.connect(F.tIn); F.tIn.connect(F.tDry); F.tDry.connect(F.eq[0]); F.tWet.connect(F.eq[0]);
+  let n = F.eq[0]; for (const b of F.eq.slice(1)) { n.connect(b); n = b; }
   n.connect(F.bass); F.bass.connect(F.air); F.air.connect(F.shaper); F.shaper.connect(F.makeup); F.makeup.connect(F.crusher); F.crusher.connect(F.hp); F.hp.connect(F.lp); F.lp.connect(F.comp); F.comp.connect(F.compMk); F.compMk.connect(F.wowDl); F.wowDl.connect(F.mod);
   F.mod.connect(F.modDry); F.modDry.connect(F.modOut);
-  F.chDl.connect(F.chWet); F.chWet.connect(F.modOut);
+  F.chDl.connect(F.chWet); F.chWet.connect(F.modOut); F.phWet.connect(F.modOut); F.wahWet.connect(F.modOut); F.hWet.connect(F.wowDl);
   F.flDl.connect(F.flFb); F.flFb.connect(F.flDl); F.flDl.connect(F.flWet); F.flWet.connect(F.modOut);
-  F.modOut.connect(F.trem); F.trem.connect(F.pre); F.pre.connect(F.split);
+  F.modOut.connect(F.trem); F.trem.connect(F.gate); F.gate.connect(F.pre); F.pre.connect(F.split);
   F.split.connect(F.m.LL, 0); F.split.connect(F.m.LR, 0); F.split.connect(F.m.RL, 1); F.split.connect(F.m.RR, 1);
   F.m.LL.connect(F.merge, 0, 0); F.m.RL.connect(F.merge, 0, 0); F.m.LR.connect(F.merge, 0, 1); F.m.RR.connect(F.merge, 0, 1);
   F.merge.connect(F.pan); F.kLp.connect(F.kGain); F.kGain.connect(F.pan);
   F.pan.connect(F.dry); F.dry.connect(E.gain);
   F.conv.connect(F.rvWet); F.rvWet.connect(E.gain);
-  F.dl.connect(F.dlLp); F.dlLp.connect(F.dlFb); F.dlFb.connect(F.dl); F.dlLp.connect(F.echoWet); F.echoWet.connect(E.gain);
+  F.dl.connect(F.dlLp); F.dlLp.connect(F.dlFb); F.dlFb.connect(F.dl); F.dlLp.connect(F.echoWet); F.echoWet.connect(E.gain); F.ppWet.connect(E.gain);
+  initTricks(c, F);
   F.on = {};
   return F;
 }
 /* branches that are switched off are physically disconnected, so idle reverb/echo/chorus cost no CPU */
+function curBpm() { const t = typeof curT === 'function' ? curT() : null; const b = t && +t.bpm; return b >= 60 && b <= 200 ? b : 120; }
+const TRICK_SRC = `class KT extends AudioWorkletProcessor {
+  constructor() { super(); this.n = Math.floor(sampleRate * 4); this.b = [new Float32Array(this.n), new Float32Array(this.n)]; this.w = 0; this.m = 0; this.len = 0; this.st = 0; this.r = 0; this.p = 0; this.g = 0;
+    this.port.onmessage = e => { const d = e.data; this.m = d.m; if (!d.m) return; this.len = Math.max(256, Math.min(this.n - 1, Math.floor(d.len * sampleRate))); this.st = (this.w - this.len + this.n) % this.n; this.r = 0; this.p = this.w; this.g = 0; }; }
+  process(ins, outs) {
+    const i = ins[0], o = outs[0], L = i && i[0], Rr = i && (i[1] || i[0]), N = o[0].length, n = this.n, fade = 96;
+    for (let k = 0; k < N; k++) {
+      const xl = L ? L[k] : 0, xr = Rr ? Rr[k] : 0; let yl = xl, yr = xr;
+      if (this.m === 1) { const idx = (this.st + this.r) % n, e = Math.min(1, this.r / fade, (this.len - this.r) / fade); yl = this.b[0][idx] * e; yr = this.b[1][idx] * e; this.r = (this.r + 1) % this.len; }
+      else if (this.m === 2) { this.p = (this.p - 2 + n) % n; this.g++; const e = Math.min(1, this.g / fade); yl = this.b[0][this.p] * e; yr = this.b[1][this.p] * e; }
+      else if (this.m === 3) { const G = this.len, a = this.r % G, b2 = (this.r + (G >> 1)) % G, wa = .5 - .5 * Math.cos(2 * Math.PI * a / G), wb = .5 - .5 * Math.cos(2 * Math.PI * b2 / G), ia = (this.st + a) % n, ib = (this.st + b2) % n; yl = this.b[0][ia] * wa + this.b[0][ib] * wb; yr = this.b[1][ia] * wa + this.b[1][ib] * wb; this.r++; }
+      if (this.m !== 3 && this.m !== 1) { this.b[0][this.w] = xl; this.b[1][this.w] = xr; this.w = (this.w + 1) % n; }
+      else { this.b[0][this.w] = xl; this.b[1][this.w] = xr; this.w = (this.w + 1) % n; if (this.w === this.st) this.st = (this.st + 1) % n; }
+      o[0][k] = yl; if (o[1]) o[1][k] = yr;
+    }
+    return true;
+  }
+}
+registerProcessor('kmp-trick', KT);`;
+const TK = { node: null, on: null, rateT: 0 };
+async function initTricks(c, F) {
+  if (!c.audioWorklet || typeof AudioWorkletNode === 'undefined') return;
+  try {
+    const url = URL.createObjectURL(new Blob([TRICK_SRC], { type: 'application/javascript' }));
+    await c.audioWorklet.addModule(url);
+    TK.node = new AudioWorkletNode(c, 'kmp-trick', { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
+    F.tIn.connect(TK.node); TK.node.connect(F.tWet);
+  } catch (e) { TK.node = null; }
+}
+const TRICKS = [
+  { k: 'st4', l: 'Повтор 1/4', d: 'Зацикливает долю', key: '1', g: '<path d="M4 12a8 8 0 0 1 13.7-5.6M20 12a8 8 0 0 1-13.7 5.6"/><path d="M17.5 3v3.6h-3.6M6.5 21v-3.6h3.6"/>' },
+  { k: 'st8', l: 'Повтор 1/8', d: 'Быстрый заикающийся луп', key: '2', g: '<path d="M4 7v10M9 7v10M14 7v10M19 7v10"/>' },
+  { k: 'st16', l: 'Ролл 1/16', d: 'Барабанная дробь', key: '3', g: '<path d="M3 8v8M6 8v8M9 8v8M12 8v8M15 8v8M18 8v8M21 8v8"/>' },
+  { k: 'rev', l: 'Реверс', d: 'Музыка играет задом наперёд', key: '4', g: '<path d="M11 6 5 12l6 6M19 6l-6 6 6 6"/>' },
+  { k: 'frz', l: 'Заморозка', d: 'Останавливает мгновение в звук', key: '5', g: '<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/><path d="M9.5 4.5 12 7l2.5-2.5M9.5 19.5 12 17l2.5 2.5"/>' },
+  { k: 'stop', l: 'Стоп плёнки', d: 'Как будто выдернули вертушку', key: '6', g: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2"/><path d="M12 3.5v4"/>' },
+  { k: 'rise', l: 'Подъём', d: 'Нарастание перед дропом', key: '7', g: '<path d="M3 19c6 0 9-4 11-9s4-6 7-6"/><path d="M16.5 4H21v4.5"/>' },
+  { k: 'drop', l: 'Бас-дроп', d: 'Отпусти, и бас бьёт в полную', key: '8', g: '<path d="M12 4v12M6.5 11l5.5 5.5 5.5-5.5M5 20.5h14"/>' }
+];
+function trickOn(k) {
+  const F = E.fx; if (!F || TK.on === k) return; if (TK.on) trickOff(TK.on);
+  const c = E.ctx, t = c.currentTime, beat = 60 / curBpm(); TK.on = k;
+  document.querySelectorAll(`[data-trick="${k}"]`).forEach(b => b.classList.add('on'));
+  const toWet = () => { F.tDry.gain.setTargetAtTime(0, t, .004); F.tWet.gain.setTargetAtTime(1, t, .004); };
+  if (k.startsWith('st') || k === 'rev' || k === 'frz') {
+    if (!TK.node) { toast('Этот трюк не поддерживается в твоём браузере'); TK.on = null; return; }
+    const len = k === 'st4' ? beat : k === 'st8' ? beat / 2 : k === 'st16' ? beat / 4 : k === 'frz' ? .12 : 4;
+    TK.node.port.postMessage({ m: k === 'rev' ? 2 : k === 'frz' ? 3 : 1, len }); toWet();
+  } else if (k === 'stop') {
+    const els = [...E.decks, E.raw].filter(Boolean).map(d => d.el), r0 = E.rate || 1, t0 = performance.now();
+    clearInterval(TK.rateT);
+    TK.rateT = setInterval(() => { const p = Math.min(1, (performance.now() - t0) / 900), r = Math.max(.07, r0 * Math.pow(1 - p, 1.6)); els.forEach(el => { try { el.playbackRate = r; } catch (e) {} }); if (p >= 1) clearInterval(TK.rateT); }, 30);
+    F.tIn.gain.cancelScheduledValues(t); F.tIn.gain.setValueAtTime(1, t); F.tIn.gain.linearRampToValueAtTime(0, t + .95);
+  } else if (k === 'rise') {
+    link(F, 'rv', true, F.pan, F.conv); link(F, 'dl', true, F.pan, F.dl);
+    F.hp.frequency.cancelScheduledValues(t); F.hp.frequency.setValueAtTime(Math.max(20, F.hp.frequency.value), t); F.hp.frequency.exponentialRampToValueAtTime(2600, t + 4);
+    F.hp.Q.setTargetAtTime(6, t, .8); F.rvWet.gain.setTargetAtTime(.9, t, 1.2); F.echoWet.gain.setTargetAtTime(.45, t, 1); F.dlFb.gain.setTargetAtTime(.6, t, .5);
+  } else if (k === 'drop') {
+    F.lp.frequency.cancelScheduledValues(t); F.lp.frequency.setTargetAtTime(260, t, .05); F.lp.Q.setTargetAtTime(5, t, .05); F.tIn.gain.setTargetAtTime(.8, t, .05);
+  }
+}
+function trickOff(k) {
+  const F = E.fx; if (!F || !k || TK.on !== k) return; TK.on = null;
+  document.querySelectorAll(`[data-trick="${k}"]`).forEach(b => b.classList.remove('on'));
+  const c = E.ctx, t = c.currentTime;
+  if (k.startsWith('st') || k === 'rev' || k === 'frz') { F.tDry.gain.setTargetAtTime(1, t, .004); F.tWet.gain.setTargetAtTime(0, t, .004); setTimeout(() => { if (!TK.on && TK.node) TK.node.port.postMessage({ m: 0 }); }, 40); }
+  else if (k === 'stop') { clearInterval(TK.rateT); setRate(); F.tIn.gain.cancelScheduledValues(t); F.tIn.gain.setTargetAtTime(1, t, .06); }
+  else if (k === 'rise' || k === 'drop') {
+    [F.hp.frequency, F.lp.frequency].forEach(p => p.cancelScheduledValues(t));
+    if (k === 'drop') { F.tIn.gain.setTargetAtTime(1, t, .01); F.bass.gain.setValueAtTime(FX.bass + 9, t); F.bass.gain.setTargetAtTime(FX.bass, t + .12, .35); }
+    applyFX(); if (k === 'drop') { F.bass.gain.cancelScheduledValues(t); F.bass.gain.setValueAtTime(FX.bass + 9, t); F.bass.gain.setTargetAtTime(FX.bass, t + .12, .35); }
+  }
+}
+addEventListener('blur', () => { if (TK.on) trickOff(TK.on); });
 function link(F, key, on, a, b) { if (on && !F.on[key]) { a.connect(b); F.on[key] = true; } else if (!on && F.on[key]) { try { a.disconnect(b); } catch (e) {} F.on[key] = false; } }
 function makeIR(c, room) {
   const len = .6 + room / 100 * (IS_MOBILE ? 2.2 : 4.4), sr = c.sampleRate, n = Math.floor(sr * len), b = c.createBuffer(2, n, sr), dec = 2 + room / 100 * 2;
@@ -1532,8 +1664,15 @@ function applyFX(force) {
   const fl = filterFreqs(FX.filter); sp(F.hp.frequency, fl.hp); sp(F.lp.frequency, fl.lp); sp(F.hp.Q, fl.qh); sp(F.lp.Q, fl.ql);
   const cm = FX.comp / 100; sp(F.comp.threshold, -cm * 40); sp(F.comp.ratio, 1 + cm * 11); F.comp.knee.value = 18; F.comp.attack.value = .008; F.comp.release.value = .22; sp(F.compMk.gain, 1 + cm * .9);
   sp(F.chWet.gain, FX.chorus / 100 * .7); sp(F.flWet.gain, FX.flanger / 100 * .7); sp(F.flFb.gain, FX.flanger / 100 * .6);
-  sp(F.modDry.gain, 1 - Math.max(FX.chorus, FX.flanger) / 100 * .25);
+  sp(F.modDry.gain, Math.max(.15, 1 - Math.max(FX.chorus, FX.flanger) / 100 * .25 - FX.wah / 100 * .75));
   const td = FX.tremolo / 100 * .9; sp(F.trem.gain, 1 - td / 2); sp(F.tremAmt.gain, td / 2);
+  const beat = 60 / curBpm();
+  sp(F.phWet.gain, FX.phaser / 100 * .85); sp(F.phAmt.gain, FX.phaser > 0 ? 650 : 0); sp(F.phLfo.frequency, .12 + FX.phaser / 100 * .35);
+  sp(F.wahWet.gain, FX.wah / 100 * 2.4); sp(F.wahAmt.gain, FX.wah > 0 ? 620 : 0); sp(F.wahLfo.frequency, 1 / beat);
+  const gd = FX.gate / 100 * .95; sp(F.gate.gain, 1 - gd / 2); sp(F.gateAmt.gain, gd / 2); sp(F.gateLfo.frequency, 2 / beat);
+  sp(F.hWet.gain, FX.harm / 100 * 1.2);
+  sp(F.ppWet.gain, FX.pingpong / 100 * .6); sp(F.ppA.gain, .3 + FX.pingpong / 100 * .35); sp(F.ppB.gain, .3 + FX.pingpong / 100 * .35); sp(F.ppL.delayTime, beat * .75); sp(F.ppR.delayTime, beat * .75);
+  link(F, 'ph', FX.phaser > 0, F.mod, F.ph[0]); link(F, 'wah', FX.wah > 0, F.mod, F.wah); link(F, 'hm', FX.harm > 0, F.compMk, F.hLp); link(F, 'pp', FX.pingpong > 0, F.pan, F.ppIn);
   const w = FX.width / 100, m = 1 - FX.karaoke / 100 * .97, a = (m + w) / 2, b = (m - w) / 2;
   sp(F.m.LL.gain, a); sp(F.m.RR.gain, a); sp(F.m.LR.gain, b); sp(F.m.RL.gain, b); sp(F.kGain.gain, FX.karaoke / 100 * .9);
   const r = FX.rotate / 100; sp(F.lfoAmt.gain, r > 0 ? Math.min(1, .35 + r * .65) : 0); sp(F.lfo.frequency, .06 + r * .22);
@@ -1548,7 +1687,7 @@ function applyFX(force) {
 }
 function setBypass(on) {
   E.bypass = on;
-  if (E.fx) { const F = E.fx; F.input.disconnect(); F.input.connect(on ? E.gain : F.eq[0]); link(F, 'vin', FX.vinyl > 0 && !on, F.vinGain, F.pre); }
+  if (E.fx) { const F = E.fx; F.input.disconnect(); F.input.connect(on ? E.gain : F.tIn); link(F, 'vin', FX.vinyl > 0 && !on, F.vinGain, F.pre); }
   setRate();
 }
 const MC = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 1, 44100);
@@ -1572,7 +1711,7 @@ function matchPreset() {
 function fxChanged() {
   FXP = matchPreset();
   const id = S.queue[S.qi];
-  if (id && S.trackFx[id]) { S.trackFx[id] = clone(FX); store.set('trackFx', S.trackFx); } else store.set('fx', FX);
+  if (id && S.trackFx[id]) { S.trackFx[id] = clone(FX); store.set('trackFx', S.trackFx); try { Cloud.dataChanged(); } catch (e) {} } else store.set('fx', FX);
   applyFX(); syncMirror(); syncMixerUI(); markFXBtn();
 }
 function applyTrackFx(t, silent) {
@@ -2103,6 +2242,11 @@ const GLYPH = {
   water: '<path d="M12 3.5s6 6.2 6 10.5a6 6 0 0 1-12 0c0-4.3 6-10.5 6-10.5z"/>',
   phone: '<rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 17.5h2"/>',
   night: '<path d="M16 15.5A6.5 6.5 0 1 1 8.5 6a5 5 0 0 0 7.5 9.5z"/><path d="M18.5 3.5v3M17 5h3"/>',
+  space: '<circle cx="12" cy="12" r="4.5"/><ellipse cx="12" cy="12" rx="10" ry="3.6" transform="rotate(-20 12 12)"/>',
+  funk: '<path d="M2.5 12c2.5 0 2.5-6 5-6s2.5 12 5 12 2.5-9 5-9 2.5 3 4 3"/>',
+  trance: '<path d="M3.5 7.5h3v9h-3zM10.5 7.5h3v9h-3zM17.5 7.5h3v9h-3z"/>',
+  sub: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
+  psy: '<path d="M12 12a1.5 1.5 0 0 1 3 0 3 3 0 0 1-6 0 4.5 4.5 0 0 1 9 0 6 6 0 0 1-12 0 7.5 7.5 0 0 1 15 0"/>',
   custom: '<path d="M6 4v5M6 13v7M12 4v10M12 18v2M18 4v2M18 10v10"/><circle cx="6" cy="11" r="2"/><circle cx="12" cy="16" r="2"/><circle cx="18" cy="8" r="2"/>'
 };
 const glyph = id => `<svg viewBox="0 0 24 24" aria-hidden="true">${GLYPH[id] || GLYPH.custom}</svg>`;
@@ -2115,16 +2259,22 @@ function presetsHTML() {
     <span class="pc-art">${glyph(p.user ? 'custom' : p.id)}${p.user ? `<span class="p-more" data-pmenu="${p.id}" role="button" tabindex="0" aria-label="Действия с пресетом">${ic('more')}</span>` : ''}</span>
     <span class="pc-t"><b>${esc(p.name)}</b><span class="d">${esc(p.d || 'Твой пресет')}</span></span></button>`).join('');
 }
-const MIXTABS = [['eq', 'Эквалайзер'], ['tone', 'Тон'], ['space', 'Пространство'], ['mod', 'Модуляция'], ['tex', 'Текстура'], ['move', 'Движение']];
-function tabActive(k) { if (k === 'eq') return FX.eq.some(v => v !== 0); return KNOBS.some(m => m.g === k && FX[m.k] !== FX_DEF[m.k]); }
+const MIXTABS = [['eq', 'Эквалайзер'], ['tricks', 'Трюки'], ['tone', 'Тон'], ['space', 'Пространство'], ['mod', 'Модуляция'], ['tex', 'Текстура'], ['move', 'Движение']];
+function tabActive(k) { if (k === 'tricks') return false; if (k === 'eq') return FX.eq.some(v => v !== 0); return KNOBS.some(m => m.g === k && FX[m.k] !== FX_DEF[m.k]); }
 function mixTabsHTML() { return MIXTABS.map(([k, l]) => `<button role="tab" data-act="mix-tab" data-v="${k}" aria-selected="${S.mixTab === k}">${l}${tabActive(k) ? '<i></i>' : ''}</button>`).join(''); }
 function mixPanelHTML() {
   if (S.mixTab === 'eq') return `<div class="c-card mp-eq"><canvas id="eqCv" class="eq-cv" aria-hidden="true"></canvas>
       <div class="eq-sliders">${EQF.map((f, i) => `<label class="eqs"><output id="eqv${i}">0</output><input type="range" id="eq${i}" min="-12" max="12" step="0.5" value="${FX.eq[i]}" data-eq="${i}" aria-label="${flabel(f)} Гц"><span>${flabel(f)}</span></label>`).join('')}</div></div>
     <div class="c-card mp-out"><div class="meters"><div class="meter"><i id="mL"></i></div><div class="meter"><i id="mR"></i></div></div><div class="m-lab"><span>L</span><span>R</span></div>
       <dl class="c-read"><div><dt>Пик</dt><dd id="rdPk">−∞ дБ</dd></div><div><dt>Сжатие</dt><dd id="rdGR">0,0 дБ</dd></div><div><dt>Скорость</dt><dd id="rdRate">1,00×</dd></div></dl></div>`;
+  if (S.mixTab === 'tricks') return `<div class="c-card mp-pads"><div class="pads">${TRICKS.map(x => `<button class="pad" data-trick="${x.k}" aria-label="${x.l}"><svg viewBox="0 0 24 24" aria-hidden="true">${x.g}</svg><b>${x.l}</b><small>${x.d}</small>${IS_MOBILE ? '' : `<kbd>${x.key}</kbd>`}</button>`).join('')}</div><p class="pads-note">Зажми и держи. Отпустишь, и музыка продолжится с того же места.</p></div>`;
   return `<div class="c-card mp-knobs"><div class="knobs big">${KNOBS.filter(k => k.g === S.mixTab).map(knobHTML).join('')}</div></div>`;
 }
+document.addEventListener('pointerdown', e => { const b = e.target.closest('[data-trick]'); if (!b) return; e.preventDefault(); if (!E.playing) { toast('Сначала включи музыку'); return; } try { b.setPointerCapture(e.pointerId); } catch (er) {} trickOn(b.dataset.trick); });
+['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => document.addEventListener(ev, e => { const b = e.target.closest && e.target.closest('[data-trick]'); if (b) trickOff(b.dataset.trick); }));
+document.addEventListener('contextmenu', e => { if (e.target.closest('[data-trick]')) e.preventDefault(); });
+document.addEventListener('keydown', e => { if (S.view !== 'mixer' || e.repeat || e.ctrlKey || e.metaKey || e.altKey || /INPUT|TEXTAREA/.test(document.activeElement && document.activeElement.tagName)) return; const x = TRICKS.find(t => t.key === e.key); if (x && E.playing) { e.preventDefault(); trickOn(x.k); } });
+document.addEventListener('keyup', e => { const x = TRICKS.find(t => t.key === e.key); if (x) trickOff(x.k); });
 function paintMixPanel() {
   const t = $('#mixTabs'), p = $('#mixPanel'); if (!t || !p) return;
   t.innerHTML = mixTabsHTML(); p.innerHTML = mixPanelHTML(); p.className = 'console one ' + (S.mixTab === 'eq' ? 'is-eq' : '');
@@ -2417,7 +2567,7 @@ const Cloud = {
     finally { if (btn.isConnected) btn.disabled = false; }
   },
   async signOut() {
-    const uid = this.user && this.user.id; await this.sb.auth.signOut();
+    const uid = this.user && this.user.id; await this.sb.auth.signOut(); S.statsRemote = {}; store.set('statsRemote', {});
     let n = 0; for (const t of [...T.values()]) if (t.cloud && t.owner === uid) { T.delete(t.id); DB.del(t.id); bufCache.delete(t.id); S.order = S.order.filter(x => x !== t.id); n++; }
     if (n) { S.queue = S.queue.filter(id => T.has(id)); if (!S.queue.length) { S.queue = [...S.order]; S.qi = 0; } S.qi = Math.min(S.qi, S.queue.length - 1); stopAll(); E.playing = false; E.buf = null; }
     toast(n ? `Ты вышел. ${n} ${plural(n, 'облачный трек убран', 'облачных трека убрано', 'облачных треков убрано')} с этого устройства` : 'Ты вышел из аккаунта');
@@ -2534,25 +2684,41 @@ const Cloud = {
   },
   /* ---- likes, playlists, presets ---- */
   dataChanged() { if (!this.user) return; store.set('udStamp', Date.now()); clearTimeout(this.pushT); this.pushT = setTimeout(() => this.pushData(), 1500); },
-  snapshot() { return { liked: [...S.liked], pls: S.pls, presets: userPresets, plays: S.plays }; },
-  async pushData() {
-    if (!this.user) return;
-    const { error } = await this.sb.from('user_data').upsert({ user_id: this.user.id, data: this.snapshot(), updated_at: new Date(store.get('udStamp', Date.now())).toISOString() });
-    if (error) this.err = 'Не удалось сохранить лайки и плейлисты. Попробую позже';
+  snapshot() {
+    const stats = Object.assign({}, S.statsRemote, { [S.devId]: S.stats });
+    return { liked: [...S.liked], pls: S.pls, presets: userPresets, plays: S.plays, moments: S.moments, trackFx: S.trackFx, labs: S.labs, stats };
   },
+  statsT: 0,
+  statsChanged() { if (!this.user || this.statsT) return; this.statsT = setTimeout(() => { this.statsT = 0; this.pushData(); }, 60000); },
+  applyRemote(d, ts) {
+    if (Array.isArray(d.liked)) S.liked = new Set(d.liked);
+    if (Array.isArray(d.pls)) S.pls = d.pls;
+    if (Array.isArray(d.presets)) { userPresets = d.presets; store.set('fxUser', userPresets); }
+    if (d.plays && typeof d.plays === 'object') for (const k in d.plays) S.plays[k] = Math.max(S.plays[k] || 0, d.plays[k]);
+    if (d.moments && typeof d.moments === 'object') { S.moments = d.moments; store.set('moments', S.moments); }
+    if (d.trackFx && typeof d.trackFx === 'object') { S.trackFx = d.trackFx; store.set('trackFx', S.trackFx); }
+    if (d.labs && typeof d.labs === 'object') { const amb = S.labs.amb, ambVol = S.labs.ambVol; Object.assign(S.labs, d.labs, { amb, ambVol }); store.set('labs', S.labs); }
+    store.set('udStamp', ts); persist(true);
+  },
+  async pushData() {
+    if (!this.user || this.pushing) return; this.pushing = true;
+    try {
+      const { data: row } = await this.sb.from('user_data').select('data,updated_at').eq('user_id', this.user.id).maybeSingle();
+      if (row) { const rt = Date.parse(row.updated_at), d = row.data || {}; mergeStats(d.stats); if (rt > store.get('udStamp', 0)) { this.applyRemote(d, rt); this.refreshViews(); } }
+      const { error } = await this.sb.from('user_data').upsert({ user_id: this.user.id, data: this.snapshot(), updated_at: new Date(store.get('udStamp', Date.now())).toISOString() });
+      if (error) throw error;
+    } catch (e) { this.err = 'Не удалось сохранить данные. Попробую позже'; }
+    finally { this.pushing = false; }
+  },
+  refreshViews() { if (['home', 'liked', 'mixer', 'labs', 'me'].includes(S.view) || S.view.startsWith('pl:')) renderView(); else renderNow(); },
   async pullData() {
     const { data, error } = await this.sb.from('user_data').select('data,updated_at').eq('user_id', this.user.id).maybeSingle();
     if (error) throw error;
-    const local = store.get('udStamp', 0);
-    if (data && Date.parse(data.updated_at) > local) {
-      const d = data.data || {};
-      if (Array.isArray(d.liked)) S.liked = new Set(d.liked);
-      if (Array.isArray(d.pls)) S.pls = d.pls;
-      if (Array.isArray(d.presets)) { userPresets = d.presets; store.set('fxUser', userPresets); }
-      if (d.plays && typeof d.plays === 'object') for (const k in d.plays) S.plays[k] = Math.max(S.plays[k] || 0, d.plays[k]);
-      store.set('udStamp', Date.parse(data.updated_at)); persist(true);
-      if (['home', 'liked', 'mixer'].includes(S.view) || S.view.startsWith('pl:')) renderView(); else renderNow();
-    } else if (!data || local > Date.parse(data.updated_at)) { if (!local) store.set('udStamp', Date.now()); await this.pushData(); }
+    const local = store.get('udStamp', 0), sch = data ? mergeStats((data.data || {}).stats) : false;
+    if (data && Date.parse(data.updated_at) > local) { this.applyRemote(data.data || {}, Date.parse(data.updated_at)); this.refreshViews(); }
+    else if (!data || local > Date.parse(data.updated_at)) { if (!local) store.set('udStamp', Date.now()); await this.pushData(); }
+    else if (sch && S.view === 'labs') renderView();
+    if (data && !((data.data || {}).stats || {})[S.devId] && statSum(S.stats) > 0) await this.pushData();
   },
   async deleteAccount(btn) {
     if (!btn.classList.contains('armed')) { btn.classList.add('armed'); btn.querySelector('span').textContent = 'Точно? Нажми ещё раз'; setTimeout(() => { if (btn.isConnected) { btn.classList.remove('armed'); btn.querySelector('span').textContent = 'Удалить аккаунт'; } }, 4000); return; }
@@ -2642,7 +2808,7 @@ function meHTML() {
       <div class="card-s wide danger-zone"><h3>Удаление аккаунта</h3><p>Удалит профиль, все треки из облака, посты, комментарии и лайки. Треки на этом устройстве останутся.</p><button class="btn btn-danger press" data-act="acct-delete" style="align-self:flex-start">${ic('trash')}<span>Удалить аккаунт</span></button></div>
     </div>`;
 }
-if (window.KMP_DEBUG) window.__kmp = { Cloud, T, S, E, synth, ensureBuffer, srcFor };
+if (window.KMP_DEBUG) window.__kmp = { Cloud, T, S, E, synth, ensureBuffer, srcFor, statsAll, TK, trickOn, trickOff, applyFX, get FX() { return FX; } };
 /* ================= labs ================= */
 const LABS = [
   { k: 'oneplayer', t: 'Один плеер', d: 'Если KMP открыт в двух окнах, играет только одно. Защищает от двойного звука.' },
@@ -2659,11 +2825,11 @@ addEventListener('beforeinstallprompt', e => { e.preventDefault(); installPrompt
 addEventListener('appinstalled', () => { installPrompt = null; toast('KMP установлен'); });
 function labOn(k) { return k === 'amb' ? S.labs.amb && S.labs.amb !== 'none' : !!S.labs[k]; }
 function statsHTML() {
-  const days = S.stats.days, today = dayKey(0);
+  const ALL = statsAll(), days = ALL.days, today = dayKey(0);
   const week = [...Array(7)].map((_, i) => { const k = dayKey(6 - i); return { k, v: days[k] || 0, l: ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'][new Date(Date.now() - (6 - i) * 864e5).getDay()] }; });
   const mx = Math.max(60, ...week.map(w => w.v)), total = Object.values(days).reduce((a, b) => a + b, 0);
   let streak = 0; for (let i = 0; i < 365 && (days[dayKey(i)] || 0) >= 60; i++) streak++;
-  const top = Object.entries(S.stats.tracks).filter(([id]) => T.has(id)).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  const top = Object.entries(ALL.tracks).filter(([id]) => T.has(id)).sort((a, b) => b[1] - a[1]).slice(0, 3);
   const mins = v => Math.round(v / 60);
   return `<div class="stats">
     <dl class="stat"><dt>Сегодня</dt><dd>${mins(days[today] || 0)}<small>мин</small></dd></dl>
@@ -2690,15 +2856,16 @@ function labsHTML() {
 }
 function dayKey(back) { const d = new Date(Date.now() - back * 864e5); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
 let statAcc = 0, statTrack = 0, statLast = 0;
-function tickStats(ts) {
-  const dt = statLast ? Math.min(1, (ts - statLast) / 1000) : 0; statLast = ts;
-  if (!E.playing || document.hidden && dt > .9) return;
+setInterval(() => { if (document.hidden) tickStats(performance.now(), true); }, 5000);
+function tickStats(ts, bg) {
+  const dt = statLast ? Math.min(bg ? 6 : 1, (ts - statLast) / 1000) : 0; statLast = ts;
+  if (!E.playing || (document.hidden && !bg)) return;
   statAcc += dt; statTrack += dt;
   if (statAcc >= 5) {
     const k = dayKey(0), t = curT();
     S.stats.days[k] = (S.stats.days[k] || 0) + statAcc;
     if (t && !String(t.id).startsWith('tmp:')) S.stats.tracks[t.id] = (S.stats.tracks[t.id] || 0) + statTrack;
-    statAcc = 0; statTrack = 0; store.set('stats', S.stats);
+    statAcc = 0; statTrack = 0; store.set('stats', S.stats); try { Cloud.statsChanged(); } catch (e) {}
     if (S.labs.resume) savePos();
   }
 }
@@ -2721,7 +2888,7 @@ function ambBuffer(c, kind) {
   return b;
 }
 function setAmb(v, silent) {
-  S.labs.amb = v; store.set('labs', S.labs);
+  S.labs.amb = v; store.set('labs', S.labs); try { Cloud.dataChanged(); } catch (e) {}
   if (E.amb) { const old = E.amb; old.g.gain.setTargetAtTime(.0001, E.ctx.currentTime, .4); setTimeout(() => { try { old.s.stop(); } catch (e) {} }, 2000); E.amb = null; }
   if (v !== 'none') {
     ac(); const c = E.ctx, s = c.createBufferSource(), g = c.createGain();
@@ -2756,7 +2923,7 @@ function addMoment() {
   if (!S.labs.moments) { toast('Моменты выключены в Лаборатории'); return; }
   const ct = Math.round(curTime() * 10) / 10, arr = S.moments[t.id] = (S.moments[t.id] || []);
   if (arr.some(x => Math.abs(x - ct) < 2)) { toast('Здесь момент уже есть'); return; }
-  arr.push(ct); arr.sort((a, b) => a - b); store.set('moments', S.moments); renderMoments(); toast(`Момент ${fmt(ct)} сохранён`);
+  arr.push(ct); arr.sort((a, b) => a - b); store.set('moments', S.moments); try { Cloud.dataChanged(); } catch (e) {} renderMoments(); toast(`Момент ${fmt(ct)} сохранён`);
 }
 function renderMoments() {
   const el = $('#momList'); if (!el) return; const t = curT(), arr = (t && S.moments[t.id]) || [];
@@ -3066,7 +3233,7 @@ document.addEventListener('click', e => {
       case 'fx-save': openModal({ title: 'Новый пресет', ph: 'Например: ночью в машине' }, name => { addPreset(name, FX); toast(`Пресет «${name}» сохранён`); }); break;
       case 'fx-update': { const p = userPresets.find(x => x.id === FXBASE); if (p) { p.p = clone(FX); savePresets(); toast(`Пресет «${p.name}» обновлён`); } break; }
       case 'fx-import': openModal({ title: 'Вставь код пресета', ph: 'KMP1:…', max: 4000, btn: 'Добавить' }, code => { const o = parseCode(code); if (!o) { toast('Это не код пресета KMP'); return; } const p = addPreset(o.name, presetParams(o.p)); applyPreset(p.id); toast(`Пресет «${o.name}» добавлен и включён`); }); break;
-      case 'fx-bind': { const t = curT(); if (!t) break; if (S.trackFx[t.id]) { delete S.trackFx[t.id]; store.set('trackFx', S.trackFx); applyTrackFx(t, true); toast('Трек снова играет с общим звуком'); } else { S.trackFx[t.id] = clone(FX); store.set('trackFx', S.trackFx); toast(`Звук запомнен для «${t.title}»`); } updateSmartUI(); break; }
+      case 'fx-bind': { const t = curT(); if (!t) break; if (S.trackFx[t.id]) { delete S.trackFx[t.id]; store.set('trackFx', S.trackFx); try { Cloud.dataChanged(); } catch (e) {} applyTrackFx(t, true); toast('Трек снова играет с общим звуком'); } else { S.trackFx[t.id] = clone(FX); store.set('trackFx', S.trackFx); try { Cloud.dataChanged(); } catch (e) {} toast(`Звук запомнен для «${t.title}»`); } updateSmartUI(); break; }
       case 'cloud-retry': { Cloud.err = ''; Cloud.ready = false; renderView(); Cloud.init(); break; }
       case 'norm': { S.norm = !S.norm; store.set('norm', S.norm); const t = curT(); if (E.srcGain && t) E.srcGain.gain.setTargetAtTime(S.norm && t.gain ? t.gain : 1, E.ctx.currentTime, .1); updateSmartUI(); toast(S.norm ? 'Громкость выравнивается' : 'Выравнивание выключено'); break; }
       case 'loop-a': { const t = curT(); if (!t || !E.buf) { toast('Сначала включи трек'); break; } S.loop = { id: t.id, a: curTime(), b: null }; updateLoopUI(); break; }
@@ -3099,13 +3266,13 @@ document.addEventListener('click', e => {
       case 'acct-delete': Cloud.deleteAccount(a); break;
       case 'lab': { const k = a.dataset.k, on = !labOn(k);
         if (k === 'focus') setFocus(on); else { S.labs[k] = on; }
-        store.set('labs', S.labs); a.setAttribute('aria-checked', on); a.closest('.lab').classList.toggle('off', !on);
+        store.set('labs', S.labs); try { Cloud.dataChanged(); } catch (e) {} a.setAttribute('aria-checked', on); a.closest('.lab').classList.toggle('off', !on);
         if (k === 'moments') renderMoments();
         if (k === 'lullaby' && !on) resetLull();
         toast((on ? 'Включено: ' : 'Выключено: ') + LABS.find(L => L.k === k).t); break; }
       case 'vote': { const k = a.dataset.k, v = a.dataset.v; S.labsVote[k] = S.labsVote[k] === v ? undefined : v; store.set('labsVote', S.labsVote); a.parentElement.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', S.labsVote[k] === b.dataset.v)); break; }
       case 'moment': addMoment(); break;
-      case 'moment-del': { const t = curT(); if (t && S.moments[t.id]) { S.moments[t.id] = S.moments[t.id].filter(x => x !== +a.dataset.t); store.set('moments', S.moments); renderMoments(); } break; }
+      case 'moment-del': { const t = curT(); if (t && S.moments[t.id]) { S.moments[t.id] = S.moments[t.id].filter(x => x !== +a.dataset.t); store.set('moments', S.moments); try { Cloud.dataChanged(); } catch (e) {} renderMoments(); } break; }
       case 'moment-go': seek(+a.dataset.t); if (!E.playing) play(); break;
       case 'focus-skip': if (S.focusSt) { S.focusSt.end = Date.now(); tickFocus(); } break;
       case 'net-tab': NET.tab = a.dataset.v; paintNet(); netSearch(S.q); break;
@@ -3247,7 +3414,7 @@ function syncVolUI() {
   ['#vol', '#vol2'].forEach(s => { const el = $(s); el.value = S.vol; el.style.setProperty('--v', (S.muted ? 0 : S.vol * 100) + '%'); });
   $$('.volic use').forEach(u => u.setAttribute('href', S.muted || S.vol === 0 ? '#i-mute' : '#i-vol'));
 }
-document.addEventListener('input', e => { if (e.target.id === 'ambVol') { S.labs.ambVol = +e.target.value; e.target.style.setProperty('--v', S.labs.ambVol * 100 + '%'); store.set('labs', S.labs); if (E.ambGain) E.ambGain.gain.setTargetAtTime(S.labs.ambVol * .8, E.ctx.currentTime, .05); } });
+document.addEventListener('input', e => { if (e.target.id === 'ambVol') { S.labs.ambVol = +e.target.value; e.target.style.setProperty('--v', S.labs.ambVol * 100 + '%'); store.set('labs', S.labs); try { Cloud.dataChanged(); } catch (e) {} if (E.ambGain) E.ambGain.gain.setTargetAtTime(S.labs.ambVol * .8, E.ctx.currentTime, .05); } });
 ['#vol', '#vol2'].forEach(s => $(s).addEventListener('input', e => { S.vol = +e.target.value; S.muted = false; applyVol(); syncVolUI(); saveSession(); }));
 let dragDepth = 0;
 addEventListener('dragenter', e => { if ([...(e.dataTransfer?.types || [])].includes('Files')) { dragDepth++; $('#drop').hidden = false; } });
