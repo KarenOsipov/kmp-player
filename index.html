@@ -1466,8 +1466,8 @@ const KM = Object.fromEntries(KNOBS.map(k => [k.k, k]));
 const PRESETS = [
   { id: 'flat', cat: 'all', name: 'Оригинал', d: 'Без обработки', hue: 220, p: {} },
   { id: 'bass', cat: 'power', name: 'Бас-буст', d: 'Низ вперёд, плотнее', hue: 12, p: { eq: [6, 5, 3.5, 1, 0, 0, 0, 0, 0, 0], bass: 5, comp: 30 } },
-  { id: 'slowed', cat: 'mood', name: 'Slowed + Reverb', d: 'Медленнее, ниже, в зале', hue: 262, p: { speed: 82, reverb: 45, room: 78, eq: [2, 2, 1, 0, 0, 0, -1, -2, -3, -4], width: 120 } },
-  { id: 'nightcore', cat: 'power', name: 'Nightcore', d: 'Быстрее и выше', hue: 320, p: { speed: 125, eq: [0, 0, 0, 0, 0, 1, 2, 2, 3, 3], air: 2, comp: 20 } },
+  { id: 'slowed', cat: 'style', name: 'Slowed + Reverb', d: 'Медленнее, ниже, в зале', hue: 262, p: { speed: 82, reverb: 45, room: 78, eq: [2, 2, 1, 0, 0, 0, -1, -2, -3, -4], width: 120 } },
+  { id: 'nightcore', cat: 'style', name: 'Nightcore', d: 'Быстрее и выше', hue: 320, p: { speed: 125, eq: [0, 0, 0, 0, 0, 1, 2, 2, 3, 3], air: 2, comp: 20 } },
   { id: '8d', cat: 'fx', name: '8D-звук', d: 'Звук ходит вокруг головы', hue: 188, p: { rotate: 55, reverb: 22, room: 55, width: 130 } },
   { id: 'karaoke', cat: 'fx', name: 'Караоке', d: 'Убирает голос из центра', hue: 0, p: { karaoke: 90, bass: 2 } },
   { id: 'hall', cat: 'mood', name: 'Концертный зал', d: 'Большое пространство', hue: 40, p: { reverb: 55, room: 92, width: 140, air: 1.5 } },
@@ -1482,6 +1482,21 @@ const PRESETS = [
   { id: 'pulse', cat: 'fx', name: 'Пульс', d: 'Громкость дышит волнами', hue: 350, p: { tremolo: 55, comp: 30 } },
   { id: 'water', cat: 'fx', name: 'Под водой', d: 'Как из соседней комнаты', hue: 200, p: { filter: -72, reverb: 38, room: 60, width: 80, chorus: 20 } },
   { id: 'phone', cat: 'fx', name: 'Телефон', d: 'Узкая полоса, моно', hue: 90, p: { eq: [-12, -12, -10, -4, 2, 5, 6, 0, -10, -12], filter: 40, drive: 25, width: 0 } },
+  { id: 'spedup', cat: 'style', name: 'Sped Up', d: 'Быстрее и звонче, как в тиктоке', hue: 330, p: { speed: 118, air: 2.5, comp: 25, eq: [1, 1, 0, 0, 0, 0, 1, 1, 2, 2] } },
+  { id: 'daycore', cat: 'style', name: 'Daycore', d: 'Ниже и медленнее, без лишнего зала', hue: 205, p: { speed: 84, eq: [2, 2, 1, 0, 0, 0, 0, -1, -2, -3], width: 115, reverb: 12, room: 45 } },
+  { id: 'melancholy', cat: 'style', name: 'Меланхолия', d: 'Грустно, тихо, как дождь за окном', hue: 222, p: { speed: 90, reverb: 50, room: 82, filter: -28, chorus: 18, width: 130, eq: [2, 1, 1, 0, 0, -1, -2, -3, -4, -5], comp: 20 } },
+  { id: 'emocore', cat: 'style', name: 'Эмокор', d: 'Надрыв, перегруз, гитары лезут вперёд', hue: 350, p: { drive: 42, comp: 55, air: 3, eq: [2, 1, 0, -1, 1, 3, 4, 3, 2, 1], reverb: 16, room: 40, width: 120 } },
+  { id: 'phonk', cat: 'style', name: 'Фонк', d: 'Грязный бас и тёмный кач', hue: 275, p: { harm: 60, bass: 6, drive: 35, comp: 50, crush: 10, eq: [5, 4, 2, 0, -1, -1, 0, 1, 0, -1] } },
+  { id: 'drift', cat: 'style', name: 'Дрифт-фонк', d: 'Бас рвёт колонки, быстрее на полтона', hue: 0, p: { harm: 75, bass: 8, drive: 45, comp: 60, speed: 106, eq: [6, 5, 3, 0, -1, 0, 1, 2, 1, 0], width: 120 } },
+  { id: 'vapor', cat: 'style', name: 'Вейпорвейв', d: 'Медленно, плывёт, как VHS из 90-х', hue: 300, p: { speed: 80, chorus: 40, reverb: 45, room: 75, wow: 25, filter: -15, width: 140 } },
+  { id: 'hyperpop', cat: 'style', name: 'Гиперпоп', d: 'Быстро, ярко, цифровой хруст', hue: 190, p: { speed: 118, crush: 22, drive: 28, air: 5, comp: 60, width: 150, eq: [3, 2, 0, -1, 0, 1, 2, 3, 4, 4] } },
+  { id: 'dreamcore', cat: 'style', name: 'Дримкор', d: 'Как будто песня снится', hue: 265, p: { speed: 92, chorus: 35, phaser: 25, reverb: 55, room: 90, filter: -30, width: 150 } },
+  { id: 'sadslow', cat: 'style', name: 'Sad Slowed', d: 'Очень медленно, темно и пусто', hue: 235, p: { speed: 76, reverb: 62, room: 96, filter: -40, bass: 3, width: 135, eq: [2, 2, 1, 0, 0, -1, -2, -3, -5, -6] } },
+  { id: 'slowbass', cat: 'style', name: 'Slowed + Bass', d: 'Медленно, и бас качает', hue: 15, p: { speed: 85, bass: 6, harm: 40, reverb: 30, room: 70, comp: 30, width: 125 } },
+  { id: 'nightdrive', cat: 'style', name: 'Ночная трасса', d: 'Синтвейв, неон и пустая дорога', hue: 318, p: { chorus: 30, pingpong: 25, reverb: 35, room: 70, width: 140, air: 2, eq: [3, 2, 1, 0, -1, 0, 1, 2, 2, 1] } },
+  { id: 'car', cat: 'style', name: 'В машине', d: 'Как из сабвуфера в багажнике', hue: 25, p: { harm: 50, bass: 8, comp: 40, width: 120, eq: [6, 5, 3, 1, 0, -1, 0, 1, 1, 0], filter: -10 } },
+  { id: 'gramophone', cat: 'style', name: 'Граммофон', d: 'Запись из 1930-х', hue: 38, p: { vinyl: 60, width: 0, filter: 35, drive: 20, eq: [-12, -10, -6, 0, 3, 4, 2, -4, -10, -12], wow: 10 } },
+  { id: 'stadium', cat: 'style', name: 'Стадион', d: 'Концерт на 50 тысяч человек', hue: 55, p: { reverb: 50, room: 100, width: 180, pingpong: 20, comp: 30, air: 2 } },
   { id: 'space', cat: 'mood', name: 'Космос', d: 'Фэйзер, эхо между ушами, бесконечный зал', hue: 250, p: { phaser: 55, reverb: 48, room: 88, pingpong: 30, width: 150, air: 2 } },
   { id: 'funk', cat: 'fx', name: 'Фанк', d: 'Квакающий вау и плотный низ', hue: 28, p: { wah: 72, comp: 35, bass: 2, drive: 10 } },
   { id: 'trance', cat: 'power', name: 'Транс', d: 'Звук режется в ритм трека', hue: 292, p: { gate: 75, reverb: 25, room: 60, pingpong: 22, width: 130 } },
@@ -2247,10 +2262,25 @@ const GLYPH = {
   trance: '<path d="M3.5 7.5h3v9h-3zM10.5 7.5h3v9h-3zM17.5 7.5h3v9h-3z"/>',
   sub: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
   psy: '<path d="M12 12a1.5 1.5 0 0 1 3 0 3 3 0 0 1-6 0 4.5 4.5 0 0 1 9 0 6 6 0 0 1-12 0 7.5 7.5 0 0 1 15 0"/>',
+  spedup: '<path d="M4 7l6 5-6 5zM12 7l6 5-6 5z"/><path d="M20.5 7v10"/>',
+  daycore: '<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/>',
+  melancholy: '<path d="M7 15a4.5 4.5 0 1 1 1-8.9A6 6 0 0 1 19 9a3.5 3.5 0 0 1-1 6.9z"/><path d="M9 18l-1 2.5M13 18l-1 2.5M17 18l-1 2.5"/>',
+  emocore: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M12.5 7.5 11 11.5h2.5L11.5 16"/>',
+  phonk: '<path d="M12 3c2 3 5 4.5 5 9a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5.3 2 1.2 3 2 3.5C11 8 11.5 5.5 12 3z"/>',
+  drift: '<path d="M3 15h2l2-4h8l3 4h3"/><circle cx="7.5" cy="16.5" r="2"/><circle cx="16.5" cy="16.5" r="2"/><path d="M2 20c3-1 5-1 8 0"/>',
+  vapor: '<path d="M4 18h16M6 14.5h12M8 11h8"/><path d="M7 8a5 5 0 0 1 10 0"/>',
+  hyperpop: '<path d="M12 2.5 14 9l6.5 1-5 4.3 1.5 6.7L12 17.5 7 21l1.5-6.7-5-4.3L10 9z"/>',
+  dreamcore: '<path d="M4 16c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1"/><path d="M4 11c2-2 4-2 6 0s4 2 6 0 3-1.5 4-1"/><circle cx="17" cy="5.5" r="1.5"/>',
+  sadslow: '<path d="M12 4c3 4.5 5 7 5 9.5a5 5 0 0 1-10 0C7 11 9 8.5 12 4z"/><path d="M10 15c.6.8 1.2 1 2 1"/>',
+  slowbass: '<path d="M3 12h3l2-5 3 10 3-12 3 9 2-2h2"/>',
+  nightdrive: '<path d="M12 4 5 20M12 4l7 16M12 9v2M12 14v3"/><path d="M8 4h8"/>',
+  car: '<rect x="3" y="8" width="18" height="9" rx="3"/><circle cx="9" cy="12.5" r="2.2"/><circle cx="16" cy="12.5" r="1.2"/>',
+  gramophone: '<path d="M4 20h9M8.5 20v-5"/><path d="M8.5 15 14 5.5c2.5.5 5 2.5 6 5z"/>',
+  stadium: '<path d="M3 9c3-2.5 15-2.5 18 0v7c-3 2.5-15 2.5-18 0z"/><path d="M3 12.5c3 2.5 15 2.5 18 0"/>',
   custom: '<path d="M6 4v5M6 13v7M12 4v10M12 18v2M18 4v2M18 10v10"/><circle cx="6" cy="11" r="2"/><circle cx="12" cy="16" r="2"/><circle cx="18" cy="8" r="2"/>'
 };
 const glyph = id => `<svg viewBox="0 0 24 24" aria-hidden="true">${GLYPH[id] || GLYPH.custom}</svg>`;
-const PCATS = [['all', 'Все'], ['mood', 'Настроение'], ['power', 'Мощнее'], ['retro', 'Ретро'], ['fx', 'Эффекты'], ['mine', 'Мои']];
+const PCATS = [['all', 'Все'], ['style', 'Стили'], ['mood', 'Настроение'], ['power', 'Мощнее'], ['retro', 'Ретро'], ['fx', 'Эффекты'], ['mine', 'Мои']];
 S.pcat = 'all'; S.mixTab = 'eq';
 function presetsHTML() {
   const list = S.pcat === 'mine' ? userPresets.map(u => ({ ...u, user: true })) : [...PRESETS.filter(p => S.pcat === 'all' || p.cat === S.pcat || p.id === 'flat'), ...(S.pcat === 'all' ? userPresets.map(u => ({ ...u, user: true })) : [])];
