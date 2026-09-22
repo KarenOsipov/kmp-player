@@ -18,6 +18,7 @@
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html,body{overscroll-behavior-y:none}</style>
 </head>
 <body>
+<title>KMP Player</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=Manrope:wght@400;500;600;700&display=swap">
@@ -328,10 +329,10 @@ button,a,[role=button],.knob,.wave{touch-action:manipulation;-webkit-tap-highlig
 .at{position:relative}.at::before{content:"@";position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600}.at .field{padding-left:30px}
 .usage{height:8px;border-radius:4px;background:var(--hover);overflow:hidden}
 .usage i{display:block;height:100%;background:var(--accent);border-radius:4px;transition:width .6s var(--ease)}
-.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.kv div{padding:12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line);min-width:0}
-.kv dt{font-size:12px;color:var(--muted);font-weight:600}
-.kv dd{margin:4px 0 0;font:400 22px/1.1 var(--f-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+dl.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+dl.kv div{padding:12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line);min-width:0}
+dl.kv dt{font-size:12px;color:var(--muted);font-weight:600}
+dl.kv dd{margin:4px 0 0;font:400 22px/1.1 var(--f-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .upq{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow:auto}
 .upq div{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:8px 10px;border-radius:10px;background:var(--surface-2)}
 .upq span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
@@ -343,7 +344,7 @@ button,a,[role=button],.knob,.wave{touch-action:manipulation;-webkit-tap-highlig
 .steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--ink-2)}
 .steps code{font-size:12.5px;background:var(--hover);padding:1px 6px;border-radius:6px}
 img.ava{object-fit:cover}
-@media (max-width:900px){.me{grid-template-columns:1fr}.kv{grid-template-columns:1fr 1fr 1fr}}
+@media (max-width:900px){.me{grid-template-columns:1fr}dl.kv{grid-template-columns:1fr 1fr 1fr}}
 /* dropdown */
 .dd-btn{height:36px;border-radius:18px;border:1px solid var(--line);background:var(--surface-2);padding:0 10px 0 12px;display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:13px;white-space:nowrap;flex:none;transition:background .2s,border-color .2s}
 .dd-btn:hover{border-color:var(--wave)}
@@ -399,6 +400,108 @@ img.ava{object-fit:cover}
 .topbar .theme-m{display:none}
 @media (max-width:1180px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:760px){.stats{grid-template-columns:1fr}.stat.wide{grid-column:auto}.topbar .theme-m{display:grid;width:54px;height:54px;border-radius:50%;place-items:center}.focus-pill{bottom:calc(144px + env(safe-area-inset-bottom,0px))}}
+/* mixer v2 */
+.snd+.block,.snd~.block:first-of-type{margin-top:26px}
+.snd{position:relative;overflow:hidden;isolation:isolate;border-radius:30px;padding:24px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center;color:#fff;margin-top:6px;
+  background:radial-gradient(80% 120% at 0% 0%,hsl(var(--ph) 85% 62%) 0%,transparent 60%),radial-gradient(90% 120% at 100% 100%,hsl(calc(var(--ph) + 50) 80% 52%) 0%,transparent 58%),hsl(calc(var(--ph) - 10) 45% 22%);box-shadow:var(--shadow-lg)}
+.snd::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(60% 80% at 70% 20%,rgba(255,255,255,.12),transparent 70%)}
+.snd-art{width:120px;height:120px;border-radius:30px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;flex:none}
+.snd-art svg,.pc-art svg{fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.snd-art svg{width:58px;height:58px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.25))}
+body.is-playing .snd-art svg{animation:breathe 2.4s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.07)}}
+.snd-info{min-width:0}
+.snd-k{margin:0;font-size:13px;font-weight:600;opacity:.8}
+.snd h2{margin:4px 0 0;font:300 clamp(34px,4.4vw,56px)/1 var(--f-display);letter-spacing:-.035em;overflow-wrap:anywhere}
+.snd-d{margin:8px 0 0;font-size:14px;opacity:.85;max-width:56ch}
+.snd-act{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.snd .snd-play{width:52px;height:52px;margin:0 4px 0 0}
+.snd .snd-play .ic{width:22px;height:22px}
+.snd .st-btn.holding{background:#fff;color:#131826}
+.pcats{margin-bottom:2px}
+.plist{display:grid;grid-template-columns:repeat(auto-fill,minmax(156px,1fr));gap:12px}
+.pc{position:relative;text-align:left;border-radius:22px;overflow:hidden;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;transition:transform .4s var(--spring),box-shadow .3s,border-color .2s}
+.pc:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.pc:active{transform:scale(.97)}
+.pc-art{position:relative;aspect-ratio:1.45;display:grid;place-items:center;background:radial-gradient(90% 90% at 15% 10%,hsl(var(--ph) 90% 68%),transparent 62%),radial-gradient(90% 90% at 95% 100%,hsl(calc(var(--ph) + 45) 85% 55%),transparent 64%),hsl(calc(var(--ph) - 10) 45% 28%)}
+.pc-art svg{width:40px;height:40px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.25));transition:transform .45s var(--spring)}
+.pc:hover .pc-art svg{transform:scale(1.12) rotate(-4deg)}
+.pc-t{padding:10px 12px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.pc b{font:500 15px/1.2 var(--f-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc .d{font-size:12px;color:var(--muted);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pc.on{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.pc.on .pc-art::after{content:"Включён";position:absolute;left:8px;top:8px;font:700 11px var(--f-body);padding:4px 8px;border-radius:9px;background:rgba(0,0,0,.35);color:#fff}
+.pc .p-more{color:#fff;background:rgba(0,0,0,.25);opacity:1;top:8px;right:8px}
+.pc .p-more:hover{background:rgba(0,0,0,.45);color:#fff}
+.seg-tabs{display:flex;gap:2px;padding:4px;border-radius:16px;background:var(--hover);overflow-x:auto;scrollbar-width:none;align-self:flex-start;max-width:100%}
+.seg-tabs::-webkit-scrollbar{display:none}
+.seg-tabs button{position:relative;height:36px;padding:0 14px;border-radius:12px;font-weight:600;font-size:13px;color:var(--muted);white-space:nowrap;flex:none;transition:background .2s,color .2s}
+.seg-tabs button:hover{color:var(--ink)}
+.seg-tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.seg-tabs button i{position:absolute;top:7px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.console.one{display:grid;grid-template-columns:1fr;gap:10px;margin-top:6px}
+.console.one.is-eq{grid-template-columns:minmax(0,1fr) 200px}
+.console.one .c-card{animation:rise .35s var(--ease)}
+.knobs.big{grid-template-columns:repeat(auto-fill,minmax(104px,150px));justify-content:start;gap:14px 6px;padding:10px 0}
+.knobs.big .knob svg{width:78px;height:78px}
+.knobs.big .kv{font-size:13.5px}.knobs.big .kl{font-size:12.5px}
+.mp-out .meters{height:150px}
+.sm-list{display:flex;flex-direction:column;border-radius:22px;background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.sm-row{display:flex;align-items:center;gap:14px;padding:14px 16px;min-width:0}
+.sm-row+.sm-row{border-top:1px solid var(--line)}
+.sm-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);flex:none}
+.sm-ic .ic{width:19px;height:19px}
+.sm-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.sm-t b{font-weight:600;font-size:14.5px}
+.sm-t small{font-size:12.5px;color:var(--muted);line-height:1.4}
+.sm-t small strong{color:var(--ink);font-weight:600}
+.sm-btn{height:36px;padding:0 14px;font-size:13px}
+.menu-bg{position:fixed;inset:0;z-index:79;background:rgba(10,13,20,.42);animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}}
+@media (max-width:760px){
+  .snd{grid-template-columns:64px minmax(0,1fr);padding:18px;gap:6px 14px;border-radius:24px;align-items:start}
+  .snd-art{width:64px;height:64px;border-radius:18px;grid-row:1/span 2}.snd-art svg{width:32px;height:32px}
+  .snd h2{font-size:30px}
+  .snd-info{display:contents}
+  .snd-info>:not(.snd-act){grid-column:2}
+  .snd-k{align-self:end;margin-top:4px}
+  .snd-d{font-size:13px;margin-top:4px;grid-column:1/-1!important}
+  .snd-act{grid-column:1/-1}
+  .mix-hint{display:none}
+  .sm-t small{font-size:12px;line-height:1.35}
+  .snd-act .st-btn span{display:none}
+  .snd-act{margin-top:12px}
+  .plist{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:144px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-16px;padding:2px 16px 10px;scrollbar-width:none}
+  .plist::-webkit-scrollbar{display:none}
+  .pc{scroll-snap-align:start}
+  .seg-tabs{margin-inline:-16px;border-radius:0;padding:4px 16px;background:transparent;max-width:none;align-self:stretch;width:auto}
+  .seg-tabs button{background:var(--hover)}
+  .console.one.is-eq{grid-template-columns:1fr}
+  .mp-out{display:none}
+  .knobs.big{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .knobs.big .knob svg{width:66px;height:66px}
+  .sm-row{padding:12px 14px;gap:12px}
+  .sm-ic{width:36px;height:36px;border-radius:11px}
+  /* floating tab bar + mini player */
+  :root{--tabh:62px;--barh:60px}
+  .app{padding-bottom:calc(var(--tabh) + var(--barh) + 44px + env(safe-area-inset-bottom,0px))}
+  .tabbar{left:10px!important;right:10px!important;bottom:calc(8px + env(safe-area-inset-bottom,0px))!important;height:var(--tabh)!important;padding:5px!important;border-radius:24px!important;border:1px solid var(--line)!important;background:var(--surface-2)!important;box-shadow:0 12px 32px -14px rgba(0,0,0,.45)!important}
+  .tabbar button{border-radius:19px;gap:3px;font-size:10.5px;transition:background .25s,color .25s}
+  .tabbar button .ic{width:21px;height:21px;transition:transform .35s var(--spring)}
+  .tabbar button[aria-current="page"]{background:color-mix(in srgb,var(--accent) 13%,transparent);color:var(--accent)}
+  .tabbar button[aria-current="page"] .ic{transform:translateY(-1px) scale(1.08)}
+  .player{left:10px!important;right:10px!important;bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px))!important;height:var(--barh)!important;border-radius:18px!important;border:1px solid var(--line)!important;box-shadow:0 12px 30px -16px rgba(0,0,0,.45)!important;overflow:hidden!important;padding:7px 8px 7px 7px!important}
+  .p-line{top:auto!important;bottom:0!important;height:2px!important}
+  .p-cover{width:44px!important;height:44px!important;border-radius:11px!important}
+  .toast{bottom:calc(var(--tabh) + var(--barh) + 30px + env(safe-area-inset-bottom,0px))!important}
+  .focus-pill{bottom:calc(var(--tabh) + var(--barh) + 76px + env(safe-area-inset-bottom,0px))!important}
+  /* menus become bottom sheets */
+  .menu.as-sheet{left:0!important;right:0!important;top:auto!important;bottom:0;width:auto;max-width:none;max-height:78dvh;border-radius:24px 24px 0 0;padding:6px 10px calc(14px + env(safe-area-inset-bottom,0px));background:var(--surface-2);box-shadow:0 -12px 40px -10px rgba(0,0,0,.4);animation:sheetUp .32s var(--ease)}
+  .menu.as-sheet::before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--wave);margin:6px auto 8px;flex:none}
+  .menu.as-sheet button{padding:13px 12px;font-size:15px;border-radius:14px}
+  .menu.as-sheet button .ic{width:19px;height:19px}
+  .menu.as-sheet .m-label{font-size:13px;margin:6px 12px}
+}
 /* smart features */
 .smart{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
 .tile{padding:16px 18px;border-radius:18px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
@@ -854,8 +957,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
   <button data-go="search"><svg class="ic"><use href="#i-search"/></svg>Поиск</button>
   <button data-go="library"><svg class="ic"><use href="#i-library"/></svg>Музыка</button>
   <button data-go="feed"><svg class="ic"><use href="#i-feed"/></svg>Лента</button>
-  <button data-go="mixer"><svg class="ic"><use href="#i-sliders"/></svg>Микшер</button>
-  <button data-go="labs"><svg class="ic"><use href="#i-flask"/></svg>Лаба</button>
+  <button data-go="mixer"><svg class="ic"><use href="#i-sliders"/></svg>Звук</button>
 </nav>
 
 <div class="full" id="full" hidden>
@@ -897,6 +999,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
   </div>
 </div>
 
+<div class="menu-bg" id="menuBg" hidden></div>
 <div class="menu glass-strong" id="menu" hidden></div>
 <div class="modal-bg" id="modal" hidden>
   <form class="modal glass-strong" id="modalForm">
@@ -1299,25 +1402,25 @@ const KNOBS = [
 const GROUPS = [['tone', 'Тон', 'c-tone'], ['tex', 'Текстура', 'c-tex'], ['mod', 'Модуляция', 'c-mod'], ['space', 'Пространство', 'c-space'], ['move', 'Движение и голос', 'c-move']];
 const KM = Object.fromEntries(KNOBS.map(k => [k.k, k]));
 const PRESETS = [
-  { id: 'flat', name: 'Оригинал', d: 'Без обработки', hue: 220, p: {} },
-  { id: 'bass', name: 'Бас-буст', d: 'Низ вперёд, плотнее', hue: 12, p: { eq: [6, 5, 3.5, 1, 0, 0, 0, 0, 0, 0], bass: 5, comp: 30 } },
-  { id: 'slowed', name: 'Slowed + Reverb', d: 'Медленнее, ниже, в зале', hue: 262, p: { speed: 82, reverb: 45, room: 78, eq: [2, 2, 1, 0, 0, 0, -1, -2, -3, -4], width: 120 } },
-  { id: 'nightcore', name: 'Nightcore', d: 'Быстрее и выше', hue: 320, p: { speed: 125, eq: [0, 0, 0, 0, 0, 1, 2, 2, 3, 3], air: 2, comp: 20 } },
-  { id: '8d', name: '8D-звук', d: 'Звук ходит вокруг головы', hue: 188, p: { rotate: 55, reverb: 22, room: 55, width: 130 } },
-  { id: 'karaoke', name: 'Караоке', d: 'Убирает голос из центра', hue: 0, p: { karaoke: 90, bass: 2 } },
-  { id: 'hall', name: 'Концертный зал', d: 'Большое пространство', hue: 40, p: { reverb: 55, room: 92, width: 140, air: 1.5 } },
-  { id: 'club', name: 'Клуб', d: 'Кач, панч, яркий верх', hue: 340, p: { eq: [5, 4, 2, 0, -1, -1, 0, 2, 3, 3], bass: 3, comp: 45, drive: 10 } },
-  { id: 'vocal', name: 'Голос ближе', d: 'Вокал на передний план', hue: 150, p: { eq: [-3, -3, -2, -1, 1, 3, 4, 3, 1, 0], comp: 35, width: 90 } },
-  { id: 'dream', name: 'Мечтательный', d: 'Хорус, зал, мягкий верх', hue: 280, p: { chorus: 55, reverb: 40, room: 70, air: 3, speed: 94, width: 140 } },
-  { id: 'lofi', name: 'Лоу-фай радио', d: 'Тёплый, мутный, старый', hue: 30, p: { eq: [2, 2, 1, 0, 0, -1, -2, -4, -8, -10], drive: 35, filter: -30, speed: 96, reverb: 15, width: 70, vinyl: 30, crush: 15 } },
-  { id: 'vinyl', name: 'Пластинка', d: 'Треск и тёплый ламповый низ', hue: 24, p: { vinyl: 45, drive: 15, wow: 12, eq: [1, 1, 0, 0, 0, 0, -1, -2, -4, -6], width: 85 } },
-  { id: 'tape', name: 'Старая кассета', d: 'Плавающий тон и шипение', hue: 48, p: { wow: 55, vinyl: 20, filter: -20, drive: 20 } },
-  { id: '8bit', name: '8-бит', d: 'Как в старой приставке', hue: 110, p: { crush: 78, width: 0, filter: -8 } },
-  { id: 'jet', name: 'Реактивный', d: 'Флэнжер в движении', hue: 170, p: { flanger: 60, rotate: 25 } },
-  { id: 'pulse', name: 'Пульс', d: 'Громкость дышит волнами', hue: 350, p: { tremolo: 55, comp: 30 } },
-  { id: 'water', name: 'Под водой', d: 'Как из соседней комнаты', hue: 200, p: { filter: -72, reverb: 38, room: 60, width: 80, chorus: 20 } },
-  { id: 'phone', name: 'Телефон', d: 'Узкая полоса, моно', hue: 90, p: { eq: [-12, -12, -10, -4, 2, 5, 6, 0, -10, -12], filter: 40, drive: 25, width: 0 } },
-  { id: 'night', name: 'Тихий вечер', d: 'Ровная громкость, мягкий низ', hue: 240, p: { comp: 70, eq: [-3, -2, 0, 0, 0, 0, 0, -1, -2, -2] } }
+  { id: 'flat', cat: 'all', name: 'Оригинал', d: 'Без обработки', hue: 220, p: {} },
+  { id: 'bass', cat: 'power', name: 'Бас-буст', d: 'Низ вперёд, плотнее', hue: 12, p: { eq: [6, 5, 3.5, 1, 0, 0, 0, 0, 0, 0], bass: 5, comp: 30 } },
+  { id: 'slowed', cat: 'mood', name: 'Slowed + Reverb', d: 'Медленнее, ниже, в зале', hue: 262, p: { speed: 82, reverb: 45, room: 78, eq: [2, 2, 1, 0, 0, 0, -1, -2, -3, -4], width: 120 } },
+  { id: 'nightcore', cat: 'power', name: 'Nightcore', d: 'Быстрее и выше', hue: 320, p: { speed: 125, eq: [0, 0, 0, 0, 0, 1, 2, 2, 3, 3], air: 2, comp: 20 } },
+  { id: '8d', cat: 'fx', name: '8D-звук', d: 'Звук ходит вокруг головы', hue: 188, p: { rotate: 55, reverb: 22, room: 55, width: 130 } },
+  { id: 'karaoke', cat: 'fx', name: 'Караоке', d: 'Убирает голос из центра', hue: 0, p: { karaoke: 90, bass: 2 } },
+  { id: 'hall', cat: 'mood', name: 'Концертный зал', d: 'Большое пространство', hue: 40, p: { reverb: 55, room: 92, width: 140, air: 1.5 } },
+  { id: 'club', cat: 'power', name: 'Клуб', d: 'Кач, панч, яркий верх', hue: 340, p: { eq: [5, 4, 2, 0, -1, -1, 0, 2, 3, 3], bass: 3, comp: 45, drive: 10 } },
+  { id: 'vocal', cat: 'power', name: 'Голос ближе', d: 'Вокал на передний план', hue: 150, p: { eq: [-3, -3, -2, -1, 1, 3, 4, 3, 1, 0], comp: 35, width: 90 } },
+  { id: 'dream', cat: 'mood', name: 'Мечтательный', d: 'Хорус, зал, мягкий верх', hue: 280, p: { chorus: 55, reverb: 40, room: 70, air: 3, speed: 94, width: 140 } },
+  { id: 'lofi', cat: 'retro', name: 'Лоу-фай радио', d: 'Тёплый, мутный, старый', hue: 30, p: { eq: [2, 2, 1, 0, 0, -1, -2, -4, -8, -10], drive: 35, filter: -30, speed: 96, reverb: 15, width: 70, vinyl: 30, crush: 15 } },
+  { id: 'vinyl', cat: 'retro', name: 'Пластинка', d: 'Треск и тёплый ламповый низ', hue: 24, p: { vinyl: 45, drive: 15, wow: 12, eq: [1, 1, 0, 0, 0, 0, -1, -2, -4, -6], width: 85 } },
+  { id: 'tape', cat: 'retro', name: 'Старая кассета', d: 'Плавающий тон и шипение', hue: 48, p: { wow: 55, vinyl: 20, filter: -20, drive: 20 } },
+  { id: '8bit', cat: 'retro', name: '8-бит', d: 'Как в старой приставке', hue: 110, p: { crush: 78, width: 0, filter: -8 } },
+  { id: 'jet', cat: 'fx', name: 'Реактивный', d: 'Флэнжер в движении', hue: 170, p: { flanger: 60, rotate: 25 } },
+  { id: 'pulse', cat: 'fx', name: 'Пульс', d: 'Громкость дышит волнами', hue: 350, p: { tremolo: 55, comp: 30 } },
+  { id: 'water', cat: 'fx', name: 'Под водой', d: 'Как из соседней комнаты', hue: 200, p: { filter: -72, reverb: 38, room: 60, width: 80, chorus: 20 } },
+  { id: 'phone', cat: 'fx', name: 'Телефон', d: 'Узкая полоса, моно', hue: 90, p: { eq: [-12, -12, -10, -4, 2, 5, 6, 0, -10, -12], filter: 40, drive: 25, width: 0 } },
+  { id: 'night', cat: 'mood', name: 'Тихий вечер', d: 'Ровная громкость, мягкий низ', hue: 240, p: { comp: 70, eq: [-3, -2, 0, 0, 0, 0, 0, -1, -2, -2] } }
 ];
 const presetParams = p => { const o = clone(FX_DEF); for (const k in p || {}) if (k in FX_DEF) o[k] = clone(p[k]); return o; };
 let FX = presetParams(store.get('fx', {}));
@@ -1940,33 +2043,82 @@ function knobHTML(m) {
     <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="k-track" cx="32" cy="32" r="26" transform="rotate(135 32 32)"/><circle class="k-arc" cx="32" cy="32" r="26" transform="rotate(135 32 32)"/><g class="k-cap"><circle cx="32" cy="32" r="17"/><line x1="32" y1="32" x2="32" y2="19"/></g></svg>
     <span class="kv"></span><span class="kl">${m.l}</span></div>`;
 }
+const GLYPH = {
+  flat: '<path d="M3 12h18"/><circle cx="8" cy="12" r="1.6"/><circle cx="16" cy="12" r="1.6"/>',
+  bass: '<path d="M5 20v-6M9.5 20V8M14 20v-9M18.5 20v-4"/>',
+  slowed: '<path d="M19 14.5A7 7 0 1 1 9.5 5a5.5 5.5 0 0 0 9.5 9.5z"/>',
+  nightcore: '<path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/>',
+  '8d': '<circle cx="12" cy="12" r="2.4"/><ellipse cx="12" cy="12" rx="9" ry="4"/><ellipse cx="12" cy="12" rx="4" ry="9"/>',
+  karaoke: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
+  hall: '<path d="M4 20V11a8 8 0 0 1 16 0v9M8.5 20v-7a3.5 3.5 0 0 1 7 0v7M3 20h18"/>',
+  club: '<circle cx="12" cy="13" r="6"/><path d="M12 3v4M6 13h12M12 7c-2.2 2-2.2 10 0 12M12 7c2.2 2 2.2 10 0 12"/>',
+  vocal: '<circle cx="10" cy="8" r="3.5"/><path d="M3.5 20c1-4 3.5-5.5 6.5-5.5M17 9a3 3 0 0 1 0 5M19.5 6.5a7 7 0 0 1 0 10"/>',
+  dream: '<path d="M7 18.5a4.5 4.5 0 0 1-.4-9A6 6 0 0 1 18 8.6a4 4 0 0 1-.5 9.9z"/>',
+  lofi: '<rect x="3" y="8" width="18" height="12" rx="2.5"/><path d="m8 8 8-4M6.5 12.5h3M6.5 15.5h3"/><circle cx="15.5" cy="14" r="2.5"/>',
+  vinyl: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4"/><path d="M12 5.5A6.5 6.5 0 0 1 18.5 12"/>',
+  tape: '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="8.5" cy="11.5" r="2"/><circle cx="15.5" cy="11.5" r="2"/><path d="M6.5 18l1.5-2.5h8l1.5 2.5"/>',
+  '8bit': '<path d="M5 5h5v5H5zM14 5h5v5h-5zM5 14h5v5H5zM14 14h5v5h-5z"/>',
+  jet: '<path d="M3 16c4 0 5-8 9-8s5 8 9 8"/><path d="M3 11c2.5 0 3.5 2 5 2"/>',
+  pulse: '<path d="M3 12h4l2-5 3 10 2-5h7"/>',
+  water: '<path d="M12 3.5s6 6.2 6 10.5a6 6 0 0 1-12 0c0-4.3 6-10.5 6-10.5z"/>',
+  phone: '<rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 17.5h2"/>',
+  night: '<path d="M16 15.5A6.5 6.5 0 1 1 8.5 6a5 5 0 0 0 7.5 9.5z"/><path d="M18.5 3.5v3M17 5h3"/>',
+  custom: '<path d="M6 4v5M6 13v7M12 4v10M12 18v2M18 4v2M18 10v10"/><circle cx="6" cy="11" r="2"/><circle cx="12" cy="16" r="2"/><circle cx="18" cy="8" r="2"/>'
+};
+const glyph = id => `<svg viewBox="0 0 24 24" aria-hidden="true">${GLYPH[id] || GLYPH.custom}</svg>`;
+const PCATS = [['all', 'Все'], ['mood', 'Настроение'], ['power', 'Мощнее'], ['retro', 'Ретро'], ['fx', 'Эффекты'], ['mine', 'Мои']];
+S.pcat = 'all'; S.mixTab = 'eq';
 function presetsHTML() {
-  return [...PRESETS, ...userPresets.map(u => ({ ...u, user: true }))].map(p =>
-    `<button class="preset ${p.user ? 'user' : ''}" data-preset="${p.id}" style="--ph:${p.hue}" aria-pressed="${FXP === p.id}"><span class="sw"></span><b>${esc(p.name)}</b><span class="d">${esc(p.d || 'Твой пресет')}</span>${p.user ? `<span class="p-more" data-pmenu="${p.id}" role="button" tabindex="0" aria-label="Действия с пресетом">${ic('more')}</span>` : ''}</button>`).join('');
+  const list = S.pcat === 'mine' ? userPresets.map(u => ({ ...u, user: true })) : [...PRESETS.filter(p => S.pcat === 'all' || p.cat === S.pcat || p.id === 'flat'), ...(S.pcat === 'all' ? userPresets.map(u => ({ ...u, user: true })) : [])];
+  if (!list.length) return `<p class="net-note" style="grid-column:1/-1">Своих пресетов пока нет. Настрой звук и нажми «Сохранить».</p>`;
+  return list.map(p => `<button class="pc ${FXP === p.id ? 'on' : ''}" data-preset="${p.id}" style="--ph:${p.hue}" aria-pressed="${FXP === p.id}">
+    <span class="pc-art">${glyph(p.user ? 'custom' : p.id)}${p.user ? `<span class="p-more" data-pmenu="${p.id}" role="button" tabindex="0" aria-label="Действия с пресетом">${ic('more')}</span>` : ''}</span>
+    <span class="pc-t"><b>${esc(p.name)}</b><span class="d">${esc(p.d || 'Твой пресет')}</span></span></button>`).join('');
 }
-const SLEEP_OPTS = `<option value="0">Выключен</option><option value="15">15 мин</option><option value="30">30 мин</option><option value="45">45 мин</option><option value="60">1 час</option><option value="track">После трека</option>`;
+const MIXTABS = [['eq', 'Эквалайзер'], ['tone', 'Тон'], ['space', 'Пространство'], ['mod', 'Модуляция'], ['tex', 'Текстура'], ['move', 'Движение']];
+function tabActive(k) { if (k === 'eq') return FX.eq.some(v => v !== 0); return KNOBS.some(m => m.g === k && FX[m.k] !== FX_DEF[m.k]); }
+function mixTabsHTML() { return MIXTABS.map(([k, l]) => `<button role="tab" data-act="mix-tab" data-v="${k}" aria-selected="${S.mixTab === k}">${l}${tabActive(k) ? '<i></i>' : ''}</button>`).join(''); }
+function mixPanelHTML() {
+  if (S.mixTab === 'eq') return `<div class="c-card mp-eq"><canvas id="eqCv" class="eq-cv" aria-hidden="true"></canvas>
+      <div class="eq-sliders">${EQF.map((f, i) => `<label class="eqs"><output id="eqv${i}">0</output><input type="range" id="eq${i}" min="-12" max="12" step="0.5" value="${FX.eq[i]}" data-eq="${i}" aria-label="${flabel(f)} Гц"><span>${flabel(f)}</span></label>`).join('')}</div></div>
+    <div class="c-card mp-out"><div class="meters"><div class="meter"><i id="mL"></i></div><div class="meter"><i id="mR"></i></div></div><div class="m-lab"><span>L</span><span>R</span></div>
+      <dl class="c-read"><div><dt>Пик</dt><dd id="rdPk">−∞ дБ</dd></div><div><dt>Сжатие</dt><dd id="rdGR">0,0 дБ</dd></div><div><dt>Скорость</dt><dd id="rdRate">1,00×</dd></div></dl></div>`;
+  return `<div class="c-card mp-knobs"><div class="knobs big">${KNOBS.filter(k => k.g === S.mixTab).map(knobHTML).join('')}</div></div>`;
+}
+function paintMixPanel() {
+  const t = $('#mixTabs'), p = $('#mixPanel'); if (!t || !p) return;
+  t.innerHTML = mixTabsHTML(); p.innerHTML = mixPanelHTML(); p.className = 'console one ' + (S.mixTab === 'eq' ? 'is-eq' : '');
+  const cv = $('#eqCv'); if (cv) { ro.observe(cv); sizeCanvas(cv); }
+  syncMixerUI();
+}
 function mixerHTML() {
-  const grp = ([g, title, cls]) => `<div class="c-card ${cls}"><div class="c-head"><h3>${title}</h3></div><div class="knobs">${KNOBS.filter(k => k.g === g).map(knobHTML).join('')}</div></div>`;
-  return headHTML('Микшер', 'Звук под тебя', 'Эффекты работают в реальном времени. Ручки крути мышью вверх-вниз или колесом, Shift даёт точную настройку, двойной клик сбрасывает.',
-    `<button class="btn press" id="abBtn">${ic('ab')}<span>Держи: оригинал</span></button><button class="btn btn-accent gp press" data-act="toggle">${ic('play', 'ic-play')}${ic('pause', 'ic-pause')}Слушать</button>`)
-    + `<section class="block"><div class="block-head"><h2>Пресеты</h2><span class="link" id="presetName"></span></div>
-      <div class="head-actions" style="padding-inline:4px"><button class="btn press" data-act="fx-save">${ic('save')}Сохранить как новый</button><button class="btn press" data-act="fx-update" id="fxUpd" hidden>${ic('save')}<span>Обновить</span></button><button class="btn press" data-act="fx-import">${ic('plus')}Вставить код пресета</button><button class="btn press" data-act="fx-reset">${ic('reset')}Сбросить всё</button></div>
-      <div class="presets" id="presets">${presetsHTML()}</div></section>
-    <section class="block"><div class="block-head"><h2>Умные функции</h2></div><div class="smart">
-      <div class="tile"><div class="t-top"><b>Свой звук для трека</b><button class="switch" role="switch" aria-checked="false" data-act="fx-bind" id="swBind" aria-label="Свой звук для трека"></button></div><p id="bindNote"></p></div>
-      <div class="tile"><div class="t-top"><b>Выравнивание громкости</b><button class="switch" role="switch" aria-checked="false" data-act="norm" id="swNorm" aria-label="Выравнивание громкости"></button></div><p>Тихие и громкие файлы звучат на одном уровне, не надо дёргать громкость.</p></div>
-      <div class="tile"><div class="t-top"><b>Плавный переход</b><button class="dd-btn" data-dd="xfade" aria-haspopup="menu"><svg class="ic"><use href="#i-blend"/></svg><span data-ddv="xfade"></span><svg class="ic chev"><use href="#i-down"/></svg></button></div><p>Следующий трек начинается, пока текущий затихает, как у диджея.</p></div>
-      <div class="tile"><div class="t-top"><b>Таймер сна</b><button class="dd-btn" data-dd="sleep" aria-haspopup="menu"><svg class="ic"><use href="#i-moon"/></svg><span data-ddv="sleep"></span><svg class="ic chev"><use href="#i-down"/></svg></button></div><p id="sleepNote">Музыка плавно затихнет и встанет на паузу.</p></div>
-      <div class="tile"><div class="t-top"><b>Петля A–B</b><button class="btn press" data-act="open-full" style="height:34px;padding:0 12px;font-size:13px">Открыть</button></div><p>В полноэкранном плеере отметь A и B, и KMP будет крутить этот кусок. С ручкой «Скорость» удобно разучивать партии.</p></div>
-      <div class="tile"><div class="t-top"><b>Караоке</b><button class="btn press" data-preset="karaoke" style="height:34px;padding:0 12px;font-size:13px">Включить</button></div><p>Убирает голос, который записан по центру. Лучше всего работает на поп- и рэп-треках.</p></div>
-    </div></section>
-    <section class="console" style="margin-top:18px">
-      <div class="c-card c-eq"><div class="c-head"><h3>Эквалайзер</h3><span class="c-note">10 полос, ±12 дБ</span></div><canvas id="eqCv" class="eq-cv" aria-hidden="true"></canvas>
-        <div class="eq-sliders">${EQF.map((f, i) => `<label class="eqs"><output id="eqv${i}">0</output><input type="range" id="eq${i}" min="-12" max="12" step="0.5" value="${FX.eq[i]}" data-eq="${i}" aria-label="${flabel(f)} Гц"><span>${flabel(f)}</span></label>`).join('')}</div></div>
-      <div class="c-card c-out"><div class="c-head"><h3>Выход</h3><span class="c-note">L / R</span></div><div class="meters"><div class="meter"><i id="mL"></i></div><div class="meter"><i id="mR"></i></div></div>
-        <dl class="c-read"><div><dt>Пик</dt><dd id="rdPk">−∞ дБ</dd></div><div><dt>Сжатие</dt><dd id="rdGR">0,0 дБ</dd></div><div><dt>Скорость</dt><dd id="rdRate">1,00×</dd></div></dl></div>
-      ${GROUPS.map(grp).join('')}
-    </section>`;
+  const row = (icn, title, note, ctrl, noteId = '') => `<div class="sm-row"><span class="sm-ic">${ic(icn)}</span><div class="sm-t"><b>${title}</b><small ${noteId ? `id="${noteId}"` : ''}>${note}</small></div>${ctrl}</div>`;
+  return `<section class="snd" id="snd">
+      <div class="snd-art" id="sndArt"></div>
+      <div class="snd-info"><p class="snd-k" id="sndK">Сейчас звучит</p><h2 id="sndName">Оригинал</h2><p class="snd-d" id="sndDesc"></p>
+        <div class="snd-act">
+          <button class="st-play gp snd-play" data-act="toggle" aria-label="Играть или пауза">${ic('play', 'ic-play')}${ic('pause', 'ic-pause')}</button>
+          <button class="st-btn press" id="abBtn">${ic('ab')}<span>Держи: оригинал</span></button>
+          <button class="st-btn press" data-act="fx-save">${ic('save')}<span>Сохранить</span></button>
+          <button class="st-btn press" data-act="fx-update" id="fxUpd" hidden>${ic('save')}<span>Обновить</span></button>
+          <button class="st-btn press" data-act="fx-reset" aria-label="Сбросить всё">${ic('reset')}<span>Сбросить</span></button>
+          <button class="st-btn press" data-act="fx-import" aria-label="Вставить код пресета">${ic('plus')}<span>Код</span></button>
+        </div></div>
+    </section>
+    <section class="block"><div class="block-head"><h2>Пресеты</h2></div>
+      <div class="chips pcats">${PCATS.map(([k, l]) => `<button class="chip press" data-act="pcat" data-v="${k}" aria-pressed="${S.pcat === k}">${l}</button>`).join('')}</div>
+      <div class="plist" id="presets">${presetsHTML()}</div></section>
+    <section class="block"><div class="block-head"><h2>Тонкая настройка</h2><span class="link mix-hint">Двойной клик по ручке сбрасывает её</span></div>
+      <div class="seg-tabs" role="tablist" id="mixTabs">${mixTabsHTML()}</div>
+      <div class="console one ${S.mixTab === 'eq' ? 'is-eq' : ''}" id="mixPanel">${mixPanelHTML()}</div></section>
+    <section class="block"><div class="block-head"><h2>Умные функции</h2></div><div class="sm-list">
+      ${row('sliders', 'Свой звук для трека', '', '<button class="switch" role="switch" aria-checked="false" data-act="fx-bind" id="swBind" aria-label="Свой звук для трека"></button>', 'bindNote')}
+      ${row('vol', 'Выравнивание громкости', 'Тихие и громкие треки звучат одинаково', '<button class="switch" role="switch" aria-checked="false" data-act="norm" id="swNorm" aria-label="Выравнивание громкости"></button>')}
+      ${row('blend', 'Плавный переход', 'Следующий трек начинается, пока текущий затихает', `<button class="dd-btn" data-dd="xfade" aria-haspopup="menu"><span data-ddv="xfade"></span><svg class="ic chev"><use href="#i-down"/></svg></button>`)}
+      ${row('moon', 'Таймер сна', 'Музыка плавно затихнет и встанет на паузу', `<button class="dd-btn" data-dd="sleep" aria-haspopup="menu"><span data-ddv="sleep"></span><svg class="ic chev"><use href="#i-down"/></svg></button>`, 'sleepNote')}
+      ${row('repeat', 'Петля A–B', 'Повтор выбранного куска в полноэкранном плеере', `<button class="btn press sm-btn" data-act="open-full">Открыть</button>`)}
+      ${row('flask', 'Лаборатория', 'Экспериментальные функции и статистика', `<button class="btn press sm-btn" data-go="labs">Открыть</button>`)}
+    </div></section>`;
 }
 /* ================= feed: opinions + favourite moments ================= */
 const MOODS = ['На репит', 'Качает', 'Грустно', 'Для дороги', 'Для работы', 'Недооценён', 'Мурашки'];
@@ -2434,7 +2586,7 @@ function meHTML() {
           <label>О себе<textarea name="bio" maxlength="160" placeholder="Что слушаешь, что любишь">${esc(P.bio || '')}</textarea></label>
           <button class="btn btn-accent press" type="submit" style="align-self:flex-start">Сохранить профиль</button>
         </form></div>
-      <div class="card-s"><h3>Моя активность</h3><p>Треков в библиотеке: <strong>${trackObjs(S.order).filter(t => t.kind !== 'demo').length}</strong>, в любимом: <strong>${S.liked.size}</strong>, плейлистов: <strong>${S.pls.length}</strong>, своих пресетов: <strong>${userPresets.length}</strong>.</p><button class="btn press" data-go="feed">${ic('feed')}Мои посты в ленте</button></div>
+      <div class="card-s"><h3>Моя активность</h3><button class="btn press" data-go="labs" style="align-self:flex-start">${ic('flask')}Лаборатория и статистика</button><p>Треков в библиотеке: <strong>${trackObjs(S.order).filter(t => t.kind !== 'demo').length}</strong>, в любимом: <strong>${S.liked.size}</strong>, плейлистов: <strong>${S.pls.length}</strong>, своих пресетов: <strong>${userPresets.length}</strong>.</p><button class="btn press" data-go="feed">${ic('feed')}Мои посты в ленте</button></div>
       ${cloudCardHTML()}
       <div class="card-s wide danger-zone"><h3>Удаление аккаунта</h3><p>Удалит профиль, все треки из облака, посты, комментарии и лайки. Треки на этом устройстве останутся.</p><button class="btn btn-danger press" data-act="acct-delete" style="align-self:flex-start">${ic('trash')}<span>Удалить аккаунт</span></button></div>
     </div>`;
@@ -2596,10 +2748,16 @@ function syncMixerUI() {
   if (S.view !== 'mixer') return;
   $$('.knob').forEach(updateKnob);
   EQF.forEach((_, i) => { const inp = $('#eq' + i), o = $('#eqv' + i); if (inp && +inp.value !== FX.eq[i]) inp.value = FX.eq[i]; if (o) o.textContent = (FX.eq[i] > 0 ? '+' : '') + String(FX.eq[i]).replace('.', ','); });
-  $$('.preset').forEach(p => p.setAttribute('aria-pressed', p.dataset.preset === FXP));
-  $$('.preset').forEach(p => p.classList.toggle('on', p.dataset.preset === FXP));
-  const all = [...PRESETS, ...userPresets], cp = all.find(p => p.id === FXP);
-  const pn = $('#presetName'); if (pn) pn.textContent = cp ? 'Сейчас: ' + cp.name : 'Сейчас: свои настройки';
+  $$('.pc').forEach(p => { const on = p.dataset.preset === FXP; p.setAttribute('aria-pressed', on); p.classList.toggle('on', on); });
+  const all = [...PRESETS, ...userPresets], cp = all.find(p => p.id === FXP), snd = $('#snd');
+  if (snd) {
+    const isUser = cp && userPresets.includes(cp), gid = !cp ? 'custom' : isUser ? 'custom' : cp.id, hue = cp ? cp.hue : 20;
+    snd.style.setProperty('--ph', hue);
+    if ($('#sndArt').dataset.g !== gid) { $('#sndArt').dataset.g = gid; $('#sndArt').innerHTML = glyph(gid); $('#sndArt').animate([{ transform: 'scale(.85) rotate(-8deg)', opacity: .4 }, { transform: 'none', opacity: 1 }], { duration: 450, easing: 'cubic-bezier(.34,1.56,.64,1)' }); }
+    $('#sndName').textContent = cp ? cp.name : 'Свои настройки';
+    $('#sndDesc').textContent = cp ? (cp.d || 'Твой пресет') : 'Ты подкрутил звук вручную. Сохрани, чтобы включать его в один клик';
+  }
+  $$('#mixTabs [data-act=mix-tab]').forEach(b => { const has = tabActive(b.dataset.v), i = b.querySelector('i'); if (has && !i) b.insertAdjacentHTML('beforeend', '<i></i>'); if (!has && i) i.remove(); });
   const base = userPresets.find(p => p.id === FXBASE), up = $('#fxUpd');
   if (up) { up.hidden = !(base && FXP === 'custom'); if (base) up.querySelector('span').textContent = `Обновить «${base.name}»`; }
   updateSmartUI();
@@ -2749,11 +2907,8 @@ function openPresetMenu(anchor, id) {
     <button data-pm="dup">${ic('plus')}Дублировать</button>
     <button data-pm="code">${ic('arrow')}Скопировать код, чтобы поделиться</button>
     <div class="m-sep"></div><button data-pm="del" class="danger">${ic('trash')}<span>Удалить пресет</span></button>`;
-  menu.dataset.pid = id; menu.dataset.id = ''; menu.hidden = false;
-  menu.dataset.dd = ''; menu.dataset.pid = '';
-  const r = anchor.getBoundingClientRect(), mw = menu.offsetWidth, mh = menu.offsetHeight;
-  let y = r.bottom + 8; if (y + mh > innerHeight - 12) y = r.top - mh - 8;
-  menu.style.left = Math.max(12, Math.min(r.right - mw, innerWidth - mw - 12)) + 'px'; menu.style.top = Math.max(12, y) + 'px';
+  menu.dataset.id = ''; menu.dataset.dd = ''; menu.dataset.pid = id; menu.hidden = false;
+  placeMenu(anchor, 'right');
 }
 function savePresets() { store.set('fxUser', userPresets); try { Cloud.dataChanged(); } catch (e) {} const el = $('#presets'); if (el) el.innerHTML = presetsHTML(); FXP = matchPreset(); syncMixerUI(); markFXBtn(); }
 function addPreset(name, params) {
@@ -2781,13 +2936,19 @@ function openMenu(anchor, id) {
     <button data-m="newpl">${ic('plus')}Новый плейлист…</button>`;
   if (inPl) h += `<div class="m-sep"></div><button data-m="rmpl" data-pl="${inPl}">${ic('close')}Убрать из этого плейлиста</button>`;
   if (t.kind === 'upload' || (t.kind === 'net' && S.order.includes(id))) h += `${inPl ? '' : '<div class="m-sep"></div>'}<button data-m="del" class="danger">${ic('trash')}<span>Удалить из библиотеки</span></button>`;
-  menu.innerHTML = h; menu.dataset.id = id; menu.hidden = false;
-  const r = anchor.getBoundingClientRect(), mw = menu.offsetWidth, mh = menu.offsetHeight;
-  let y = r.bottom + 8; if (y + mh > innerHeight - 12) y = r.top - mh - 8;
-  menu.style.left = Math.max(12, Math.min(r.right - mw, innerWidth - mw - 12)) + 'px';
-  menu.style.top = Math.max(12, y) + 'px';
+  menu.innerHTML = h; menu.dataset.id = id; menu.dataset.dd = ''; menu.dataset.pid = ''; menu.hidden = false;
+  placeMenu(anchor, 'right');
 }
-const closeMenu = () => { if (menu.hidden) return; menu.hidden = true; if (ddOpenBtn) { ddOpenBtn.setAttribute('aria-expanded', 'false'); ddOpenBtn = null; } };
+function placeMenu(anchor, align) {
+  const bg = $('#menuBg');
+  if (matchMedia('(max-width:760px)').matches) { menu.classList.add('as-sheet'); menu.style.left = ''; menu.style.top = ''; bg.hidden = false; return; }
+  menu.classList.remove('as-sheet'); bg.hidden = true;
+  const r = anchor.getBoundingClientRect(), mw = Math.max(menu.offsetWidth, 200), mh = menu.offsetHeight;
+  let y = r.bottom + 8; if (y + mh > innerHeight - 12) y = r.top - mh - 8;
+  const x = align === 'left' ? r.left : r.right - mw;
+  menu.style.left = Math.max(12, Math.min(x, innerWidth - mw - 12)) + 'px'; menu.style.top = Math.max(12, y) + 'px';
+}
+const closeMenu = () => { if (menu.hidden) return; menu.hidden = true; $('#menuBg').hidden = true; if (ddOpenBtn) { ddOpenBtn.setAttribute('aria-expanded', 'false'); ddOpenBtn = null; } };
 menu.addEventListener('click', e => {
   const ddo = e.target.closest('[data-ddo]');
   if (ddo) { const k = menu.dataset.dd, btn = ddOpenBtn; closeMenu(); DD[k].set(ddo.dataset.ddo); syncDD(); if (btn) btn.focus({ preventScroll: true }); return; }
@@ -2819,7 +2980,7 @@ function toast(msg) { const el = $('#toast'); el.textContent = msg; el.hidden = 
 
 /* ================= events ================= */
 document.addEventListener('click', e => {
-  if (!menu.hidden && !e.target.closest('#menu') && !e.target.closest('[data-act=more],[data-act=more-cur],[data-pmenu],[data-dd]')) closeMenu();
+  if (!menu.hidden && !e.target.closest('#menu') && (e.target.id === 'menuBg' || !e.target.closest('[data-act=more],[data-act=more-cur],[data-pmenu],[data-dd]'))) { closeMenu(); if (e.target.id === 'menuBg') return; }
   const pmn = e.target.closest('[data-pmenu]'); if (pmn) { openPresetMenu(pmn, pmn.dataset.pmenu); return; }
   const ddb = e.target.closest('[data-dd]'); if (ddb) { openDD(ddb); return; }
   if (!menu.hidden && e.target.closest('#menu')) return;
@@ -2859,6 +3020,8 @@ document.addEventListener('click', e => {
       case 'loop-a': { const t = curT(); if (!t || !E.buf) { toast('Сначала включи трек'); break; } S.loop = { id: t.id, a: curTime(), b: null }; updateLoopUI(); break; }
       case 'loop-b': { const t = curT(); if (!S.loop || !t || S.loop.id !== t.id) { toast('Сначала отметь точку A'); break; } const ct = curTime(); if (ct <= S.loop.a + .5) { toast('B должна быть позже A'); break; } S.loop.b = ct; seek(S.loop.a); updateLoopUI(); break; }
       case 'loop-clear': S.loop = null; updateLoopUI(); break;
+      case 'mix-tab': S.mixTab = a.dataset.v; paintMixPanel(); break;
+      case 'pcat': S.pcat = a.dataset.v; $$('[data-act=pcat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.pcat)); $('#presets').innerHTML = presetsHTML(); $('#presets').scrollLeft = 0; break;
       case 'install': if (installPrompt) { installPrompt.prompt(); installPrompt.userChoice.finally(() => { installPrompt = null; if (S.view === 'labs') renderView(); }); } break;
       case 'compose': if (FULL) setFull(false); openComposer(); break;
       case 'cmp-close': closeComposer(); break;
@@ -3020,9 +3183,7 @@ function openDD(btn) {
   menu.dataset.dd = k; menu.dataset.id = ''; menu.dataset.pid = ''; menu.hidden = false;
   $$('[aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded', 'false'));
   btn.setAttribute('aria-expanded', 'true'); ddOpenBtn = btn;
-  const r = btn.getBoundingClientRect(), mw = Math.max(menu.offsetWidth, 200), mh = menu.offsetHeight;
-  let y = r.bottom + 8; if (y + mh > innerHeight - 12) y = r.top - mh - 8;
-  menu.style.left = Math.max(12, Math.min(r.left, innerWidth - mw - 12)) + 'px'; menu.style.top = Math.max(12, y) + 'px';
+  placeMenu(btn, 'left');
   const on = menu.querySelector('.on'); (on || menu.querySelector('button')).focus({ preventScroll: true });
 }
 menu.addEventListener('keydown', e => {
@@ -3245,5 +3406,3 @@ addEventListener('pagehide', () => { savePos(); if (statAcc) { S.stats.days[dayK
 boot();
 })();
 </script>
-</body>
-</html>
