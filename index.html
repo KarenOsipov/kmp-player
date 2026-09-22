@@ -733,6 +733,15 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
   .f-title h2{font-size:30px}
 }
 @media (max-width:760px) and (min-height:760px){.f-stage{padding-top:12px}}
+/* phones: no live blur (the most expensive thing to paint while scrolling) */
+@media (max-width:760px){
+  .glass-strong,.st-btn,.f-queue,.topbar,.drop,.eyebrow{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  .glass-strong{background:var(--surface-2)}
+  .topbar{background:var(--ground)}
+  .st-btn{background:rgba(255,255,255,.18)}
+  .f-queue{background:rgba(10,12,22,.4)}
+  .card-cov,.card:hover .card-cov{transition:none}
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1017,115 +1026,176 @@ function hueFromImage(src) {
 }
 const seededPeaks = id => { const r = rng('pk' + id); const a = []; let v = .5; for (let i = 0; i < 160; i++) { v += (r() - .5) * .25; v = Math.max(.2, Math.min(1, v)); a.push(v * (.7 + r() * .3)); } return a; };
 
-/* ================= audio engine ================= */
-const E = { ctx: null, gain: null, an: null, src: null, srcGain: null, buf: null, startAt: 0, startOff: 0, offset: 0, playing: false, rate: 1, bypass: false, fx: null };
+/* ================= audio engine: streaming media elements + Web Audio effects ================= */
+// Tracks stream through <audio> elements (no full decode in memory), so phones stay fast and never run out of RAM.
+const IS_MOBILE = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const E = { ctx: null, gain: null, an: null, fx: null, decks: [], raw: null, deck: null, playing: false, offset: 0, rate: 1, bypass: false, buf: null, pref: null };
+const BUFH = { get duration() { const d = E.deck && E.deck.el.duration; const t = curT(); return isFinite(d) && d > 0 ? d : (t && t.duration) || 0; } };
 let decoder = null;
-const bufCache = new Map();
+const bufCache = new Map(); // kept for compatibility, no audio is cached in memory any more
+function curT() { return T.get(S.queue[S.qi]); }
+function mkDeck(routed) {
+  const el = new Audio(); el.preload = 'auto'; el.setAttribute('playsinline', ''); el.setAttribute('webkit-playsinline', '');
+  if (routed) el.crossOrigin = 'anonymous';
+  const d = { el, routed, g: null, id: null, vol: 1, fadeT: 0 };
+  if (routed) { const src = E.ctx.createMediaElementSource(el); d.g = E.ctx.createGain(); d.g.gain.value = .0001; src.connect(d.g); d.g.connect(E.fx.input); }
+  el.addEventListener('ended', () => { if (E.deck === d && E.playing) { E.playing = false; E.offset = 0; setPlayingUI(); onEnded(); } });
+  el.addEventListener('waiting', () => { if (E.deck === d && E.playing) setLoading(true); });
+  el.addEventListener('playing', () => { if (E.deck === d) setLoading(false); });
+  el.addEventListener('loadedmetadata', () => {
+    const t = T.get(d.id); if (!t || !isFinite(el.duration) || el.duration <= 0) return;
+    if (!t.duration || Math.abs(t.duration - el.duration) > .5) { t.duration = el.duration; if (E.deck === d) renderNow(); if (S.order.includes(t.id) && t.kind !== 'demo') DB.put(dbRec(t)); }
+  });
+  return d;
+}
 function ac() {
   if (!E.ctx) {
-    const C = window.AudioContext || window.webkitAudioContext, c = E.ctx = new C();
-    E.gain = c.createGain(); E.an = c.createAnalyser(); E.an.fftSize = 2048; E.an.smoothingTimeConstant = .8;
+    const C = window.AudioContext || window.webkitAudioContext;
+    let c; try { c = new C({ latencyHint: 'playback' }); } catch (e) { c = new C(); }
+    E.ctx = c;
+    E.gain = c.createGain(); E.an = c.createAnalyser(); E.an.fftSize = IS_MOBILE ? 1024 : 2048; E.an.smoothingTimeConstant = .8;
     E.lull = c.createBiquadFilter(); E.lull.type = 'lowpass'; E.lull.frequency.value = 20000; E.lull.Q.value = .5;
     E.lullG = c.createGain(); E.duck = c.createGain();
     E.gain.connect(E.lull); E.lull.connect(E.lullG); E.lullG.connect(E.duck); E.duck.connect(E.an); E.an.connect(c.destination);
     E.ambGain = c.createGain(); E.ambGain.gain.value = 0; E.ambGain.connect(c.destination);
-    E.msplit = c.createChannelSplitter(2); E.anL = c.createAnalyser(); E.anR = c.createAnalyser(); E.anL.fftSize = E.anR.fftSize = 1024;
+    E.msplit = c.createChannelSplitter(2); E.anL = c.createAnalyser(); E.anR = c.createAnalyser(); E.anL.fftSize = E.anR.fftSize = 512;
     E.duck.connect(E.msplit); E.msplit.connect(E.anL, 0); E.msplit.connect(E.anR, 1);
-    E.fx = buildFX(c); applyFX(true); applyVol();
+    E.fx = buildFX(c); applyFX(true);
+    E.decks = [mkDeck(true), mkDeck(true)]; E.raw = mkDeck(false);
+    applyVol();
     if (E.bypass) setBypass(true);
+    // unlock playback on phones: every element gets one real play() inside this user gesture
+    const sil = silentWav();
+    for (const d of [...E.decks, E.raw]) { try { d.el.src = sil; const p = d.el.play(); if (p && p.then) p.then(() => { if (!d.id) d.el.pause(); }).catch(() => {}); } catch (e) {} }
+    if (navigator.audioSession) try { navigator.audioSession.type = 'playback'; } catch (e) {}
   }
   if (E.ctx.state === 'suspended') E.ctx.resume();
   return E.ctx;
 }
 function decodeCtx() { if (!decoder) { const O = window.OfflineAudioContext || window.webkitOfflineAudioContext; decoder = new O(2, 1, 44100); } return decoder; }
-function applyVol() { if (!E.gain) return; const v = S.muted ? 0 : S.vol * S.vol; E.gain.gain.setTargetAtTime(v, E.ctx.currentTime, .03); }
-function curTime() { if (!E.buf) return 0; return E.playing ? Math.min(E.buf.duration, E.startOff + (E.ctx.currentTime - E.startAt) * E.rate) : E.offset; }
-function curT() { return T.get(S.queue[S.qi]); }
-E.live = new Set();
-function fadeOut(entry, d) {
-  const c = E.ctx, now = c.currentTime, { s, g } = entry; s._dead = true;
-  try { g.gain.cancelScheduledValues(now); g.gain.setValueAtTime(Math.max(.0001, g.gain.value), now); if (d > .2) g.gain.linearRampToValueAtTime(.0001, now + d); else g.gain.exponentialRampToValueAtTime(.0001, now + d); s.stop(now + d + .02); } catch (e) { try { s.stop(); } catch (_) {} }
+function deckTarget(d) { const t = T.get(d.id), ng = S.norm && t && t.gain ? t.gain : 1; return d.routed ? ng : (S.muted ? 0 : Math.min(1, S.vol * S.vol * Math.min(1, ng))); }
+function fadeDeck(d, to, dur) {
+  return new Promise(res => {
+    if (d.routed) {
+      const g = d.g.gain, now = E.ctx.currentTime;
+      g.cancelScheduledValues(now); g.setValueAtTime(Math.max(.0001, g.value), now);
+      if (dur > .2) g.linearRampToValueAtTime(Math.max(.0001, to), now + dur); else g.exponentialRampToValueAtTime(Math.max(.0001, to), now + Math.max(.02, dur));
+      setTimeout(res, dur * 1000 + 20);
+    } else {
+      clearInterval(d.fadeT); const from = d.el.volume, t0 = performance.now();
+      if (dur <= 0) { d.el.volume = to; return res(); }
+      d.fadeT = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / (dur * 1000)); d.el.volume = Math.max(0, Math.min(1, from + (to - from) * k)); if (k >= 1) { clearInterval(d.fadeT); res(); } }, 30);
+    }
+  });
 }
-/* hard guarantee: only one track is audible, except a deliberate crossfade tail */
-function stopAll(d = .12) { for (const en of E.live) if (!en.s._dead || en.s === E.src) fadeOut(en, d); E.src = null; E.srcEntry = null; }
-function startSrc(off, fadeIn = 0, keepTail = false) {
-  const c = E.ctx; if (!c || !E.buf) return;
-  if (keepTail) { if (E.srcEntry) fadeOut(E.srcEntry, .12); } else stopAll();
-  const s = c.createBufferSource(), g = c.createGain(), now = c.currentTime, t = curT();
-  const tg = S.norm && t && t.gain ? t.gain : 1;
-  s.buffer = E.buf; s.playbackRate.value = E.rate;
-  g.gain.setValueAtTime(.0001, now);
-  if (fadeIn > .2) g.gain.linearRampToValueAtTime(tg, now + fadeIn); else g.gain.exponentialRampToValueAtTime(tg, now + .06);
-  s.connect(g); g.connect(E.fx.input);
-  if (E.fx) E.fx.wowBus.connect(s.detune);
-  const entry = { s, g }; E.live.add(entry);
-  s.onended = () => { E.live.delete(entry); try { g.disconnect(); } catch (e) {} if (!s._dead && E.src === s) { E.src = null; E.srcEntry = null; E.playing = false; E.offset = E.buf.duration; onEnded(); } };
-  off = Math.max(0, Math.min(off, E.buf.duration - .01));
-  s.start(0, off); E.src = s; E.srcEntry = entry; E.startAt = now; E.startOff = off; E.playing = true;
-  if (S.labs.oneplayer && bc) try { bc.postMessage({ play: TAB }); } catch (e) {}
-}
-function killSrc(fade) {
-  const en = E.srcEntry; E.src = null; E.srcEntry = null; if (!en) return;
-  fadeOut(en, fade ? (typeof fade === 'number' ? fade : .14) : .02);
-}
+function haltDeck(d, dur = .12) { if (!d) return; d.halting = true; fadeDeck(d, 0, dur).then(() => { if (d.halting) { d.el.pause(); d.halting = false; } }); }
+function curTime() { const d = E.deck; if (!d || !d.id) return E.offset; const x = d.el.currentTime; return isFinite(x) ? x : 0; }
+function stopAll(dur = .12) { for (const d of [...E.decks, E.raw]) if (d && !d.el.paused) haltDeck(d, dur); E.playing = false; }
+function killSrc() { stopAll(.14); }
 function loudGain(buf) {
   const a = buf.getChannelData(0); let sum = 0, n = 0;
   for (let i = 0; i < a.length; i += 64) { sum += a[i] * a[i]; n++; }
   const rms = Math.sqrt(sum / Math.max(1, n));
   return rms > 0 ? Math.max(.35, Math.min(2.5, .16 / rms)) : 1;
 }
-let keepAlive = null;
 function silentWav() { const n = 8000, b = new Uint8Array(44 + n), v = new DataView(b.buffer), w = (o, t) => { for (let i = 0; i < t.length; i++) b[o + i] = t.charCodeAt(i); };
   w(0, 'RIFF'); v.setUint32(4, 36 + n, true); w(8, 'WAVE'); w(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true); v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); w(36, 'data'); v.setUint32(40, n, true); b.fill(128, 44);
   let s = ''; for (let i = 0; i < b.length; i++) s += String.fromCharCode(b[i]); return 'data:audio/wav;base64,' + btoa(s); }
-function keepAliveSet(on) {
-  try {
-    if (navigator.audioSession) navigator.audioSession.type = 'playback';
-    if (!keepAlive) { keepAlive = new Audio(silentWav()); keepAlive.loop = true; keepAlive.setAttribute('playsinline', ''); }
-    if (on) { const p = keepAlive.play(); if (p && p.catch) p.catch(() => {}); } else keepAlive.pause();
-  } catch (e) {}
+function wavBlob(buf) {
+  const ch = buf.numberOfChannels, sr = buf.sampleRate, n = buf.length, ab = new ArrayBuffer(44 + n * ch * 2), v = new DataView(ab);
+  const w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+  w(0, 'RIFF'); v.setUint32(4, 36 + n * ch * 2, true); w(8, 'WAVE'); w(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, ch, true); v.setUint32(24, sr, true); v.setUint32(28, sr * ch * 2, true); v.setUint16(32, ch * 2, true); v.setUint16(34, 16, true); w(36, 'data'); v.setUint32(40, n * ch * 2, true);
+  const cs = [...Array(ch)].map((_, i) => buf.getChannelData(i)); let o = 44;
+  for (let i = 0; i < n; i++) for (let c = 0; c < ch; c++) { const s = Math.max(-1, Math.min(1, cs[c][i])); v.setInt16(o, s < 0 ? s * 0x8000 : s * 0x7fff, true); o += 2; }
+  return new Blob([ab], { type: 'audio/wav' });
 }
-function play() { ac(); if (!E.buf || (E.playing && E.src)) return; startSrc(E.offset >= E.buf.duration - .05 ? 0 : E.offset); setPlayingUI(); }
-function pause() { if (!E.playing) { stopAll(); return; } E.offset = curTime(); savePos(); stopAll(.14); E.playing = false; setPlayingUI(); }
-function seek(t) { if (!E.buf) return; t = Math.max(0, Math.min(t, E.buf.duration - .05)); E.offset = t; if (E.playing) startSrc(t); }
-function toggle() { if (!E.ctx || !E.buf) return playAt(S.qi); E.playing ? pause() : play(); }
+function keepAliveSet() {}
+function applyVol() { if (!E.gain) return; const v = S.muted ? 0 : S.vol * S.vol; E.gain.gain.setTargetAtTime(v, E.ctx.currentTime, .03); if (E.raw && E.deck === E.raw && E.playing) E.raw.el.volume = deckTarget(E.raw); }
+function setPitchPref(el) { el.preservesPitch = false; el.mozPreservesPitch = false; el.webkitPreservesPitch = false; }
+function play() {
+  ac(); const d = E.deck;
+  if (!d || !d.id) return playAt(S.qi);
+  if (E.playing && !d.el.paused) return;
+  d.halting = false; setPitchPref(d.el); d.el.playbackRate = E.rate;
+  E.playing = true; setPlayingUI();
+  const p = d.el.play();
+  const go = () => fadeDeck(d, deckTarget(d), .08);
+  if (p && p.then) p.then(go).catch(e => { if (E.deck === d) { E.playing = false; setPlayingUI(); if (e && e.name === 'NotAllowedError') toast('Нажми «Играть» ещё раз'); } }); else go();
+}
+function pause() { if (!E.playing) { stopAll(); setPlayingUI(); return; } E.offset = curTime(); savePos(); E.playing = false; haltDeck(E.deck, .14); setPlayingUI(); }
+function seek(x) { const d = E.deck, t = curT(); if (!d || !d.id || (t && t.live)) return; const D = BUFH.duration; x = Math.max(0, Math.min(x, D ? D - .05 : x)); try { d.el.currentTime = x; } catch (e) {} E.offset = x; }
+function toggle() { if (!E.ctx || !E.deck || !E.deck.id || E.deck.id !== S.queue[S.qi]) return playAt(S.qi); E.playing ? pause() : play(); }
 function setPlayingUI() {
-  document.body.classList.toggle('is-playing', E.playing); keepAliveSet(E.playing);
+  document.body.classList.toggle('is-playing', E.playing);
   const k = $('#stKick'); if (k) k.textContent = E.playing ? 'Сейчас играет' : (E.buf ? 'На паузе' : 'Готово к воспроизведению');
   if ('mediaSession' in navigator) navigator.mediaSession.playbackState = E.playing ? 'playing' : 'paused';
 }
 function setLoading(on) { $$('.gp').forEach(b => b.classList.toggle('loading', on)); }
 function setRate() {
-  const r = E.bypass ? 1 : FX.speed / 100;
-  if (!E.ctx) { E.rate = r; return; }
-  if (r === E.rate) return;
-  if (E.playing && E.src) { E.startOff = curTime(); E.startAt = E.ctx.currentTime; E.src.playbackRate.setValueAtTime(r, E.ctx.currentTime); }
-  E.rate = r;
+  const r = E.bypass ? 1 : FX.speed / 100; E.rate = r;
+  for (const d of [...E.decks, E.raw]) if (d) { setPitchPref(d.el); d.el.playbackRate = r; }
+}
+function isRemote(u) { return /^https?:/i.test(u) && !u.startsWith(location.origin); }
+async function srcFor(t) {
+  if (t.kind === 'demo') { if (t.url) return t.url; if (!t._fileFailed) return 'demos/' + t.id + '.mp3'; await ensureBuffer(t); return t.url; }
+  if (t.blob) { if (!t.url) t.url = URL.createObjectURL(t.blob); return t.url; }
+  if (t.path) return await Cloud.signedUrl(t);
+  if (t.live) return t.stream;
+  if (t.net || t.stream) return await resolveStream(t);
+  throw new Error('no source');
+}
+function loadDeck(d, url) {
+  return new Promise((res, rej) => {
+    const el = d.el; let done = false;
+    const ok = () => { if (done) return; done = true; off(); res(); };
+    const bad = () => { if (done) return; done = true; off(); rej(el.error || new Error('load')); };
+    const off = () => { el.removeEventListener('loadedmetadata', ok); el.removeEventListener('canplay', ok); el.removeEventListener('error', bad); clearTimeout(to); };
+    const to = setTimeout(bad, 20000);
+    el.addEventListener('loadedmetadata', ok); el.addEventListener('canplay', ok); el.addEventListener('error', bad);
+    d.halting = false; el.pause(); el.src = url; el.load();
+  });
+}
+async function loadInto(t, avoid) {
+  const url = await srcFor(t);
+  let d = t.noCors ? E.raw : (E.decks.find(x => x !== avoid) || E.decks[0]);
+  if (d === avoid) d = E.decks.find(x => x !== avoid) || E.raw;
+  if (d.routed) d.g.gain.value = .0001; else d.el.volume = 0;
+  d.id = t.id;
+  try { await loadDeck(d, url); }
+  catch (e) {
+    if (t.kind === 'demo' && !t._fileFailed) { t._fileFailed = true; d.id = null; return loadInto(t, avoid); }
+    if (!d.routed || !isRemote(url)) throw e;
+    t.noCors = true; d.id = null; d = E.raw; d.id = t.id; d.el.volume = 0; await loadDeck(d, url);
+  }
+  setPitchPref(d.el); d.el.playbackRate = E.rate;
+  return d;
 }
 
 let playToken = 0;
 async function playAt(qi, autoplay = true) {
   const t = T.get(S.queue[qi]); if (!t) return;
   ac();
-  const tok = ++playToken;
-  savePos(); stopAll(.14); E.playing = false;
+  const tok = ++playToken, old = E.deck;
+  savePos(); if (old) haltDeck(old, .12); E.playing = false;
   S.qi = qi; E.buf = null; E.offset = 0; E.pref = null; E.shufFor = null;
   if (S.loop && S.loop.id !== t.id) S.loop = null;
   applyTrackFx(t);
-  renderNow(); markPlaying(); saveSession(); updateLoopUI();
+  renderNow(); markPlaying(); saveSession(); updateLoopUI(); setPlayingUI();
   setLoading(true);
   try {
-    const buf = await ensureBuffer(t);
-    if (tok !== playToken) return;
-    if (t.gain == null) t.gain = loudGain(buf);
-    E.buf = buf; E.offset = startOffset(t);
+    const d = await loadInto(t, old);
+    if (tok !== playToken) { d.id = null; d.el.pause(); return; }
+    E.deck = d; E.buf = BUFH;
+    const off = startOffset(t); if (off) try { d.el.currentTime = off; } catch (e) {}
     if (autoplay) { play(); S.plays[t.id] = (S.plays[t.id] || 0) + 1; persist(); }
-  } catch (e) { if (tok === playToken) toast((t.net || t.stream || t.path) ? 'Трек сейчас недоступен. Проверь интернет и попробуй ещё раз' : 'Не удалось открыть трек: этот формат не поддерживается'); }
+    else setPlayingUI();
+    updateMediaPosition();
+  } catch (e) { if (tok === playToken) { E.playing = false; setPlayingUI(); toast(t.kind === 'upload' && t.blob ? 'Не удалось открыть трек: этот формат не поддерживается' : 'Трек сейчас недоступен. Проверь интернет и попробуй ещё раз'); } }
   finally { if (tok === playToken) setLoading(false); }
 }
 function onEnded() {
   if (S.sleep && S.sleep.mode === 'track') { S.sleep = null; E.offset = 0; setPlayingUI(); updateSmartUI(); if (S.labs.amb && S.labs.amb !== 'none') setAmb('none', true); toast('Таймер сна: трек закончился, музыка остановлена'); return; }
-  if (S.repeat === 'one') { E.offset = 0; play(); return; }
+  if (S.repeat === 'one' && E.deck) { try { E.deck.el.currentTime = 0; } catch (e) {} play(); return; }
   next(true);
 }
 function nextIndex(auto) {
@@ -1143,47 +1213,55 @@ function next(auto) {
   if (n < 0) { E.offset = 0; E.playing = false; setPlayingUI(); return; }
   playAt(n);
 }
-function crossfadeTo(n, buf) {
+function crossfadeTo(n, nd) {
   const d = Math.max(.5, Math.min(S.xfade, (trackEnd() - curTime()) / E.rate));
-  ++playToken; savePos(); if (E.srcEntry) fadeOut(E.srcEntry, d); E.src = null; E.srcEntry = null;
-  S.qi = n; E.buf = buf; E.offset = 0; E.pref = null; E.shufFor = null;
-  const t = curT(); if (t.gain == null) t.gain = loudGain(buf);
+  ++playToken; savePos();
+  const old = E.deck; if (old) haltDeck(old, d);
+  S.qi = n; E.deck = nd; E.buf = BUFH; E.offset = 0; E.pref = null; E.shufFor = null;
+  const t = curT();
   if (S.loop && S.loop.id !== t.id) S.loop = null;
   applyTrackFx(t);
-  startSrc(startOffset(t), d, true);
+  const off = startOffset(t); if (off) try { nd.el.currentTime = off; } catch (e) {}
+  nd.halting = false; setPitchPref(nd.el); nd.el.playbackRate = E.rate;
+  E.playing = true;
+  const p = nd.el.play(); if (p && p.then) p.catch(() => {});
+  fadeDeck(nd, deckTarget(nd), d);
   S.plays[t.id] = (S.plays[t.id] || 0) + 1; persist(); saveSession();
-  renderNow(); markPlaying(); setPlayingUI(); updateLoopUI();
+  renderNow(); markPlaying(); setPlayingUI(); updateLoopUI(); updateMediaPosition();
 }
-/* smart features running every frame */
-function trackEnd() { const t = curT(); return S.labs.silence && t && t.trimE ? Math.min(E.buf.duration, t.trimE) : E.buf.duration; }
+function trackEnd() { const t = curT(), D = BUFH.duration; return S.labs.silence && t && t.trimE ? Math.min(D, t.trimE) : D; }
 function startOffset(t) {
   const p = S.labs.resume && t.duration > 360 ? S.pos[t.id] : 0;
   if (p && p > 15 && p < t.duration - 20) { toast(`Продолжаю с ${fmt(p)}`); return p; }
   return S.labs.silence && t.trimS ? t.trimS : 0;
 }
 function savePos() {
-  const t = curT(); if (!S.labs.resume || !t || !E.buf || E.buf.duration <= 360) return;
-  const ct = curTime(); if (ct > 15 && ct < E.buf.duration - 20) S.pos[t.id] = Math.round(ct); else delete S.pos[t.id];
+  const t = curT(); if (!S.labs.resume || !t || !E.buf || t.live) return;
+  const D = BUFH.duration; if (D <= 360) return;
+  const ct = curTime(); if (ct > 15 && ct < D - 20) S.pos[t.id] = Math.round(ct); else delete S.pos[t.id];
   store.set('pos', S.pos);
 }
+let mpT = 0;
+function updateMediaPosition() { try { const D = BUFH.duration, t = curT(); if (navigator.mediaSession && navigator.mediaSession.setPositionState && D > 0 && t && !t.live) navigator.mediaSession.setPositionState({ duration: D, playbackRate: E.rate, position: Math.min(D, curTime()) }); } catch (e) {} }
 function tickSmart() {
   if (S.sleep && S.sleep.mode === 'time') {
     const left = S.sleep.end - Date.now();
     if (S.labs.lullaby && E.lull) { const f = Math.max(0, Math.min(1, 1 - left / 600000)); E.lull.frequency.setTargetAtTime(20000 * Math.pow(900 / 20000, f), E.ctx.currentTime, .5); E.lullG.gain.setTargetAtTime(1 - f * .55, E.ctx.currentTime, .5); }
-    if (left <= 8000 && !S.sleep.fading && E.gain) { S.sleep.fading = true; E.gain.gain.setTargetAtTime(.0001, E.ctx.currentTime, 2.2); if (E.ambGain) E.ambGain.gain.setTargetAtTime(.0001, E.ctx.currentTime, 2.2); }
+    if (left <= 8000 && !S.sleep.fading && E.gain) { S.sleep.fading = true; E.gain.gain.setTargetAtTime(.0001, E.ctx.currentTime, 2.2); if (E.raw) fadeDeck(E.raw, 0, 6); if (E.ambGain) E.ambGain.gain.setTargetAtTime(.0001, E.ctx.currentTime, 2.2); }
     if (left <= 0) { S.sleep = null; pause(); applyVol(); resetLull(); if (S.labs.amb && S.labs.amb !== 'none') setAmb('none', true); updateSmartUI(); toast('Таймер сна: музыка на паузе'); }
   }
   if (!E.playing || !E.buf) return;
-  const t = curT(), ct = curTime(), remain = (trackEnd() - ct) / E.rate;
-  if (S.labs.silence && t && t.trimE && t.trimE < E.buf.duration - .3 && ct >= t.trimE && !(S.xfade > 0)) { stopAll(.1); E.playing = false; E.offset = E.buf.duration; onEnded(); return; }
-  if (S.loop && t && S.loop.id === t.id && S.loop.b != null && ct >= S.loop.b) { seek(S.loop.a); return; }
-  if (S.clip && t && S.clip.id === t.id && ct >= S.clip.b) { pause(); S.clip = null; if (S.view === 'feed') paintFeed(); return; }
-  if (S.clip && t && S.clip.id !== t.id) S.clip = null;
-  if (S.xfade > 0 && S.repeat !== 'one' && !(S.sleep && S.sleep.mode === 'track') && !(S.loop && S.loop.b != null)) {
+  const t = curT(); if (!t || t.live) return;
+  const ct = curTime(), remain = (trackEnd() - ct) / E.rate;
+  if (S.labs.silence && t.trimE && t.trimE < BUFH.duration - .3 && ct >= t.trimE && !(S.xfade > 0)) { stopAll(.1); E.offset = 0; setPlayingUI(); onEnded(); return; }
+  if (S.loop && S.loop.id === t.id && S.loop.b != null && ct >= S.loop.b) { seek(S.loop.a); return; }
+  if (S.clip && S.clip.id === t.id && ct >= S.clip.b) { pause(); S.clip = null; if (S.view === 'feed') paintFeed(); return; }
+  if (S.clip && S.clip.id !== t.id) S.clip = null;
+  if (S.xfade > 0 && S.repeat !== 'one' && !(S.sleep && S.sleep.mode === 'track') && !(S.loop && S.loop.b != null) && isFinite(remain)) {
     const n = nextIndex(true); if (n < 0 || n === S.qi) return;
-    const nt = T.get(S.queue[n]); if (!nt) return;
-    if (remain < S.xfade + 12 && (!E.pref || E.pref.id !== nt.id)) { const pr = E.pref = { id: nt.id, buf: null }; ensureBuffer(nt).then(b => { pr.buf = b; }).catch(() => {}); }
-    if (remain <= S.xfade && E.pref && E.pref.buf && E.pref.id === nt.id) crossfadeTo(n, E.pref.buf);
+    const nt = T.get(S.queue[n]); if (!nt || nt.live) return;
+    if (remain < S.xfade + 12 && (!E.pref || E.pref.id !== nt.id)) { const pr = E.pref = { id: nt.id, deck: null }; loadInto(nt, E.deck).then(d => { if (E.pref === pr) pr.deck = d; else if (d !== E.deck) d.id = null; }).catch(() => {}); }
+    if (remain <= S.xfade && E.pref && E.pref.deck && E.pref.id === nt.id) crossfadeTo(n, E.pref.deck);
   }
 }
 function prev() { if (curTime() > 3) { seek(0); return; } playAt(S.qi - 1 < 0 ? S.queue.length - 1 : S.qi - 1); }
@@ -1262,7 +1340,7 @@ function buildFX(c) {
   F.input = G();
   F.eq = EQF.map((f, i) => BQ(i === 0 ? 'lowshelf' : i === 9 ? 'highshelf' : 'peaking', f, 1.1));
   F.bass = BQ('lowshelf', 110); F.air = BQ('highshelf', 7000);
-  F.shaper = c.createWaveShaper(); F.shaper.oversample = '4x'; F.makeup = G(); F.crusher = c.createWaveShaper();
+  F.shaper = c.createWaveShaper(); F.shaper.oversample = IS_MOBILE ? '2x' : '4x'; F.makeup = G(); F.crusher = c.createWaveShaper();
   F.hp = BQ('highpass', 20); F.lp = BQ('lowpass', 20000);
   F.comp = c.createDynamicsCompressor(); F.compMk = G();
   // modulation
@@ -1277,29 +1355,32 @@ function buildFX(c) {
   F.kLp = BQ('lowpass', 150); F.kGain = G(); F.kGain.gain.value = 0;
   F.pan = c.createStereoPanner(); F.lfoAmt = G(); F.lfoAmt.gain.value = 0; F.lfo = O('sine', .1); F.lfo.connect(F.lfoAmt); F.lfoAmt.connect(F.pan.pan);
   // vinyl noise + tape wow
-  F.vin = c.createBufferSource(); F.vin.buffer = vinylBuffer(c); F.vin.loop = true; F.vinGain = G(); F.vinGain.gain.value = 0; F.vin.connect(F.vinGain); F.vinGain.connect(F.pre); F.vin.start();
-  F.wowBus = G(); F.wowAmt = G(); F.wowAmt.gain.value = 0; F.wowAmt2 = G(); F.wowAmt2.gain.value = 0;
-  O('sine', .55).connect(F.wowAmt); O('sine', 6.5).connect(F.wowAmt2); F.wowAmt.connect(F.wowBus); F.wowAmt2.connect(F.wowBus);
+  F.vin = c.createBufferSource(); F.vin.buffer = vinylBuffer(c); F.vin.loop = true; F.vinGain = G(); F.vinGain.gain.value = 0; F.vin.connect(F.vinGain); F.vin.start();
+  F.wowDl = c.createDelay(.05); F.wowDl.delayTime.value = .006; F.wowAmt = G(); F.wowAmt.gain.value = 0; F.wowAmt2 = G(); F.wowAmt2.gain.value = 0;
+  O('sine', .55).connect(F.wowAmt); O('sine', 6.5).connect(F.wowAmt2); F.wowAmt.connect(F.wowDl.delayTime); F.wowAmt2.connect(F.wowDl.delayTime);
   // space
   F.dry = G(); F.conv = c.createConvolver(); F.rvWet = G(); F.rvWet.gain.value = 0;
   F.dl = c.createDelay(2); F.dl.delayTime.value = .34; F.dlFb = G(); F.dlLp = BQ('lowpass', 3200); F.echoWet = G(); F.echoWet.gain.value = 0;
   // wiring
   let n = F.input; for (const b of F.eq) { n.connect(b); n = b; }
-  n.connect(F.bass); F.bass.connect(F.air); F.air.connect(F.shaper); F.shaper.connect(F.makeup); F.makeup.connect(F.crusher); F.crusher.connect(F.hp); F.hp.connect(F.lp); F.lp.connect(F.comp); F.comp.connect(F.compMk); F.compMk.connect(F.mod);
+  n.connect(F.bass); F.bass.connect(F.air); F.air.connect(F.shaper); F.shaper.connect(F.makeup); F.makeup.connect(F.crusher); F.crusher.connect(F.hp); F.hp.connect(F.lp); F.lp.connect(F.comp); F.comp.connect(F.compMk); F.compMk.connect(F.wowDl); F.wowDl.connect(F.mod);
   F.mod.connect(F.modDry); F.modDry.connect(F.modOut);
-  F.mod.connect(F.chDl); F.chDl.connect(F.chWet); F.chWet.connect(F.modOut);
-  F.mod.connect(F.flDl); F.flDl.connect(F.flFb); F.flFb.connect(F.flDl); F.flDl.connect(F.flWet); F.flWet.connect(F.modOut);
+  F.chDl.connect(F.chWet); F.chWet.connect(F.modOut);
+  F.flDl.connect(F.flFb); F.flFb.connect(F.flDl); F.flDl.connect(F.flWet); F.flWet.connect(F.modOut);
   F.modOut.connect(F.trem); F.trem.connect(F.pre); F.pre.connect(F.split);
   F.split.connect(F.m.LL, 0); F.split.connect(F.m.LR, 0); F.split.connect(F.m.RL, 1); F.split.connect(F.m.RR, 1);
   F.m.LL.connect(F.merge, 0, 0); F.m.RL.connect(F.merge, 0, 0); F.m.LR.connect(F.merge, 0, 1); F.m.RR.connect(F.merge, 0, 1);
-  F.merge.connect(F.pan); F.pre.connect(F.kLp); F.kLp.connect(F.kGain); F.kGain.connect(F.pan);
+  F.merge.connect(F.pan); F.kLp.connect(F.kGain); F.kGain.connect(F.pan);
   F.pan.connect(F.dry); F.dry.connect(E.gain);
-  F.pan.connect(F.conv); F.conv.connect(F.rvWet); F.rvWet.connect(E.gain);
-  F.pan.connect(F.dl); F.dl.connect(F.dlLp); F.dlLp.connect(F.dlFb); F.dlFb.connect(F.dl); F.dlLp.connect(F.echoWet); F.echoWet.connect(E.gain);
+  F.conv.connect(F.rvWet); F.rvWet.connect(E.gain);
+  F.dl.connect(F.dlLp); F.dlLp.connect(F.dlFb); F.dlFb.connect(F.dl); F.dlLp.connect(F.echoWet); F.echoWet.connect(E.gain);
+  F.on = {};
   return F;
 }
+/* branches that are switched off are physically disconnected, so idle reverb/echo/chorus cost no CPU */
+function link(F, key, on, a, b) { if (on && !F.on[key]) { a.connect(b); F.on[key] = true; } else if (!on && F.on[key]) { try { a.disconnect(b); } catch (e) {} F.on[key] = false; } }
 function makeIR(c, room) {
-  const len = .6 + room / 100 * 4.4, sr = c.sampleRate, n = Math.floor(sr * len), b = c.createBuffer(2, n, sr), dec = 2 + room / 100 * 2;
+  const len = .6 + room / 100 * (IS_MOBILE ? 2.2 : 4.4), sr = c.sampleRate, n = Math.floor(sr * len), b = c.createBuffer(2, n, sr), dec = 2 + room / 100 * 2;
   for (let ch = 0; ch < 2; ch++) { const d = b.getChannelData(ch); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, dec); }
   return b;
 }
@@ -1328,15 +1409,18 @@ function applyFX(force) {
   const w = FX.width / 100, m = 1 - FX.karaoke / 100 * .97, a = (m + w) / 2, b = (m - w) / 2;
   sp(F.m.LL.gain, a); sp(F.m.RR.gain, a); sp(F.m.LR.gain, b); sp(F.m.RL.gain, b); sp(F.kGain.gain, FX.karaoke / 100 * .9);
   const r = FX.rotate / 100; sp(F.lfoAmt.gain, r > 0 ? Math.min(1, .35 + r * .65) : 0); sp(F.lfo.frequency, .06 + r * .22);
-  sp(F.vinGain.gain, FX.vinyl / 100 * .35); sp(F.wowAmt.gain, FX.wow / 100 * 28); sp(F.wowAmt2.gain, FX.wow / 100 * 6);
+  sp(F.vinGain.gain, FX.vinyl / 100 * .35); sp(F.wowAmt.gain, FX.wow / 100 * .0022); sp(F.wowAmt2.gain, FX.wow / 100 * .0003);
+  link(F, 'rv', FX.reverb > 0, F.pan, F.conv); link(F, 'dl', FX.echo > 0, F.pan, F.dl);
+  link(F, 'ch', FX.chorus > 0, F.mod, F.chDl); link(F, 'fl', FX.flanger > 0, F.mod, F.flDl);
+  link(F, 'kb', FX.karaoke > 0, F.pre, F.kLp); link(F, 'vin', FX.vinyl > 0 && !E.bypass, F.vinGain, F.pre);
   sp(F.rvWet.gain, FX.reverb / 100 * .9); sp(F.dry.gain, 1 - FX.reverb / 100 * .35);
-  if (lastRoom !== FX.room) { const first = lastRoom == null; lastRoom = FX.room; clearTimeout(irT); irT = setTimeout(() => { F.conv.buffer = makeIR(c, FX.room); }, first ? 0 : 160); }
+  if (lastRoom !== FX.room && (FX.reverb > 0 || lastRoom == null)) { const first = lastRoom == null; lastRoom = FX.room; clearTimeout(irT); irT = setTimeout(() => { F.conv.buffer = makeIR(c, FX.room); }, first ? 0 : 160); }
   sp(F.echoWet.gain, FX.echo / 100 * .55); sp(F.dlFb.gain, .25 + FX.echo / 100 * .4);
   setRate();
 }
 function setBypass(on) {
   E.bypass = on;
-  if (E.fx) { const F = E.fx; F.input.disconnect(); F.input.connect(on ? E.gain : F.eq[0]); F.vinGain.disconnect(); if (!on) F.vinGain.connect(F.pre); }
+  if (E.fx) { const F = E.fx; F.input.disconnect(); F.input.connect(on ? E.gain : F.eq[0]); link(F, 'vin', FX.vinyl > 0 && !on, F.vinGain, F.pre); }
   setRate();
 }
 const MC = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 1, 44100);
@@ -1388,21 +1472,15 @@ function parseCode(code) {
 }
 function markFXBtn() { $$('.fx-btn').forEach(b => b.classList.toggle('fx-on', FXP !== 'flat')); }
 async function ensureBuffer(t) {
-  if (bufCache.has(t.id)) { const b = bufCache.get(t.id); bufCache.delete(t.id); bufCache.set(t.id, b); return b; }
-  let buf;
-  if (t.kind === 'demo') buf = await synth(t);
-  else if (t.blob) buf = await decodeCtx().decodeAudioData(await t.blob.arrayBuffer());
-  else if (t.path) { const blob = await Cloud.download(t); buf = await decodeCtx().decodeAudioData(await blob.arrayBuffer()); }
-  else if (t.net || t.stream) { const r = await fetch(await resolveStream(t)); if (!r.ok) throw new Error('stream ' + r.status); buf = await decodeCtx().decodeAudioData(await r.arrayBuffer()); }
-  else throw new Error('no source');
-  const fresh = !t.peaksReal; if (fresh) { t.peaks = peaksOf(buf); t.peaksReal = true; }
-  if (t.trimS == null) { const tr = silenceOf(buf); t.trimS = tr[0]; t.trimE = tr[1]; }
-  const newDur = !t.duration || Math.abs(t.duration - buf.duration) > .5; t.duration = buf.duration;
-  if (t.kind === 'net' && S.order.includes(t.id) && (newDur || fresh)) DB.put(dbRec(t));
-  bufCache.set(t.id, buf);
-  let uploads = [...bufCache.keys()].filter(k => T.get(k) && T.get(k).kind !== 'demo');
-  while (uploads.length > 3) { bufCache.delete(uploads.shift()); }
-  return buf;
+  if (t.kind !== 'demo' || t.url) return true;
+  if (!t._synth) t._synth = synth(t).then(buf => {
+    if (!t.peaksReal) { t.peaks = peaksOf(buf); t.peaksReal = true; }
+    if (t.trimS == null) { const tr = silenceOf(buf); t.trimS = tr[0]; t.trimE = tr[1]; }
+    if (t.gain == null) t.gain = loudGain(buf);
+    t.duration = buf.duration; t.url = URL.createObjectURL(wavBlob(buf));
+    return true;
+  });
+  return t._synth;
 }
 function silenceOf(buf) {
   const a = buf.getChannelData(0), sr = buf.sampleRate, th = .004; let i = 0, j = a.length - 1;
@@ -1545,16 +1623,22 @@ async function importFiles(files, meta) {
         title: tags.title || nm.title, artist: tags.artist || nm.artist, album: tags.album || '',
         hue: rng(f.name)() * 360 | 0, blob: f, size: f.size, ext: (f.name.split('.').pop() || 'audio').toUpperCase(), added: Date.now(), coverImg: tags.pic || null };
       if (t.coverImg) { const h = await hueFromImage(t.coverImg); if (h != null) t.hue = Math.round(h); }
-      const buf = await decodeCtx().decodeAudioData(await f.arrayBuffer());
-      t.duration = buf.duration; t.peaks = peaksOf(buf); t.peaksReal = true;
-      bufCache.set(t.id, buf);
+      const limit = IS_MOBILE ? 25e6 : 120e6;
+      if (f.size <= limit) {
+        let buf = await decodeCtx().decodeAudioData(await f.arrayBuffer());
+        t.duration = buf.duration; t.peaks = peaksOf(buf); t.peaksReal = true; t.gain = loudGain(buf);
+        const tr = silenceOf(buf); t.trimS = tr[0]; t.trimE = tr[1]; buf = null;
+      } else {
+        t.peaks = seededPeaks(t.id); t.peaksReal = false;
+        t.duration = await new Promise(res => { const a = new Audio(), u = URL.createObjectURL(f); a.preload = 'metadata'; a.onloadedmetadata = () => { res(isFinite(a.duration) ? a.duration : 0); URL.revokeObjectURL(u); }; a.onerror = () => { res(0); URL.revokeObjectURL(u); }; a.src = u; });
+        if (!t.duration) throw new Error('bad file');
+      }
       t.cover = t.coverImg || makeCover(t);
       T.set(t.id, t); S.order.unshift(t.id); added++; firstId = firstId || t.id; try { Cloud.autoUpload(t); } catch (e) {}
-      DB.put({ id: t.id, kind: 'upload', title: t.title, artist: t.artist, album: t.album, hue: t.hue, blob: f, size: t.size, ext: t.ext, added: t.added, duration: t.duration, peaks: t.peaks, coverImg: t.coverImg });
+      DB.put(dbRec(t));
     } catch (e) { toast(`Не получилось открыть «${f.name}»: этот формат не поддерживается`); }
   }
   if (added) {
-    let ups = [...bufCache.keys()].filter(k => T.get(k)?.kind === 'upload'); while (ups.length > 3) bufCache.delete(ups.shift());
     toast(`Добавлено: ${added} ${plural(added, 'трек', 'трека', 'треков')}` + (!DB.db && !dbWarned ? '. Сохранить их на этом устройстве не получилось' : ''));
     if (!DB.db) dbWarned = true;
     renderView();
@@ -1566,6 +1650,7 @@ function removeTrack(id) {
   const wasCur = S.queue[S.qi] === id;
   if (wasCur) { killSrc(true); E.playing = false; E.buf = null; E.offset = 0; setPlayingUI(); }
   if (t.cloud) { try { Cloud.removeTrack(t); } catch (e) {} }
+  if (t.url && t.url.startsWith('blob:')) URL.revokeObjectURL(t.url);
   T.delete(id); bufCache.delete(id); DB.del(id);
   S.order = S.order.filter(x => x !== id); S.liked.delete(id); S.pls.forEach(p => p.ids = p.ids.filter(x => x !== id));
   const qi = S.queue.indexOf(id);
@@ -1593,7 +1678,7 @@ function mosaic(ids, cls = '') {
 function cardHTML(t) {
   return `<button class="card" data-id="${t.id}"><span class="card-cov"><img src="${t.cover}" alt="" loading="lazy"><span class="card-play">${ic('play', 'ic-play')}${ic('pause', 'ic-pause')}</span></span><b>${esc(t.title)}</b><span>${esc(t.artist)}</span></button>`;
 }
-const tagOf = t => t.kind === 'demo' ? `Демо, ${t.bpm} BPM` : t.kind === 'net' ? 'Онлайн' : t.kind === 'preview' ? 'Превью 30 сек' : (t.uploading ? 'загрузка в облако…' : t.cloud ? `${t.ext || 'Аудио'} · в облаке` : t.ext);
+const tagOf = t => t.kind === 'demo' ? `Демо, ${t.bpm} BPM` : t.kind === 'radio' ? 'Радио' : t.kind === 'net' ? 'Онлайн' : t.kind === 'preview' ? 'Превью 30 сек' : (t.uploading ? 'загрузка в облако…' : t.cloud ? `${t.ext || 'Аудио'} · в облаке` : t.ext);
 function rowHTML(t, i) {
   const liked = S.liked.has(t.id);
   return `<div class="row" data-id="${t.id}" role="button" tabindex="0" aria-label="${esc(t.title)}, ${esc(t.artist)}">
@@ -1693,7 +1778,7 @@ function searchHTML() {
 /* ---- online search via local server: Audius (full tracks), Apple Music (30s previews), Jamendo (CC downloads) ---- */
 const NET = { status: 'off', mode: null, jamendo: false, tab: 'audius', q: '', loading: false, items: [], err: '' };
 const STANDALONE = !!document.querySelector('link[rel="manifest"]');
-const NET_TABS = [['audius', 'Треки целиком', 'Весь трек сразу'], ['itunes', 'Все артисты', 'Фрагменты по 30 секунд'], ['jamendo', 'Можно скачать', 'Сохраняются в библиотеку']];
+const NET_TABS = [['audius', 'Треки целиком', 'Инди и новые артисты'], ['archive', 'Архив', 'Концерты и редкие записи'], ['itunes', 'Все артисты', 'Фрагменты по 30 секунд'], ['radio', 'Радио', 'Прямой эфир станций'], ['jamendo', 'Можно скачать', 'Сохраняются в библиотеку']];
 async function netInit() {
   if (!location.protocol.startsWith('http')) return;
   try { const r = await fetch('api/health', { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (j && j.kmp) { NET.status = 'ok'; NET.mode = 'server'; NET.jamendo = !!j.jamendo; return; } } } catch (e) {}
@@ -1716,7 +1801,46 @@ function jsonp(url) {
 }
 const mapAudius = t => ({ src: 'audius', id: 'audius:' + t.id, raw: t.id, title: t.title, artist: (t.user && t.user.name) || '', album: '', duration: t.duration, cover: (t.artwork && (t.artwork['480x480'] || t.artwork['150x150'])) || '', link: t.permalink ? 'https://audius.co' + t.permalink : '' });
 const mapItunes = t => ({ src: 'itunes', id: 'itunes:' + t.trackId, title: t.trackName, artist: t.artistName, album: t.collectionName || '', duration: (t.trackTimeMillis || 30000) / 1000, cover: (t.artworkUrl100 || '').replace('100x100bb', '600x600bb'), preview: t.previewUrl, link: t.trackViewUrl });
+const mapDeezer = t => ({ src: 'deezer', id: 'deezer:' + t.id, title: t.title, artist: t.artist ? t.artist.name : '', album: t.album ? t.album.title : '', duration: t.duration || 30, cover: t.album ? (t.album.cover_big || t.album.cover_medium) : '', preview: t.preview, link: t.link });
+const RADIO_HOSTS = ['https://de1.api.radio-browser.info', 'https://nl1.api.radio-browser.info', 'https://at1.api.radio-browser.info'];
+async function radioSearch(q) {
+  for (const h of RADIO_HOSTS) {
+    try {
+      const u = `${h}/json/stations/search?name=${encodeURIComponent(q)}&limit=40&hidebroken=true&order=clickcount&reverse=true`;
+      let j = await (await fetch(u)).json();
+      if (!j.length) j = await (await fetch(`${h}/json/stations/search?tag=${encodeURIComponent(q.toLowerCase())}&limit=40&hidebroken=true&order=clickcount&reverse=true`)).json();
+      return j.filter(st => /^https:/i.test(st.url_resolved || '')).slice(0, 30).map(st => ({ src: 'radio', id: 'radio:' + st.stationuuid, title: st.name.trim(), artist: [st.country, (st.tags || '').split(',').slice(0, 2).join(', ')].filter(Boolean).join(' · '), album: '', duration: 0, cover: /^https:/i.test(st.favicon || '') ? st.favicon : '', stream: st.url_resolved, live: true, link: st.homepage }));
+    } catch (e) {}
+  }
+  throw new Error('radio');
+}
+async function archiveSearch(q) {
+  const u = `https://archive.org/advancedsearch.php?q=${encodeURIComponent('(' + q + ') AND mediatype:(audio)')}&fl[]=identifier&fl[]=title&fl[]=creator&fl[]=date&rows=30&sort[]=downloads+desc&output=json`;
+  let j; try { j = await (await fetch(u)).json(); } catch (e) { j = await jsonp(u); }
+  return ((j.response && j.response.docs) || []).map(d => ({ src: 'archive', id: 'archive:' + d.identifier, item: d.identifier, title: String(d.title || d.identifier), artist: [].concat(d.creator || '').join(', ') || (d.date ? String(d.date).slice(0, 4) : ''), album: '', duration: 0, cover: `https://archive.org/services/img/${d.identifier}`, link: `https://archive.org/details/${d.identifier}` }));
+}
+async function archiveFile(item) {
+  const j = await (await fetch(`https://archive.org/metadata/${encodeURIComponent(item)}`)).json();
+  const files = (j.files || []).filter(f => /mp3/i.test(f.format || '') || /\.mp3$/i.test(f.name || ''));
+  const f = files.find(x => /vbr/i.test(x.format || '')) || files[0];
+  if (!f) throw new Error('no audio');
+  return `https://archive.org/download/${encodeURIComponent(item)}/${f.name.split('/').map(encodeURIComponent).join('/')}`;
+}
+async function previewSearch(q) {
+  const [a, b] = await Promise.allSettled([
+    jsonp(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=music&entity=song&limit=25&country=KZ`).then(j => (j.results || []).filter(t => t.previewUrl).map(mapItunes)),
+    jsonp(`https://api.deezer.com/search?q=${encodeURIComponent(q)}&limit=25&output=jsonp`).then(j => (j.data || []).filter(t => t.preview).map(mapDeezer))
+  ]);
+  const out = [], seen = new Set();
+  const lists = [a.status === 'fulfilled' ? a.value : [], b.status === 'fulfilled' ? b.value : []];
+  for (let i = 0; i < 25; i++) for (const l of lists) { const r = l[i]; if (!r) continue; const k = (r.artist + '|' + r.title).toLowerCase().replace(/\s+/g, ' '); if (!seen.has(k)) { seen.add(k); out.push(r); } }
+  if (!out.length && a.status === 'rejected' && b.status === 'rejected') throw new Error('previews');
+  return out;
+}
 async function netQuery(src, q) {
+  if (src === 'archive') return archiveSearch(q);
+  if (src === 'radio') return radioSearch(q);
+  if (src === 'itunes') return previewSearch(q);
   if (NET.mode === 'server') { const r = await fetch(`api/search?src=${src}&q=` + encodeURIComponent(q)); const j = await r.json(); if (!r.ok) throw new Error(j.error || 'сервис не ответил'); return j.items || []; }
   if (src === 'audius') { const h = await audiusHost(); const r = await fetch(`${h}/v1/tracks/search?query=${encodeURIComponent(q)}&app_name=KMP_PLAYER&limit=30`); if (!r.ok) { audHost = null; throw new Error('Audius не ответил'); } const j = await r.json(); return (j.data || []).filter(t => t.is_streamable !== false).map(mapAudius); }
   if (src === 'itunes') { const j = await jsonp(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&media=music&entity=song&limit=30&country=KZ`); return (j.results || []).filter(t => t.previewUrl).map(mapItunes); }
@@ -1728,6 +1852,8 @@ function legacyNet(t) {
 }
 async function resolveStream(t) {
   const n = t.net || legacyNet(t); if (!n) throw new Error('нет источника');
+  if (n.src === 'archive') { if (!n.url) n.url = await archiveFile(n.item); return n.url; }
+  if (n.src === 'deezer') return n.url;
   if (NET.mode === 'server') return n.src === 'audius' ? 'api/stream?src=audius&id=' + encodeURIComponent(n.raw) : `api/stream?src=${n.src}&url=` + encodeURIComponent(n.url);
   if (NET.mode === 'direct') return n.src === 'audius' ? `${await audiusHost()}/v1/tracks/${encodeURIComponent(n.raw)}/stream?app_name=KMP_PLAYER` : n.url;
   throw new Error('offline');
@@ -1747,10 +1873,10 @@ function netHTML() {
     const curId = S.queue[S.qi];
     body = `<div class="list">${NET.items.map((r, i) => {
       let act = '';
-      if (r.src === 'audius') act = `<button class="btn press" data-act="net-add" data-i="${i}" ${r.added ? 'disabled' : ''}>${r.added ? 'В библиотеке' : ic('plus') + 'В библиотеку'}</button>`;
+      if (r.src === 'audius' || r.src === 'archive' || r.src === 'radio') act = `<button class="btn press" data-act="net-add" data-i="${i}" ${r.added ? 'disabled' : ''}>${r.added ? 'В библиотеке' : ic('plus') + 'В библиотеку'}</button>`;
       else if (r.src === 'jamendo') act = `<button class="btn press" data-act="net-add" data-i="${i}" ${r.added ? 'disabled' : ''}>${r.added ? 'В библиотеке' : ic('upload') + 'Скачать'}</button>`;
       else if (r.link) act = `<a class="btn" href="${esc(r.link)}" target="_blank" rel="noopener">Открыть</a>`;
-      return `<div class="orow ${curId === 'tmp:' + r.id ? 'current' : ''}" data-i="${i}"><span class="o-cov"><img src="${esc(r.cover)}" alt="" loading="lazy">${ic('play')}</span><div class="r-meta"><div class="r-t">${esc(r.title)}</div><div class="r-a">${esc(r.artist)}${r.album ? ' · ' + esc(r.album) : ''}</div></div><div class="r-d">${fmt(r.duration)}</div>${act}</div>`;
+      return `<div class="orow ${curId === 'tmp:' + r.id ? 'current' : ''}" data-i="${i}"><span class="o-cov"><img src="${esc(r.cover)}" alt="" loading="lazy">${ic('play')}</span><div class="r-meta"><div class="r-t">${esc(r.title)}</div><div class="r-a">${esc(r.artist)}${r.album ? ' · ' + esc(r.album) : ''}</div></div><div class="r-d">${r.live ? 'Эфир' : r.duration ? fmt(r.duration) : ''}</div>${act}</div>`;
     }).join('')}</div>`;
   }
   const tabs = NET.status === 'off' ? '' : `<div class="net-tabs">${NET_TABS.filter(([v]) => v !== 'jamendo' || NET.jamendo).map(([v, l, d]) => `<button class="chip press" data-act="net-tab" data-v="${v}" aria-pressed="${NET.tab === v}">${l}<small>${d}</small></button>`).join('')}</div>`;
@@ -1769,11 +1895,13 @@ async function netSearch(q) {
   } catch (e) { if (tok === netTok) { NET.items = []; NET.err = 'Не получилось выполнить поиск. Проверь интернет и попробуй ещё раз'; } }
   if (tok === netTok) { NET.loading = false; paintNet(); }
 }
-const netOf = r => r.src === 'audius' ? { src: 'audius', raw: r.raw } : { src: r.src, url: r.preview || r.download || r.audio };
+const netOf = r => r.src === 'audius' ? { src: 'audius', raw: r.raw } : r.src === 'archive' ? { src: 'archive', item: r.item } : { src: r.src, url: r.preview || r.download || r.audio };
 function tempTrack(r) {
   const id = 'tmp:' + r.id;
   if (!T.has(id)) {
-    const t = { id, kind: r.src === 'itunes' ? 'preview' : 'net', title: r.title, artist: r.artist, album: r.album || '', duration: r.src === 'itunes' ? 30 : r.duration, hue: rng(r.id)() * 360 | 0, net: netOf(r), added: Date.now(), netId: r.id };
+    const isR = r.src === 'radio';
+    const t = { id, kind: r.src === 'radio' ? 'radio' : (r.src === 'itunes' || r.src === 'deezer') ? 'preview' : 'net', live: !!r.live, stream: r.stream, title: r.title, artist: r.artist, album: r.album || '', duration: (r.src === 'itunes' || r.src === 'deezer') ? 30 : r.duration, hue: rng(r.id)() * 360 | 0, net: netOf(r), added: Date.now(), netId: r.id };
+    if (isR) delete t.net;
     t.peaks = seededPeaks(id); t.cover = r.cover || makeCover(t); T.set(id, t);
   }
   return id;
@@ -1797,15 +1925,16 @@ async function netAdd(i, btn) {
       const nid = S.order.find(id => !before.has(id)); if (nid) { const t = T.get(nid); t.netId = r.id; DB.put(dbRec(t)); }
     } else {
       const id = 'net:' + r.id;
-      const t = { id, kind: 'net', title: r.title, artist: r.artist, album: r.album || '', duration: r.duration, hue: rng(r.id)() * 360 | 0, net: netOf(r), added: Date.now(), netId: r.id, coverImg, cover: coverImg || r.cover, link: r.link };
+      const t = { id, kind: r.src === 'radio' ? 'radio' : 'net', live: !!r.live, stream: r.stream, title: r.title, artist: r.artist, album: r.album || '', duration: r.duration, hue: rng(r.id)() * 360 | 0, net: netOf(r), added: Date.now(), netId: r.id, coverImg, cover: coverImg || r.cover, link: r.link };
       t.peaks = seededPeaks(id); if (!t.cover) t.cover = makeCover(t);
       T.set(id, t); S.order.unshift(id); DB.put(dbRec(t));
+      if (t.kind === 'radio') delete t.net; if (t.kind === 'radio') DB.put(dbRec(t));
       toast(`«${r.title}» добавлен в библиотеку`);
     }
     r.added = true; paintNet();
   } catch (e) { btn.disabled = false; btn.textContent = 'Повторить'; toast('Не удалось добавить: ' + e.message); }
 }
-function dbRec(t) { return { id: t.id, kind: t.kind, title: t.title, artist: t.artist, album: t.album, hue: t.hue, blob: t.blob, size: t.size, ext: t.ext, added: t.added, duration: t.duration, peaks: t.peaksReal ? t.peaks : null, coverImg: t.coverImg, cover: t.kind === 'net' && !t.coverImg ? t.cover : undefined, netId: t.netId, stream: t.stream, net: t.net, link: t.link, cloud: t.cloud, owner: t.owner, path: t.path, gain: t.gain }; }
+function dbRec(t) { return { id: t.id, kind: t.kind, title: t.title, artist: t.artist, album: t.album, hue: t.hue, blob: t.blob, size: t.size, ext: t.ext, added: t.added, duration: t.duration, peaks: t.peaksReal ? t.peaks : null, coverImg: t.coverImg, cover: t.kind === 'net' && !t.coverImg ? t.cover : undefined, netId: t.netId, stream: t.stream, net: t.net, link: t.link, cloud: t.cloud, owner: t.owner, path: t.path, gain: t.gain, trimS: t.trimS, trimE: t.trimE, live: t.live }; }
 function knobHTML(m) {
   return `<div class="knob" role="slider" tabindex="0" data-k="${m.k}" aria-label="${m.l}" aria-valuemin="${m.min}" aria-valuemax="${m.max}">
     <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="k-track" cx="32" cy="32" r="26" transform="rotate(135 32 32)"/><circle class="k-arc" cx="32" cy="32" r="26" transform="rotate(135 32 32)"/><g class="k-cap"><circle cx="32" cy="32" r="17"/><line x1="32" y1="32" x2="32" y2="19"/></g></svg>
@@ -2042,7 +2171,7 @@ const Cloud = {
   async init() {
     const c = this.cfg(); if (!c) { markAccount(); return; }
     try {
-      if (!window.supabase) await new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js'; sc.onload = res; sc.onerror = () => rej(new Error('нет соединения')); document.head.appendChild(sc); });
+      if (!window.supabase) await new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'; sc.onload = res; sc.onerror = () => rej(new Error('нет соединения')); document.head.appendChild(sc); });
       this.sb = window.supabase.createClient(c.supabaseUrl, c.supabaseKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
       Feed.sb = this.sb; Feed.mode = 'cloud';
       this.sb.auth.onAuthStateChange((ev, sess) => {
@@ -2083,7 +2212,11 @@ const Cloud = {
         toast(data.session ? 'Аккаунт создан' : 'Мы отправили письмо. Подтверди почту и войди');
         if (!data.session) { S.authMode = 'in'; renderView(); }
       } else { const { error } = await this.sb.auth.signInWithPassword({ email, password: pass }); if (error) throw error; toast('Ты вошёл в аккаунт'); }
-    } catch (e) { toast(authError(e)); }
+    } catch (e) {
+      let msg = authError(e);
+      if (/Нет связи/.test(msg)) { try { const c = this.cfg(); const r = await fetch(c.supabaseUrl.replace(/\/+$/, '') + '/auth/v1/health', { headers: { apikey: c.supabaseKey } }); msg = r.ok ? 'Сервер отвечает, но отклоняет запрос. Проверь ключ в config.js' : 'Сервер аккаунтов отвечает с ошибкой ' + r.status; } catch (_) { msg = 'Сервер аккаунтов недоступен из этой сети. Проверь интернет или адрес проекта'; } }
+      toast(msg);
+    }
     finally { if (btn.isConnected) btn.disabled = false; }
   },
   async signOut() {
@@ -2139,7 +2272,7 @@ const Cloud = {
     const size = data.reduce((a, r) => a + (r.size || 0), 0); this.stats = { n: data.length, size };
     if (changed) { S.order.sort((a, b) => T.get(b).added - T.get(a).added); S.queue = S.queue.filter(id => T.has(id)); if (!S.queue.length) { S.queue = [...S.order]; S.qi = 0; } S.qi = Math.min(Math.max(0, S.qi), S.queue.length - 1); if (!['mixer', 'labs'].includes(S.view)) renderView(); }
   },
-  localPending() { return trackObjs(S.order).filter(t => (t.kind === 'upload' && t.blob) || (t.kind === 'net' && !String(t.id).startsWith('tmp:'))).filter(t => !t.cloud && !t.uploading); },
+  localPending() { return trackObjs(S.order).filter(t => (t.kind === 'upload' && t.blob) || (t.kind === 'net' && t.net && t.net.src === 'audius' && !String(t.id).startsWith('tmp:'))).filter(t => !t.cloud && !t.uploading); },
   enqueueLocal(manual) {
     const list = this.localPending();
     if (!list.length) { if (manual) toast('Все треки уже в облаке'); return; }
@@ -2162,6 +2295,7 @@ const Cloud = {
   async uploadTrack(t) {
     const uid = this.user.id, row = { user_id: uid, id: t.id, title: t.title, artist: t.artist || '', album: t.album || '', duration: t.duration || null, peaks: t.peaksReal ? t.peaks : null, gain: t.gain || null, size: t.size || 0, ext: t.ext || null };
     row.cover = t.coverImg ? await shrinkImage(t.coverImg, 300) : null;
+    if (t.kind === 'radio') throw new Error('радио хранится только на устройстве');
     if (t.kind === 'net') { row.kind = 'audius'; row.net = t.net || legacyNet(t); row.cover = row.cover || (/^https?:/.test(t.cover || '') ? t.cover : null); }
     else {
       if (!t.blob) throw new Error('файла нет на этом устройстве');
@@ -2176,6 +2310,15 @@ const Cloud = {
     if (error) throw error;
     t.cloud = true; t.owner = uid; DB.put(dbRec(t));
     if (this.stats) { this.stats.n++; this.stats.size += row.size || 0; }
+  },
+  async signedUrl(t) {
+    if (!this.sb || !this.user) throw new Error('login');
+    if (t._su && t._suExp > Date.now() + 60000) return t._su;
+    const { data, error } = await this.sb.storage.from('tracks').createSignedUrl(t.path, 6 * 3600);
+    if (error) throw error;
+    t._su = data.signedUrl; t._suExp = Date.now() + 6 * 3600 * 1000;
+    if (S.keepOffline && !t.blob && !t._caching) { t._caching = true; setTimeout(() => this.download(t).catch(() => {}).finally(() => { t._caching = false; }), 8000); }
+    return t._su;
   },
   async download(t) {
     if (!this.sb || !this.user) throw new Error('Войди в аккаунт, чтобы слушать облачные треки');
@@ -2234,6 +2377,7 @@ function authError(e) {
   if (/already registered|already been registered/i.test(m)) return 'Такая почта уже зарегистрирована, войди';
   if (/Password should be/i.test(m)) return 'Пароль слишком короткий, нужно минимум 6 символов';
   if (/rate limit/i.test(m)) return 'Слишком много попыток, подожди минуту';
+  if (/Failed to fetch|NetworkError|Load failed|fetch/i.test(m)) return 'Нет связи с сервером. Проверь интернет и попробуй ещё раз';
   return 'Ошибка: ' + m;
 }
 function markAccount() {
@@ -2295,7 +2439,7 @@ function meHTML() {
       <div class="card-s wide danger-zone"><h3>Удаление аккаунта</h3><p>Удалит профиль, все треки из облака, посты, комментарии и лайки. Треки на этом устройстве останутся.</p><button class="btn btn-danger press" data-act="acct-delete" style="align-self:flex-start">${ic('trash')}<span>Удалить аккаунт</span></button></div>
     </div>`;
 }
-if (window.KMP_DEBUG) window.__kmp = { Cloud, T, S, E };
+if (window.KMP_DEBUG) window.__kmp = { Cloud, T, S, E, synth, ensureBuffer, srcFor };
 /* ================= labs ================= */
 const LABS = [
   { k: 'oneplayer', t: 'Один плеер', d: 'Если KMP открыт в двух окнах, играет только одно. Защищает от двойного звука.' },
@@ -2524,7 +2668,7 @@ function renderNow() {
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   const src = (id, v) => { const el = document.getElementById(id); if (el && el.getAttribute('src') !== v) el.src = v; };
   const artist = t.artist + (t.album ? ' · ' + t.album : '');
-  const meta = t.kind === 'demo' ? `${t.key}, ${t.bpm} BPM · ${fmt(t.duration)} · демо-трек` : t.kind === 'net' ? `Онлайн · ${fmt(t.duration)}` : t.kind === 'preview' ? 'Фрагмент 30 секунд' : `${t.ext}, ${(t.size / 1048576).toFixed(1).replace('.', ',')} МБ · ${fmt(t.duration)} · прослушано ${S.plays[t.id] || 0} ${plural(S.plays[t.id] || 0, 'раз', 'раза', 'раз')}`;
+  const meta = t.kind === 'radio' ? 'Прямой эфир' + (t.artist ? ' · ' + t.artist : '') : t.kind === 'demo' ? `${t.key}, ${t.bpm} BPM · ${fmt(t.duration)} · демо-трек` : t.kind === 'net' ? `Онлайн · ${fmt(t.duration)}` : t.kind === 'preview' ? 'Фрагмент 30 секунд' : `${t.ext}, ${(t.size / 1048576).toFixed(1).replace('.', ',')} МБ · ${fmt(t.duration)} · прослушано ${S.plays[t.id] || 0} ${plural(S.plays[t.id] || 0, 'раз', 'раза', 'раз')}`;
   src('pCover', t.cover); set('pTitle', t.title); set('pArtist', artist);
   src('fCover', t.cover); set('fTitle', t.title); set('fArtist', artist);
   const changed = lastNowId !== t.id; lastNowId = t.id;
@@ -2793,6 +2937,8 @@ document.addEventListener('wheel', e => {
 }, { passive: false });
 document.addEventListener('input', e => { const i = e.target.dataset && e.target.dataset.eq; if (i != null) { FX.eq[+i] = +e.target.value; fxChanged(); } });
 
+let spaceHandled = false;
+document.addEventListener('keyup', e => { if (e.code === 'Space' && spaceHandled) { e.preventDefault(); spaceHandled = false; } }, true);
 document.addEventListener('keydown', e => {
   const tag = (e.target.tagName || '').toLowerCase(), typing = tag === 'input' || tag === 'select' || tag === 'textarea';
   if (e.key === 'Escape') { if (!$('#sheet').hidden && menu.hidden) { closeComposer(); return; } if (!menu.hidden) { const b = ddOpenBtn; closeMenu(); if (b) b.focus(); } else if (!$('#modal').hidden) closeModal(); else if (FULL) openFull(false); return; }
@@ -2805,7 +2951,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.target.dataset && e.target.dataset.delPreset) { e.target.click(); return; }
   if (typing || !$('#sheet').hidden) return;
   if (e.key === 'Enter' && e.target.classList && e.target.classList.contains('row')) { activateItem(e.target); return; }
-  if (e.code === 'Space' && !e.target.closest('button,[role=slider]')) { e.preventDefault(); toggle(); }
+  if (e.code === 'Space') { e.preventDefault(); if (!e.repeat) { spaceHandled = true; toggle(); } if (document.activeElement && document.activeElement.blur && document.activeElement.tagName === 'BUTTON') document.activeElement.blur(); }
   else if (e.key === 'ArrowRight' && e.shiftKey) next(false);
   else if (e.key === 'ArrowLeft' && e.shiftKey) prev();
   else if (e.key === 'ArrowRight') seek(curTime() + 5);
@@ -2895,12 +3041,12 @@ addEventListener('dragleave', () => { dragDepth = Math.max(0, dragDepth - 1); if
 addEventListener('dragover', e => e.preventDefault());
 addEventListener('drop', e => { e.preventDefault(); dragDepth = 0; $('#drop').hidden = true; if (e.dataTransfer?.files?.length) importFiles(e.dataTransfer.files); });
 addEventListener('scroll', () => { if (!menu.hidden) closeMenu(); }, { passive: true });
-if ('mediaSession' in navigator) { try { navigator.mediaSession.setActionHandler('play', () => play()); navigator.mediaSession.setActionHandler('pause', () => pause()); navigator.mediaSession.setActionHandler('nexttrack', () => next(false)); navigator.mediaSession.setActionHandler('previoustrack', () => prev()); } catch (e) {} }
+if ('mediaSession' in navigator) { try { navigator.mediaSession.setActionHandler('play', () => play()); navigator.mediaSession.setActionHandler('pause', () => pause()); navigator.mediaSession.setActionHandler('nexttrack', () => next(false)); navigator.mediaSession.setActionHandler('previoustrack', () => prev()); navigator.mediaSession.setActionHandler('seekto', d => { seek(d.seekTime); updateMediaPosition(); }); navigator.mediaSession.setActionHandler('seekbackward', () => seek(curTime() - 10)); navigator.mediaSession.setActionHandler('seekforward', () => seek(curTime() + 10)); } catch (e) {} }
 
 /* ================= waveforms ================= */
 function sizeCanvas(cv) {
   if (!cv) return;
-  const bg = cv.classList.contains('bg'), d = bg ? Math.min(devicePixelRatio || 1, 1) * .6 : Math.min(devicePixelRatio || 1, 2);
+  const bg = cv.classList.contains('bg'), d = bg ? Math.min(devicePixelRatio || 1, 1) * (IS_MOBILE ? .32 : .6) : Math.min(devicePixelRatio || 1, 2);
   const w = Math.round(cv.clientWidth * d), h = Math.round(cv.clientHeight * d);
   if (w && h && (cv.width !== w || cv.height !== h)) { cv.width = w; cv.height = h; }
   cv._d = d;
@@ -2923,6 +3069,8 @@ function drawWave(W, prog) {
   if (!W) return;
   const cv = W.cv, w = cv.width, h = cv.height; if (!w || !h || !cv.offsetParent) return;
   const c = cv.getContext('2d'), d = cv._d || 1, t = cur(), col = W.tone === 'light' ? LIGHT : COL;
+  const key = `${t && t.id}|${Math.round((W.scrub != null ? W.scrub : prog) * w / 3)}|${W.hover}|${w}|${S.loop ? S.loop.a + ':' + S.loop.b : ''}|${t && t.peaksReal}|${t && S.moments[t.id] ? S.moments[t.id].length : 0}|${col.accent}`;
+  if (W.key === key) return; W.key = key;
   c.clearRect(0, 0, w, h);
   if (S.loop && t && S.loop.id === t.id) { const D = E.buf ? E.buf.duration : t.duration || 1, x1 = S.loop.a / D * w, x2 = (S.loop.b != null ? S.loop.b : S.loop.a) / D * w; c.fillStyle = W.tone === 'light' ? 'rgba(255,255,255,.16)' : 'rgba(232,85,43,.15)'; c.fillRect(x1, 0, Math.max(2 * d, x2 - x1), h); }
   if (S.labs.moments && t && S.moments[t.id]) { const D = E.buf ? E.buf.duration : t.duration || 1; c.fillStyle = W.tone === 'light' ? '#fff' : COL.accent; for (const x of S.moments[t.id]) { const px = x / D * w; c.beginPath(); c.moveTo(px - 4 * d, 0); c.lineTo(px + 4 * d, 0); c.lineTo(px, 6 * d); c.fill(); } }
@@ -3035,20 +3183,23 @@ function drawEQ() {
 }
 
 /* ================= main loop ================= */
-let lastSec = -1;
+let lastSec = -1, lastGL = 0, lastLine = -1, lastLive = -1;
 function loop(ts) {
   requestAnimationFrame(loop);
   const time = RM ? 20 : ts / 1000;
   updateSpectrum(); tickSmart(); tickStats(ts);
-  if (stageGL && stageVisible && !FULL && !document.hidden) drawGL(stageGL, time);
-  if (FULL) drawGL(fullGL, time);
+  const glTick = !IS_MOBILE || (ts - lastGL > 50); if (glTick) lastGL = ts;
+  if (glTick && stageGL && stageVisible && !FULL && !document.hidden) drawGL(stageGL, time);
+  if (FULL && glTick && !document.hidden) drawGL(fullGL, time);
   const t = cur(), dur = E.buf ? E.buf.duration : (t?.duration || 0), ct = curTime(), p = dur ? ct / dur : 0;
   drawWave(pWave, p); if (stageW && stageVisible && !FULL) drawWave(stageW, p); if (FULL) drawWave(fWave, p);
   if (S.view === 'mixer' && !FULL) { drawEQ(); drawMeters(ts); }
   if (S.clip && E.playing) { if (S.view === 'feed') $$('.p-cv').forEach(drawPostWave); if (!$('#sheet').hidden) drawMomPick(); }
   const sec = Math.floor(ct);
   if (sec !== lastSec) { lastSec = sec; if (S.sleep) { updateSmartUI(); } tickFocus(); ['pCur', 'fCur', 'stCur'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = fmt(ct); }); ['pDur', 'fDur', 'stDur'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = fmt(dur); }); }
-  $('#pLine').style.width = (p * 100) + '%';
+  if (Math.abs(p - lastLine) > .002) { lastLine = p; $('#pLine').style.width = (p * 100) + '%'; }
+  if (ts - mpT > 5000 && E.playing) { mpT = ts; updateMediaPosition(); }
+  if (t && t.live && sec !== lastLive) { lastLive = sec; ['pDur', 'fDur', 'stDur'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = 'Эфир'; }); }
 }
 function setFavicon() {
   const bg = DARK ? '#EDF0F6' : '#161A2E', fg = DARK ? '#131826' : '#FFFFFF';
@@ -3070,7 +3221,8 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', refreshThe
 async function boot() {
   const th = store.get('theme', null); if (th) root.dataset.theme = th;
   refreshTheme();
-  for (const d of DEMOS) { const t = { ...d, kind: 'demo', duration: d.dur, peaks: seededPeaks(d.id) }; t.cover = makeCover(t); T.set(t.id, t); }
+  const DM = {"d1":{"peaks":[0.187,0.243,0.287,0.309,0.401,0.416,0.443,0.48,0.48,0.444,0.464,0.322,0.977,0.865,0.474,0.435,0.428,0.852,0.544,0.48,0.933,0.816,0.466,0.43,0.301,0.939,0.76,0.479,0.427,0.436,0.8,0.483,0.497,0.963,0.643,0.455,0.469,0.428,0.968,0.642,0.453,0.439,0.418,0.835,0.48,0.433,0.921,0.508,0.454,0.403,0.379,0.987,0.581,0.467,0.429,0.48,0.8,0.458,0.483,0.901,0.516,0.449,0.374,0.305,0.972,0.549,0.449,0.449,0.417,0.825,0.495,0.479,0.906,0.513,0.476,0.356,0.317,0.972,0.505,0.422,0.439,0.491,0.803,0.459,0.482,0.898,0.472,0.474,0.405,0.296,0.977,0.479,0.437,0.433,0.823,0.622,0.481,0.488,0.93,0.46,0.398,0.383,0.95,0.905,0.473,0.422,0.479,0.829,0.533,0.474,0.939,0.851,0.447,0.474,0.358,0.98,0.774,0.448,0.441,0.461,0.831,0.463,0.485,0.957,0.618,0.513,0.432,0.322,1.0,0.682,0.471,0.435,0.47,0.827,0.467,0.493,0.944,0.529,0.461,0.406,0.374,0.961,0.6,0.453,0.422,0.446,0.874,0.491,0.433,0.938,0.485,0.49,0.4,0.389,0.983,0.541,0.464,0.44,0.47,0.847,0.469,0.475,0.893,0.466,0.465,0.343,0.274,0.574,0.44,0.372,0.33,0.302,0.316,0.299,0.272,0.242,0.193,0.18,0.096,0.054],"gain":1.508,"trimS":0,"trimE":null,"dur":40.0},"d2":{"peaks":[0.048,0.161,0.246,0.324,0.343,0.428,0.431,0.334,0.406,0.958,0.406,0.974,0.398,0.965,0.619,0.391,0.921,0.407,0.918,0.408,0.925,0.427,0.929,0.835,0.424,0.943,0.387,0.954,0.393,0.954,0.589,0.322,0.95,0.446,0.952,0.394,0.914,0.421,0.909,0.867,0.44,0.939,0.397,0.965,0.378,0.958,0.6,0.338,0.935,0.399,0.965,0.442,0.973,0.436,0.915,0.886,0.422,0.895,0.454,0.899,0.418,0.913,0.6,0.371,0.932,0.387,0.975,0.432,0.955,0.464,0.939,0.913,0.4,0.909,0.384,0.928,0.47,0.889,0.668,0.427,0.917,0.367,0.944,0.396,1.0,0.467,0.976,0.957,0.455,0.974,0.418,0.915,0.411,0.932,0.693,0.454,0.89,0.398,0.945,0.407,0.944,0.508,0.409,0.957,0.441,0.965,0.406,0.938,0.401,0.936,0.7,0.38,0.94,0.47,0.911,0.411,0.906,0.519,0.265,0.941,0.396,0.979,0.403,0.984,0.452,0.987,0.727,0.429,0.923,0.411,0.966,0.44,0.916,0.517,0.337,0.899,0.409,0.927,0.364,0.933,0.437,0.959,0.782,0.402,0.973,0.403,0.936,0.364,0.96,0.578,0.34,0.914,0.431,0.901,0.43,0.919,0.441,0.946,0.806,0.405,0.945,0.458,0.993,0.406,0.944,0.538,0.291,0.855,0.355,0.792,0.29,0.691,0.327,0.227,0.211,0.202,0.184,0.174,0.098,0.054],"gain":1.227,"trimS":0,"trimE":null,"dur":40.0},"d3":{"peaks":[0.301,0.342,0.402,0.403,0.429,0.545,0.546,0.577,0.527,0.571,0.527,0.584,0.497,0.443,0.351,0.989,0.897,0.695,0.588,0.589,0.564,0.542,0.552,0.608,0.521,0.584,0.527,0.601,0.524,0.418,0.692,0.957,0.756,0.581,0.598,0.575,0.536,0.555,0.629,0.639,0.561,0.545,0.605,0.477,0.49,0.324,1.0,0.859,0.676,0.583,0.614,0.583,0.578,0.606,0.607,0.542,0.557,0.599,0.562,0.484,0.42,0.996,0.996,0.733,0.608,0.615,0.566,0.563,0.539,0.606,0.586,0.56,0.581,0.608,0.512,0.493,0.44,0.98,0.84,0.645,0.632,0.653,0.586,0.561,0.633,0.635,0.562,0.576,0.586,0.574,0.448,0.413,0.939,0.882,0.69,0.582,0.576,0.56,0.543,0.519,0.628,0.66,0.513,0.581,0.664,0.506,0.538,0.435,0.974,0.782,0.652,0.561,0.63,0.57,0.622,0.603,0.603,0.548,0.543,0.608,0.565,0.442,0.426,0.978,0.92,0.692,0.617,0.563,0.522,0.609,0.544,0.64,0.596,0.546,0.616,0.617,0.482,0.46,0.844,0.981,0.771,0.627,0.653,0.589,0.545,0.563,0.589,0.557,0.568,0.55,0.561,0.511,0.403,0.389,0.939,0.814,0.646,0.564,0.6,0.526,0.527,0.538,0.674,0.626,0.551,0.608,0.539,0.458,0.372,0.765,0.742,0.54,0.411,0.323,0.308,0.3,0.238,0.199,0.164,0.08],"gain":2.5,"trimS":0,"trimE":null,"dur":40.0},"d4":{"peaks":[0.0,0.266,0.019,0.455,0.159,0.125,0.586,0.088,0.589,0.954,0.687,0.631,0.97,0.666,0.962,0.566,0.647,0.966,0.6,0.956,0.65,0.483,0.939,0.627,0.947,0.589,0.348,0.964,0.64,0.954,0.578,0.939,0.854,0.608,0.952,0.634,0.977,0.67,0.613,0.971,0.663,0.97,0.566,0.614,0.95,0.625,0.939,0.588,0.432,0.966,0.665,0.934,0.655,0.36,0.956,0.614,0.942,0.605,0.969,0.878,0.652,0.973,0.658,0.946,0.693,0.598,0.95,0.636,0.965,0.567,0.631,0.996,0.641,0.969,0.624,0.447,1.0,0.659,0.955,0.606,0.293,0.949,0.612,0.937,0.64,0.965,0.879,0.593,0.965,0.71,0.959,0.691,0.638,0.972,0.672,0.974,0.56,0.634,0.957,0.657,0.952,0.619,0.508,0.972,0.637,0.921,0.656,0.353,0.955,0.583,0.927,0.618,0.974,0.884,0.596,0.946,0.639,0.954,0.682,0.604,0.949,0.62,0.966,0.563,0.6,0.924,0.613,0.958,0.647,0.466,0.96,0.652,0.943,0.645,0.308,0.976,0.626,0.943,0.64,0.961,0.855,0.654,0.966,0.615,0.95,0.666,0.625,0.959,0.609,0.956,0.562,0.595,0.95,0.647,0.969,0.623,0.474,0.945,0.571,0.955,0.613,0.308,0.963,0.615,0.939,0.557,0.188,0.135,0.539,0.089,0.481,0.106,0.097,0.417,0.079,0.326,0.049,0.084,0.201,0.014],"gain":1.278,"trimS":0,"trimE":null,"dur":40.0}};
+  for (const d of DEMOS) { const m = DM[d.id] || {}; const t = { ...d, kind: 'demo', duration: d.dur, peaks: m.peaks || seededPeaks(d.id), peaksReal: !!m.peaks, gain: m.gain, trimS: m.trimS || 0, trimE: m.trimE || null }; t.cover = makeCover(t); T.set(t.id, t); }
   S.order = DEMOS.map(d => d.id);
   await Promise.race([DB.open(), new Promise(r => setTimeout(r, 1500))]);
   const recs = await DB.all();
@@ -3088,7 +3240,6 @@ async function boot() {
   document.body.classList.add('boot'); setTimeout(() => document.body.classList.remove('boot'), 1600);
   renderView(); syncVolUI();
   requestAnimationFrame(loop);
-  for (const d of DEMOS) { try { await ensureBuffer(T.get(d.id)); } catch (e) {} await new Promise(r => setTimeout(r, 60)); }
 }
 addEventListener('pagehide', () => { savePos(); if (statAcc) { S.stats.days[dayKey(0)] = (S.stats.days[dayKey(0)] || 0) + statAcc; store.set('stats', S.stats); } });
 boot();

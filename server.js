@@ -83,11 +83,19 @@ http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost'), q = k => url.searchParams.get(k) || '';
   try {
     if (!url.pathname.startsWith('/api/')) {
-      const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.webmanifest': 'application/manifest+json', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.ico': 'image/x-icon' };
+      const TYPES = { '.mp3': 'audio/mpeg', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.webmanifest': 'application/manifest+json', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.ico': 'image/x-icon' };
       const rel = decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname);
       const file = path.normalize(path.join(__dirname, rel));
       if (!file.startsWith(__dirname + path.sep) || /[\\/]\.env|server\.js$|package\.json$/.test(file) || !fs.existsSync(file) || !fs.statSync(file).isFile()) return json(res, 404, { error: 'Не найдено' });
-      res.writeHead(200, { 'content-type': TYPES[path.extname(file)] || 'application/octet-stream', 'cache-control': 'no-cache' });
+      const type = TYPES[path.extname(file)] || 'application/octet-stream', size = fs.statSync(file).size, range = req.headers.range;
+      const m = range && /bytes=(\d*)-(\d*)/.exec(range);
+      if (m) {
+        const start = m[1] ? +m[1] : size - +m[2], end = m[1] && m[2] ? Math.min(+m[2], size - 1) : size - 1;
+        if (start >= size || start > end) { res.writeHead(416, { 'content-range': `bytes */${size}` }); return res.end(); }
+        res.writeHead(206, { 'content-type': type, 'content-range': `bytes ${start}-${end}/${size}`, 'accept-ranges': 'bytes', 'content-length': end - start + 1 });
+        return fs.createReadStream(file, { start, end }).pipe(res);
+      }
+      res.writeHead(200, { 'content-type': type, 'accept-ranges': 'bytes', 'content-length': size, 'cache-control': 'no-cache' });
       return fs.createReadStream(file).pipe(res);
     }
     if (url.pathname === '/api/health') return json(res, 200, { kmp: true, jamendo: !!JAMENDO, audius: true, itunes: true });
