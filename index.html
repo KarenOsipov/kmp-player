@@ -2361,7 +2361,10 @@ const Cloud = {
   lastSync: store.get('lastSync', 0), queue: [], log: [], busy: false, pushT: 0,
   cfg() { const c = window.KMP_CONFIG; return c && c.supabaseUrl && c.supabaseKey ? c : null; },
   async init() {
-    if (!this.cfg()) { try { const r = await fetch('config.js?v=' + Date.now(), { cache: 'no-store' }); if (r.ok) { const src = await r.text(); if (/supabaseUrl\s*:\s*['"]https?:/.test(src)) (0, eval)(src); } } catch (e) {} }
+    for (const u of ['config.js', 'https://karenosipov.github.io/kmp-player/config.js']) {
+      if (this.cfg()) break;
+      try { const r = await fetch(u + '?v=' + Date.now(), { cache: 'no-store' }); if (r.ok) { const src = await r.text(); if (/supabaseUrl\s*:\s*['"]https?:/.test(src)) (0, eval)(src); } } catch (e) {}
+    }
     const c = this.cfg(); if (!c) { this.ready = true; markAccount(); if (S.view === 'me') renderView(); return; }
     try {
       const load = src => new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = src; const to = setTimeout(() => rej(new Error('timeout')), 12000); sc.onload = () => { clearTimeout(to); res(); }; sc.onerror = () => { clearTimeout(to); rej(new Error('нет соединения')); }; document.head.appendChild(sc); });
