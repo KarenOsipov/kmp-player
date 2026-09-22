@@ -400,6 +400,28 @@ img.ava{object-fit:cover}
 .topbar .theme-m{display:none}
 @media (max-width:1180px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:760px){.stats{grid-template-columns:1fr}.stat.wide{grid-column:auto}.topbar .theme-m{display:grid;width:54px;height:54px;border-radius:50%;place-items:center}.focus-pill{bottom:calc(144px + env(safe-area-inset-bottom,0px))}}
+/* account entry points */
+.acct-chip{display:flex;align-items:center;gap:9px;height:50px;padding:0 16px 0 6px;border-radius:25px;background:var(--glass-strong);border:1px solid var(--line);font-weight:600;font-size:14px;color:var(--ink);flex:none;max-width:200px;box-shadow:var(--shadow)}
+.acct-chip:hover{background:var(--surface)}
+.acct-chip .acct-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acct-ava{position:relative;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--hover);color:var(--ink);flex:none}
+.acct-ava b{font:600 15px var(--f-display);color:#fff}
+.acct-ava img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.acct-ava .ic{width:19px;height:19px}
+.acct-ava .dot-sync{position:absolute;right:-1px;top:-1px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--surface);animation:ping 1.6s infinite}
+.tab-me{display:none}
+@media (max-width:1100px){.acct-chip .acct-name{display:none}.acct-chip{padding:0 6px;width:50px;justify-content:center}}
+@media (max-width:760px){
+  .acct-chip{display:none!important}
+  .m-icon.acct-btn{display:none!important}
+  .tabbar .tab-me{display:flex}
+  .tab-me .acct-ava{width:23px;height:23px;background:transparent;color:inherit}
+  .tab-me .acct-ava b{font-size:11px}
+  .tab-me .acct-ava:has(b),.tab-me .acct-ava.has-ava{outline:2px solid transparent;outline-offset:1px}
+  .tab-me[aria-current="page"] .acct-ava:has(b),.tab-me[aria-current="page"] .acct-ava.has-ava{outline-color:var(--accent)}
+  .tab-me .acct-ava .ic{width:21px;height:21px}
+  .tab-me .acct-ava .dot-sync{width:8px;height:8px}
+}
 /* mixer v2 */
 .snd+.block,.snd~.block:first-of-type{margin-top:26px}
 .snd{position:relative;overflow:hidden;isolation:isolate;border-radius:30px;padding:24px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center;color:#fff;margin-top:6px;
@@ -887,6 +909,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     <symbol id="i-feed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-7l-4.5 3.5V16.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5z"/><path d="M8 10h8M8 13h5"/></symbol>
     <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 13v5.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V13"/></symbol>
     <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4.5 12a7.5 7 0 1 1 3.4 5.9L4 19l1-3.4A6.8 6.8 0 0 1 4.5 12z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></symbol>
     <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1-4 4-5.5 7-5.5s6 1.5 7 5.5"/></symbol>
     <symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18.5a4.5 4.5 0 0 1-.4-9A6 6 0 0 1 18 8.6a4 4 0 0 1-.5 9.9z"/></symbol>
     <symbol id="i-sync" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9"/><path d="M18.5 3v4.2h-4.2M5.5 21v-4.2h4.2"/></symbol>
@@ -929,6 +952,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
       </div>
       <button class="theme-m m-icon press" data-act="theme" aria-label="Сменить тему"><svg class="ic"><use href="#i-moon"/></svg></button>
       <button class="pill pill-accent press" data-act="upload" aria-label="Добавить треки"><svg class="ic"><use href="#i-upload"/></svg><span>Добавить</span></button>
+      <button class="acct-chip press" data-go="me" aria-label="Профиль"><span class="acct-ava"><svg class="ic"><use href="#i-user"/></svg></span><span class="acct-name">Войти</span></button>
     </header>
     <div id="view"></div>
   </div>
@@ -958,6 +982,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
   <button data-go="library"><svg class="ic"><use href="#i-library"/></svg>Музыка</button>
   <button data-go="feed"><svg class="ic"><use href="#i-feed"/></svg>Лента</button>
   <button data-go="mixer"><svg class="ic"><use href="#i-sliders"/></svg>Звук</button>
+  <button data-go="me" class="tab-me"><span class="acct-ava"><svg class="ic"><use href="#i-user"/></svg></span><span class="acct-name">Профиль</span></button>
 </nav>
 
 <div class="full" id="full" hidden>
@@ -1242,7 +1267,7 @@ function isRemote(u) { return /^https?:/i.test(u) && !u.startsWith(location.orig
 async function srcFor(t) {
   if (t.kind === 'demo') { if (t.url) return t.url; if (!t._fileFailed) return 'demos/' + t.id + '.mp3'; await ensureBuffer(t); return t.url; }
   if (t.blob) { if (!t.url) t.url = URL.createObjectURL(t.blob); return t.url; }
-  if (t.path) return await Cloud.signedUrl(t);
+  if (t.path) { try { return await Cloud.signedUrl(t); } catch (e) { if (e.message === 'login') throw new Error('Войди в аккаунт, чтобы слушать облачные треки'); await Cloud.download(t); t.url = URL.createObjectURL(t.blob); return t.url; } }
   if (t.live) return t.stream;
   if (t.net || t.stream) return await resolveStream(t);
   throw new Error('no source');
@@ -1902,7 +1927,7 @@ function jsonp(url) {
     sc.src = url + '&callback=' + cb; document.head.appendChild(sc);
   });
 }
-const mapAudius = t => ({ src: 'audius', id: 'audius:' + t.id, raw: t.id, title: t.title, artist: (t.user && t.user.name) || '', album: '', duration: t.duration, cover: (t.artwork && (t.artwork['480x480'] || t.artwork['150x150'])) || '', link: t.permalink ? 'https://audius.co' + t.permalink : '' });
+const mapAudius = t => ({ src: 'audius', id: 'audius:' + t.id, raw: t.id, title: t.title, artist: (t.user && t.user.name) || '', album: '', duration: t.duration, cover: (t.artwork && (t.artwork['480x480'] || t.artwork['150x150'])) || '', link: t.permalink ? 'https://audius.co' + t.permalink : '', dl: !!(t.is_downloadable || (t.download && t.download.is_downloadable)) });
 const mapItunes = t => ({ src: 'itunes', id: 'itunes:' + t.trackId, title: t.trackName, artist: t.artistName, album: t.collectionName || '', duration: (t.trackTimeMillis || 30000) / 1000, cover: (t.artworkUrl100 || '').replace('100x100bb', '600x600bb'), preview: t.previewUrl, link: t.trackViewUrl });
 const mapDeezer = t => ({ src: 'deezer', id: 'deezer:' + t.id, title: t.title, artist: t.artist ? t.artist.name : '', album: t.album ? t.album.title : '', duration: t.duration || 30, cover: t.album ? (t.album.cover_big || t.album.cover_medium) : '', preview: t.preview, link: t.link });
 const RADIO_HOSTS = ['https://de1.api.radio-browser.info', 'https://nl1.api.radio-browser.info', 'https://at1.api.radio-browser.info'];
@@ -1979,11 +2004,26 @@ function netHTML() {
       if (r.src === 'audius' || r.src === 'archive' || r.src === 'radio') act = `<button class="btn press" data-act="net-add" data-i="${i}" ${r.added ? 'disabled' : ''}>${r.added ? 'В библиотеке' : ic('plus') + 'В библиотеку'}</button>`;
       else if (r.src === 'jamendo') act = `<button class="btn press" data-act="net-add" data-i="${i}" ${r.added ? 'disabled' : ''}>${r.added ? 'В библиотеке' : ic('upload') + 'Скачать'}</button>`;
       else if (r.link) act = `<a class="btn" href="${esc(r.link)}" target="_blank" rel="noopener">Открыть</a>`;
+      if (r.src === 'archive' || (r.src === 'audius' && r.dl)) act = `<button class="cbtn press" data-act="net-dl" data-i="${i}" aria-label="Скачать на устройство" data-tip="Скачать">${ic('download')}</button>` + act;
       return `<div class="orow ${curId === 'tmp:' + r.id ? 'current' : ''}" data-i="${i}"><span class="o-cov"><img src="${esc(r.cover)}" alt="" loading="lazy">${ic('play')}</span><div class="r-meta"><div class="r-t">${esc(r.title)}</div><div class="r-a">${esc(r.artist)}${r.album ? ' · ' + esc(r.album) : ''}</div></div><div class="r-d">${r.live ? 'Эфир' : r.duration ? fmt(r.duration) : ''}</div>${act}</div>`;
     }).join('')}</div>`;
   }
   const tabs = NET.status === 'off' ? '' : `<div class="net-tabs">${NET_TABS.filter(([v]) => v !== 'jamendo' || NET.jamendo).map(([v, l, d]) => `<button class="chip press" data-act="net-tab" data-v="${v}" aria-pressed="${NET.tab === v}">${l}<small>${d}</small></button>`).join('')}</div>`;
   return `<section class="net" id="net"><div class="block-head"><h2>Найдено в каталоге</h2></div>${tabs}${body}</section>`;
+}
+async function netDownload(r, btn) {
+  if (!r || btn.disabled) return;
+  btn.disabled = true; btn.classList.add('loading'); toast('Скачиваю «' + r.title + '»…');
+  const name = ((r.artist ? r.artist + ' - ' : '') + r.title).replace(/[\\/:*?"<>|]+/g, ' ').trim().slice(0, 120) || 'track';
+  let url;
+  try {
+    url = await resolveStream({ net: netOf(r) });
+    const res = await fetch(url); if (!res.ok) throw new Error(res.status);
+    const blob = await res.blob(), ext = /ogg/.test(blob.type) ? 'ogg' : /flac/.test(blob.type) ? 'flac' : /wav/.test(blob.type) ? 'wav' : 'mp3';
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name + '.' + ext; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 30000); toast('Готово, файл в загрузках');
+  } catch (e) { if (url) { open(url, '_blank', 'noopener'); toast('Файл открылся в новой вкладке, сохрани его оттуда'); } else toast('Не получилось скачать, попробуй позже'); }
+  finally { btn.disabled = false; btn.classList.remove('loading'); }
 }
 function paintNet() { const el = $('#net'); if (el) el.outerHTML = netHTML(); }
 let netTok = 0;
@@ -2323,7 +2363,8 @@ const Cloud = {
   async init() {
     const c = this.cfg(); if (!c) { markAccount(); return; }
     try {
-      if (!window.supabase) await new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'; sc.onload = res; sc.onerror = () => rej(new Error('нет соединения')); document.head.appendChild(sc); });
+      const load = src => new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = src; const to = setTimeout(() => rej(new Error('timeout')), 12000); sc.onload = () => { clearTimeout(to); res(); }; sc.onerror = () => { clearTimeout(to); rej(new Error('нет соединения')); }; document.head.appendChild(sc); });
+      if (!window.supabase) { try { await load('vendor/supabase.js'); } catch (e) { await load('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'); } }
       this.sb = window.supabase.createClient(c.supabaseUrl, c.supabaseKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
       Feed.sb = this.sb; Feed.mode = 'cloud';
       this.sb.auth.onAuthStateChange((ev, sess) => {
@@ -2533,8 +2574,14 @@ function authError(e) {
   return 'Ошибка: ' + m;
 }
 function markAccount() {
-  $$('.acct-btn').forEach(b => b.hidden = !Cloud.cfg());
   const P = Cloud.profile, busy = Cloud.syncing || Cloud.busy;
+  $$('.acct-ava').forEach(a => {
+    a.classList.toggle('has-ava', !!(P && P.avatar_url));
+    a.style.background = P && !P.avatar_url ? avaColor(P.id) : '';
+    a.innerHTML = (P && P.avatar_url ? `<img src="${esc(P.avatar_url)}" alt="">` : P ? `<b>${esc(P.name.slice(0, 1).toUpperCase())}</b>` : ic('user')) + (busy ? '<span class="dot-sync"></span>' : '');
+  });
+  $$('.acct-chip .acct-name').forEach(n => n.textContent = P ? P.name : 'Войти');
+  $$('.tab-me .acct-name').forEach(n => n.textContent = P ? 'Профиль' : 'Войти');
   $$('.acct-btn').forEach(b => {
     b.classList.toggle('has-ava', !!(P && P.avatar_url));
     b.innerHTML = P && P.avatar_url ? `<img src="${esc(P.avatar_url)}" alt="">` : P ? `<span style="font:600 15px var(--f-display);text-transform:uppercase">${esc(P.name.slice(0, 1))}</span>` : ic('user');
@@ -2559,9 +2606,9 @@ function cloudCardHTML() {
   </div>`;
 }
 function meHTML() {
-  if (!Cloud.cfg()) return headHTML('', 'Аккаунт', 'Скоро', '') + `<div class="me"><div class="card-s wide"><h3>Аккаунты скоро появятся</h3><p>Пока вся музыка, плейлисты и настройки хранятся на этом устройстве.</p></div></div>`;
+  if (!Cloud.cfg()) return headHTML('', 'Профиль', '', '') + `<div class="auth"><div class="card-s"><h3 style="font-size:24px">Вход временно недоступен</h3><p>Музыка, плейлисты и настройки пока сохраняются на этом устройстве. Как только вход заработает, всё перенесётся в аккаунт.</p></div></div>`;
   if (!Cloud.ready) return headHTML('', 'Аккаунт', 'Подключаюсь…', '');
-  if (Cloud.err && !Cloud.sb) return headHTML('', 'Аккаунт', '', '') + `<p class="net-note">Не удалось войти в сервис. Проверь интернет и обнови страницу.</p>`;
+  if (Cloud.err && !Cloud.sb) return headHTML('', 'Профиль', '', '') + `<div class="auth"><div class="card-s"><h3 style="font-size:24px">Нет связи</h3><p>Не получилось подключиться. Проверь интернет и попробуй ещё раз.</p><button class="btn btn-accent press" data-act="cloud-retry" style="justify-content:center">${ic('repeat')}Попробовать снова</button></div></div>`;
   if (!Cloud.user) {
     const m = S.authMode;
     return `<div class="auth"><form class="card-s" id="authForm">
@@ -2982,7 +3029,7 @@ function toast(msg) { const el = $('#toast'); el.textContent = msg; el.hidden = 
 document.addEventListener('click', e => {
   if (!menu.hidden && !e.target.closest('#menu') && (e.target.id === 'menuBg' || !e.target.closest('[data-act=more],[data-act=more-cur],[data-pmenu],[data-dd]'))) { closeMenu(); if (e.target.id === 'menuBg') return; }
   const pmn = e.target.closest('[data-pmenu]'); if (pmn) { openPresetMenu(pmn, pmn.dataset.pmenu); return; }
-  const ddb = e.target.closest('[data-dd]'); if (ddb) { openDD(ddb); return; }
+  const ddb = e.target.closest('[data-dd]:not(#menu)'); if (ddb && DD[ddb.dataset.dd]) { openDD(ddb); return; }
   if (!menu.hidden && e.target.closest('#menu')) return;
   const orow = e.target.closest('.orow'); if (orow && !e.target.closest('[data-act],a')) { netPlay(+orow.dataset.i); return; }
   const pr = e.target.closest('[data-preset]'); if (pr) { applyPreset(pr.dataset.preset); if (!E.playing) toast('Нажми «Слушать», чтобы услышать пресет'); return; }
@@ -3016,6 +3063,7 @@ document.addEventListener('click', e => {
       case 'fx-update': { const p = userPresets.find(x => x.id === FXBASE); if (p) { p.p = clone(FX); savePresets(); toast(`Пресет «${p.name}» обновлён`); } break; }
       case 'fx-import': openModal({ title: 'Вставь код пресета', ph: 'KMP1:…', max: 4000, btn: 'Добавить' }, code => { const o = parseCode(code); if (!o) { toast('Это не код пресета KMP'); return; } const p = addPreset(o.name, presetParams(o.p)); applyPreset(p.id); toast(`Пресет «${o.name}» добавлен и включён`); }); break;
       case 'fx-bind': { const t = curT(); if (!t) break; if (S.trackFx[t.id]) { delete S.trackFx[t.id]; store.set('trackFx', S.trackFx); applyTrackFx(t, true); toast('Трек снова играет с общим звуком'); } else { S.trackFx[t.id] = clone(FX); store.set('trackFx', S.trackFx); toast(`Звук запомнен для «${t.title}»`); } updateSmartUI(); break; }
+      case 'cloud-retry': { Cloud.err = ''; Cloud.ready = false; renderView(); Cloud.init(); break; }
       case 'norm': { S.norm = !S.norm; store.set('norm', S.norm); const t = curT(); if (E.srcGain && t) E.srcGain.gain.setTargetAtTime(S.norm && t.gain ? t.gain : 1, E.ctx.currentTime, .1); updateSmartUI(); toast(S.norm ? 'Громкость выравнивается' : 'Выравнивание выключено'); break; }
       case 'loop-a': { const t = curT(); if (!t || !E.buf) { toast('Сначала включи трек'); break; } S.loop = { id: t.id, a: curTime(), b: null }; updateLoopUI(); break; }
       case 'loop-b': { const t = curT(); if (!S.loop || !t || S.loop.id !== t.id) { toast('Сначала отметь точку A'); break; } const ct = curTime(); if (ct <= S.loop.a + .5) { toast('B должна быть позже A'); break; } S.loop.b = ct; seek(S.loop.a); updateLoopUI(); break; }
@@ -3058,6 +3106,7 @@ document.addEventListener('click', e => {
       case 'focus-skip': if (S.focusSt) { S.focusSt.end = Date.now(); tickFocus(); } break;
       case 'net-tab': NET.tab = a.dataset.v; paintNet(); netSearch(S.q); break;
       case 'net-add': netAdd(+a.dataset.i, a); break;
+      case 'net-dl': netDownload(NET.items[+a.dataset.i], a); break;
       case 'del-pl': {
         if (!a.classList.contains('armed')) { a.classList.add('armed'); a.querySelector('span').textContent = 'Точно удалить?'; setTimeout(() => { if (a.isConnected) { a.classList.remove('armed'); a.querySelector('span').textContent = 'Удалить'; } }, 3000); break; }
         const p = S.pls.find(x => x.id === a.dataset.pl); S.pls = S.pls.filter(x => x.id !== a.dataset.pl); persist(); toast(`Плейлист «${p.name}» удалён`); go('home'); break;
