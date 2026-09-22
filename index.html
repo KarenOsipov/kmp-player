@@ -400,6 +400,15 @@ img.ava{object-fit:cover}
 .topbar .theme-m{display:none}
 @media (max-width:1180px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:760px){.stats{grid-template-columns:1fr}.stat.wide{grid-column:auto}.topbar .theme-m{display:grid;width:54px;height:54px;border-radius:50%;place-items:center}.focus-pill{bottom:calc(144px + env(safe-area-inset-bottom,0px))}}
+/* delete on row hover */
+[data-act=demo-restore]{display:inline-flex;align-items:center;gap:6px}[data-act=demo-restore] .ic{width:15px;height:15px}
+.r-d{position:relative;display:flex;justify-content:flex-end;align-items:center}
+.r-del{display:none;width:34px;height:34px;border-radius:50%;place-items:center;color:var(--muted)}
+.r-del .ic{width:17px;height:17px}
+.r-del:hover{color:#e5484d;background:color-mix(in srgb,#e5484d 12%,transparent)}
+.r-del.armed{display:grid!important;color:#fff;background:#e5484d}
+@media (hover:hover) and (min-width:761px){.row:hover .r-d>span{display:none}.row:hover .r-del{display:grid}}
+.row:has(.r-del.armed) .r-d>span{display:none}
 /* tricks pads */
 .mp-pads{padding:16px}
 .pads{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
@@ -1928,12 +1937,13 @@ async function importFiles(files, meta) {
   }
 }
 function removeTrack(id) {
-  const t = T.get(id); if (!t || t.kind === 'demo') return;
+  const t = T.get(id); if (!t) return;
+  if (t.kind === 'demo') { const hd = store.get('demoHidden', []); if (!hd.includes(id)) { hd.push(id); store.set('demoHidden', hd); } }
   const wasCur = S.queue[S.qi] === id;
   if (wasCur) { killSrc(true); E.playing = false; E.buf = null; E.offset = 0; setPlayingUI(); }
   if (t.cloud) { try { Cloud.removeTrack(t); } catch (e) {} }
   if (t.url && t.url.startsWith('blob:')) URL.revokeObjectURL(t.url);
-  T.delete(id); bufCache.delete(id); DB.del(id);
+  if (t.kind !== 'demo') { T.delete(id); bufCache.delete(id); DB.del(id); }
   S.order = S.order.filter(x => x !== id); S.liked.delete(id); S.pls.forEach(p => p.ids = p.ids.filter(x => x !== id));
   const qi = S.queue.indexOf(id);
   if (qi > -1) { S.queue.splice(qi, 1); if (qi < S.qi) S.qi--; }
@@ -1969,7 +1979,7 @@ function rowHTML(t, i) {
     <div class="r-meta"><div class="r-t">${esc(t.title)}</div><div class="r-a">${esc(t.artist)}${t.album ? ' · ' + esc(t.album) : ''}</div></div>
     <div class="r-tag">${esc(tagOf(t))}</div>
     <button class="r-btn press" data-act="like" aria-pressed="${liked}" aria-label="В любимое">${ic(liked ? 'heart-f' : 'heart')}</button>
-    <div class="r-d">${t.duration ? fmt(t.duration) : '—'}</div>
+    <div class="r-d"><span>${t.duration ? fmt(t.duration) : '—'}</span>${S.order.includes(t.id) ? `<button class="r-del press" data-act="del-row" aria-label="Удалить" data-tip="Удалить">${ic('trash')}</button>` : ''}</div>
     <button class="r-btn press" data-act="more" aria-label="Ещё">${ic('more')}</button>
   </div>`;
 }
@@ -2036,7 +2046,7 @@ function libraryHTML() {
   const ids = sortedIds();
   const chip = (v, l) => `<button class="chip press" data-act="filter" data-v="${v}" aria-pressed="${S.filter === v}">${l}</button>`;
   return headHTML('', 'Вся музыка', `${tracksWord(ids.length)}, ${fmtLong(tot(ids))}`, playBtns('lib') + `<button class="btn press" data-act="upload">${ic('upload')}Добавить</button>`)
-    + `<div class="chips" style="margin-top:14px">${chip('all', 'Всё')}${chip('upload', 'Мои загрузки')}${chip('demo', 'Демо')}</div>`
+    + `<div class="chips" style="margin-top:14px">${chip('all', 'Всё')}${chip('upload', 'Мои загрузки')}${chip('demo', 'Демо')}${store.get('demoHidden', []).length ? `<button class="chip press" data-act="demo-restore">${ic('repeat')}Вернуть демо</button>` : ''}</div>`
     + `<div style="margin-top:14px">${ids.length ? listHTML(ids, 'lib') : emptyHTML('Здесь будут твои треки', 'Нажми «Добавить» или перетащи файлы в окно.')}</div>`;
 }
 function likedHTML() {
@@ -3179,11 +3189,11 @@ function openMenu(anchor, id) {
     <button data-m="queue">${ic('queue')}В конец очереди</button>
     <button data-m="post">${ic('feed')}Написать о треке в ленту</button>
     <button data-m="like">${ic(liked ? 'heart-f' : 'heart')}${liked ? 'Убрать из любимого' : 'В любимое'}</button>
+    ${inPl ? `<button data-m="rmpl" data-pl="${inPl}">${ic('close')}Убрать из этого плейлиста</button>` : ''}
+    ${S.order.includes(id) ? `<button data-m="del" class="danger">${ic('trash')}<span>${t.kind === 'demo' ? 'Убрать из библиотеки' : 'Удалить трек'}</span></button>` : ''}
     <div class="m-sep"></div><p class="m-label">Добавить в плейлист</p>
     ${S.pls.map(p => `<button data-m="pl" data-pl="${p.id}">${ic('library')}${esc(p.name)}${p.ids.includes(id) ? '<em>уже там</em>' : ''}</button>`).join('')}
     <button data-m="newpl">${ic('plus')}Новый плейлист…</button>`;
-  if (inPl) h += `<div class="m-sep"></div><button data-m="rmpl" data-pl="${inPl}">${ic('close')}Убрать из этого плейлиста</button>`;
-  if (t.kind === 'upload' || (t.kind === 'net' && S.order.includes(id))) h += `${inPl ? '' : '<div class="m-sep"></div>'}<button data-m="del" class="danger">${ic('trash')}<span>Удалить из библиотеки</span></button>`;
   menu.innerHTML = h; menu.dataset.id = id; menu.dataset.dd = ''; menu.dataset.pid = ''; menu.hidden = false;
   placeMenu(anchor, 'right');
 }
@@ -3306,6 +3316,8 @@ document.addEventListener('click', e => {
       case 'moment-go': seek(+a.dataset.t); if (!E.playing) play(); break;
       case 'focus-skip': if (S.focusSt) { S.focusSt.end = Date.now(); tickFocus(); } break;
       case 'net-tab': NET.tab = a.dataset.v; paintNet(); netSearch(S.q); break;
+      case 'del-row': { const row = a.closest('.row'); if (!row) break; if (!a.classList.contains('armed')) { $$('.r-del.armed').forEach(x => x.classList.remove('armed')); a.classList.add('armed'); a.dataset.tip = 'Нажми ещё раз'; toast('Нажми ещё раз, чтобы удалить'); setTimeout(() => { if (a.isConnected) { a.classList.remove('armed'); a.dataset.tip = 'Удалить'; } }, 3000); break; } removeTrack(row.dataset.id); break; }
+      case 'demo-restore': store.set('demoHidden', []); for (const d of DEMOS) if (!S.order.includes(d.id) && T.has(d.id)) S.order.unshift(d.id); persist(); renderView(); toast('Демо-треки вернулись'); break;
       case 'net-add': netAdd(+a.dataset.i, a); break;
       case 'net-dl': netDownload(NET.items[+a.dataset.i], a); break;
       case 'del-pl': {
@@ -3634,7 +3646,7 @@ async function boot() {
   refreshTheme();
   const DM = {"d1":{"peaks":[0.187,0.243,0.287,0.309,0.401,0.416,0.443,0.48,0.48,0.444,0.464,0.322,0.977,0.865,0.474,0.435,0.428,0.852,0.544,0.48,0.933,0.816,0.466,0.43,0.301,0.939,0.76,0.479,0.427,0.436,0.8,0.483,0.497,0.963,0.643,0.455,0.469,0.428,0.968,0.642,0.453,0.439,0.418,0.835,0.48,0.433,0.921,0.508,0.454,0.403,0.379,0.987,0.581,0.467,0.429,0.48,0.8,0.458,0.483,0.901,0.516,0.449,0.374,0.305,0.972,0.549,0.449,0.449,0.417,0.825,0.495,0.479,0.906,0.513,0.476,0.356,0.317,0.972,0.505,0.422,0.439,0.491,0.803,0.459,0.482,0.898,0.472,0.474,0.405,0.296,0.977,0.479,0.437,0.433,0.823,0.622,0.481,0.488,0.93,0.46,0.398,0.383,0.95,0.905,0.473,0.422,0.479,0.829,0.533,0.474,0.939,0.851,0.447,0.474,0.358,0.98,0.774,0.448,0.441,0.461,0.831,0.463,0.485,0.957,0.618,0.513,0.432,0.322,1.0,0.682,0.471,0.435,0.47,0.827,0.467,0.493,0.944,0.529,0.461,0.406,0.374,0.961,0.6,0.453,0.422,0.446,0.874,0.491,0.433,0.938,0.485,0.49,0.4,0.389,0.983,0.541,0.464,0.44,0.47,0.847,0.469,0.475,0.893,0.466,0.465,0.343,0.274,0.574,0.44,0.372,0.33,0.302,0.316,0.299,0.272,0.242,0.193,0.18,0.096,0.054],"gain":1.508,"trimS":0,"trimE":null,"dur":40.0},"d2":{"peaks":[0.048,0.161,0.246,0.324,0.343,0.428,0.431,0.334,0.406,0.958,0.406,0.974,0.398,0.965,0.619,0.391,0.921,0.407,0.918,0.408,0.925,0.427,0.929,0.835,0.424,0.943,0.387,0.954,0.393,0.954,0.589,0.322,0.95,0.446,0.952,0.394,0.914,0.421,0.909,0.867,0.44,0.939,0.397,0.965,0.378,0.958,0.6,0.338,0.935,0.399,0.965,0.442,0.973,0.436,0.915,0.886,0.422,0.895,0.454,0.899,0.418,0.913,0.6,0.371,0.932,0.387,0.975,0.432,0.955,0.464,0.939,0.913,0.4,0.909,0.384,0.928,0.47,0.889,0.668,0.427,0.917,0.367,0.944,0.396,1.0,0.467,0.976,0.957,0.455,0.974,0.418,0.915,0.411,0.932,0.693,0.454,0.89,0.398,0.945,0.407,0.944,0.508,0.409,0.957,0.441,0.965,0.406,0.938,0.401,0.936,0.7,0.38,0.94,0.47,0.911,0.411,0.906,0.519,0.265,0.941,0.396,0.979,0.403,0.984,0.452,0.987,0.727,0.429,0.923,0.411,0.966,0.44,0.916,0.517,0.337,0.899,0.409,0.927,0.364,0.933,0.437,0.959,0.782,0.402,0.973,0.403,0.936,0.364,0.96,0.578,0.34,0.914,0.431,0.901,0.43,0.919,0.441,0.946,0.806,0.405,0.945,0.458,0.993,0.406,0.944,0.538,0.291,0.855,0.355,0.792,0.29,0.691,0.327,0.227,0.211,0.202,0.184,0.174,0.098,0.054],"gain":1.227,"trimS":0,"trimE":null,"dur":40.0},"d3":{"peaks":[0.301,0.342,0.402,0.403,0.429,0.545,0.546,0.577,0.527,0.571,0.527,0.584,0.497,0.443,0.351,0.989,0.897,0.695,0.588,0.589,0.564,0.542,0.552,0.608,0.521,0.584,0.527,0.601,0.524,0.418,0.692,0.957,0.756,0.581,0.598,0.575,0.536,0.555,0.629,0.639,0.561,0.545,0.605,0.477,0.49,0.324,1.0,0.859,0.676,0.583,0.614,0.583,0.578,0.606,0.607,0.542,0.557,0.599,0.562,0.484,0.42,0.996,0.996,0.733,0.608,0.615,0.566,0.563,0.539,0.606,0.586,0.56,0.581,0.608,0.512,0.493,0.44,0.98,0.84,0.645,0.632,0.653,0.586,0.561,0.633,0.635,0.562,0.576,0.586,0.574,0.448,0.413,0.939,0.882,0.69,0.582,0.576,0.56,0.543,0.519,0.628,0.66,0.513,0.581,0.664,0.506,0.538,0.435,0.974,0.782,0.652,0.561,0.63,0.57,0.622,0.603,0.603,0.548,0.543,0.608,0.565,0.442,0.426,0.978,0.92,0.692,0.617,0.563,0.522,0.609,0.544,0.64,0.596,0.546,0.616,0.617,0.482,0.46,0.844,0.981,0.771,0.627,0.653,0.589,0.545,0.563,0.589,0.557,0.568,0.55,0.561,0.511,0.403,0.389,0.939,0.814,0.646,0.564,0.6,0.526,0.527,0.538,0.674,0.626,0.551,0.608,0.539,0.458,0.372,0.765,0.742,0.54,0.411,0.323,0.308,0.3,0.238,0.199,0.164,0.08],"gain":2.5,"trimS":0,"trimE":null,"dur":40.0},"d4":{"peaks":[0.0,0.266,0.019,0.455,0.159,0.125,0.586,0.088,0.589,0.954,0.687,0.631,0.97,0.666,0.962,0.566,0.647,0.966,0.6,0.956,0.65,0.483,0.939,0.627,0.947,0.589,0.348,0.964,0.64,0.954,0.578,0.939,0.854,0.608,0.952,0.634,0.977,0.67,0.613,0.971,0.663,0.97,0.566,0.614,0.95,0.625,0.939,0.588,0.432,0.966,0.665,0.934,0.655,0.36,0.956,0.614,0.942,0.605,0.969,0.878,0.652,0.973,0.658,0.946,0.693,0.598,0.95,0.636,0.965,0.567,0.631,0.996,0.641,0.969,0.624,0.447,1.0,0.659,0.955,0.606,0.293,0.949,0.612,0.937,0.64,0.965,0.879,0.593,0.965,0.71,0.959,0.691,0.638,0.972,0.672,0.974,0.56,0.634,0.957,0.657,0.952,0.619,0.508,0.972,0.637,0.921,0.656,0.353,0.955,0.583,0.927,0.618,0.974,0.884,0.596,0.946,0.639,0.954,0.682,0.604,0.949,0.62,0.966,0.563,0.6,0.924,0.613,0.958,0.647,0.466,0.96,0.652,0.943,0.645,0.308,0.976,0.626,0.943,0.64,0.961,0.855,0.654,0.966,0.615,0.95,0.666,0.625,0.959,0.609,0.956,0.562,0.595,0.95,0.647,0.969,0.623,0.474,0.945,0.571,0.955,0.613,0.308,0.963,0.615,0.939,0.557,0.188,0.135,0.539,0.089,0.481,0.106,0.097,0.417,0.079,0.326,0.049,0.084,0.201,0.014],"gain":1.278,"trimS":0,"trimE":null,"dur":40.0}};
   for (const d of DEMOS) { const m = DM[d.id] || {}; const t = { ...d, kind: 'demo', duration: d.dur, peaks: m.peaks || seededPeaks(d.id), peaksReal: !!m.peaks, gain: m.gain, trimS: m.trimS || 0, trimE: m.trimE || null }; t.cover = makeCover(t); T.set(t.id, t); }
-  S.order = DEMOS.map(d => d.id);
+  const demoHidden = store.get('demoHidden', []); S.order = DEMOS.map(d => d.id).filter(id => !demoHidden.includes(id));
   await Promise.race([DB.open(), new Promise(r => setTimeout(r, 1500))]);
   const recs = await DB.all();
   recs.forEach(r => { const t = { ...r, peaksReal: !!r.peaks }; if (!t.peaks) t.peaks = seededPeaks(t.id); t.cover = r.coverImg || r.cover || makeCover(t); T.set(t.id, t); S.order.push(t.id); });
