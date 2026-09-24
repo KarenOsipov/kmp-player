@@ -475,7 +475,9 @@ img.ava{object-fit:cover}
 .vn-label{position:absolute;left:31%;top:31%;width:38%;height:38%;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px rgba(0,0,0,.35)}
 .vn-hole{position:absolute;left:48.5%;top:48.5%;width:3%;height:3%;border-radius:50%;background:#0c0c10;box-shadow:0 0 0 1px rgba(255,255,255,.2)}
 .vn-sheen{position:absolute;width:84%;aspect-ratio:1;border-radius:50%;pointer-events:none;background:conic-gradient(from 30deg,transparent 0deg,rgba(255,255,255,.12) 20deg,transparent 50deg,transparent 180deg,rgba(255,255,255,.08) 205deg,transparent 235deg)}
-.vn-hint{position:absolute;bottom:-4px;font-size:12px;font-weight:600;opacity:.65;pointer-events:none}
+.vn-hint{position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);white-space:nowrap;font-size:12px;font-weight:600;opacity:.65;pointer-events:none;transition:opacity .4s}
+.f-vinyl.used .vn-hint{opacity:0}
+.vn-label{background:var(--p1,#333)}
 /* xy pad */
 .f-xy{position:relative;width:100%;aspect-ratio:1;border-radius:26px;overflow:hidden;background:rgba(10,12,22,.3);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);touch-action:none;user-select:none;-webkit-user-select:none}
 .f-xy canvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
@@ -490,6 +492,72 @@ img.ava{object-fit:cover}
   .full.vinyl-on .f-art .f-vinyl,.full.xy-on .f-art .f-xy{width:min(84vw,380px)}
   .full.vinyl-on .f-art .f-cover,.full.xy-on .f-art .f-cover{height:0}
 }
+/* covers: backdrop for transparent png, crisp edges */
+.f-cover,.p-cover,.r-cov,.q-item img,.h-row img,.hb-card img,.card img{background-color:rgba(127,127,127,.18)}
+.f-title h2{text-wrap:balance}
+.f-title p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.f-title>div{min-width:0}
+/* external "together" buttons */
+.room-top{display:flex;align-items:center;gap:8px;height:50px;padding:0 18px;border-radius:25px;background:var(--glass-strong);border:1px solid var(--line);font-weight:600;font-size:14px;color:var(--ink);flex:none;box-shadow:var(--shadow)}
+.room-top .ic{width:19px;height:19px}
+.room-top:hover{background:var(--surface)}
+.room-top.on,.m-icon.room-m.on{background:#2fd36b;color:#06120a;border-color:#2fd36b}
+@media (max-width:1100px){.room-top span{display:none}.room-top{padding:0;width:50px;justify-content:center}}
+@media (max-width:760px){.room-top{display:none!important}}
+/* recap stories */
+.recap{position:fixed;inset:0;z-index:99;color:#fff;overflow:hidden;background:var(--r0,#111);user-select:none;-webkit-user-select:none}
+.recap[hidden]{display:none}
+.rc-bg{position:absolute;inset:0;background:linear-gradient(160deg,var(--r1),var(--r0) 60%)}
+.rc-bg i{position:absolute;width:70vmax;height:70vmax;border-radius:50%;filter:blur(70px);opacity:.55;animation:rcBlob 16s ease-in-out infinite alternate}
+.rc-bg i:nth-child(1){background:var(--r2);left:-20vmax;top:-20vmax}
+.rc-bg i:nth-child(2){background:var(--r3);right:-25vmax;top:20vh;animation-duration:21s}
+.rc-bg i:nth-child(3){background:var(--r1);left:10vw;bottom:-35vmax;animation-duration:26s}
+@keyframes rcBlob{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+.rc-bars{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:min(560px,calc(100% - 32px));display:flex;gap:5px;z-index:2}
+.rc-bars span{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden}
+.rc-bars i{display:block;height:100%;background:#fff;transform-origin:left;transform:scaleX(0)}
+.rc-x{position:absolute;top:calc(28px + env(safe-area-inset-top,0px));right:max(16px,calc(50% - 290px));z-index:3;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.25);color:#fff;display:grid;place-items:center}
+.rc-x .ic{width:20px;height:20px}
+.rc-stage{position:absolute;inset:0;display:grid;place-items:center;padding:80px 24px 40px}
+.rc-s{grid-area:1/1;width:min(560px,100%);display:flex;flex-direction:column;gap:14px;opacity:0;transform:translateY(24px) scale(.98);pointer-events:none;transition:opacity .5s,transform .7s var(--ease)}
+.rc-s.on{opacity:1;transform:none;pointer-events:auto}
+.rc-k{margin:0;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.8}
+.rc-s h2{margin:0;font:300 clamp(40px,8vw,72px)/1.02 var(--f-display);letter-spacing:-.03em;text-wrap:balance}
+.rc-s h3{margin:6px 0 0;font:400 34px/1.1 var(--f-display);text-align:center}
+.rc-big{font-size:clamp(96px,22vw,180px)!important;font-variant-numeric:tabular-nums;line-height:.9!important}
+.rc-mid{font-size:clamp(56px,12vw,96px)!important}
+.rc-unit{margin:0;font-size:22px;font-weight:600}
+.rc-sub{margin:0;font-size:16px;line-height:1.45;opacity:.85;max-width:44ch}
+.rc-streak{font-size:18px;font-weight:600;opacity:1;margin-top:10px}
+.rc-per{display:flex;gap:8px;margin-top:18px}
+.rc-per button{height:40px;padding:0 18px;border-radius:20px;background:rgba(255,255,255,.14);color:#fff;font-weight:600;font-size:14px;border:1px solid rgba(255,255,255,.2)}
+.rc-per button.on{background:#fff;color:#131826}
+.rc-cov{width:min(64vw,320px);aspect-ratio:1;border-radius:24px;object-fit:cover;box-shadow:0 30px 70px -20px rgba(0,0,0,.6);margin:8px 0;background:rgba(0,0,0,.2)}
+.rc-s.on .rc-cov{animation:rcPop .9s var(--spring,ease) both}
+@keyframes rcPop{from{transform:scale(.8) rotate(-4deg);opacity:0}}
+.rc-list{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.rc-list li{display:grid;grid-template-columns:30px 56px minmax(0,1fr) auto;align-items:center;gap:12px}
+.rc-s.on .rc-list li{animation:rcIn .6s var(--ease) both;animation-delay:var(--d)}
+@keyframes rcIn{from{opacity:0;transform:translateX(-20px)}}
+.rc-list b{font:300 30px var(--f-display);opacity:.8}
+.rc-list img{width:56px;height:56px;border-radius:12px;object-fit:cover;background:rgba(0,0,0,.2)}
+.rc-list span{display:flex;flex-direction:column;min-width:0}
+.rc-list em{font-style:normal;font-weight:700;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-list small{font-size:13px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-list i{font-style:normal;font-size:13px;font-weight:600;opacity:.8}
+.rc-art li{grid-template-columns:30px 72px minmax(0,1fr)}.rc-art img{width:72px;height:72px;border-radius:50%}.rc-art em{font-size:21px}
+.rc-clock{width:min(78vw,340px);align-self:center;overflow:visible}
+.rc-clock line{stroke:#fff;stroke-width:5;stroke-linecap:round;opacity:.9}
+.rc-s.on .rc-clock line{animation:rcLine .7s var(--ease) both;animation-delay:var(--d)}
+@keyframes rcLine{from{opacity:0}}
+.rc-clock text{fill:#fff;font:600 13px var(--f-body);text-anchor:middle}
+.rc-clock .rc-dot{fill:rgba(255,255,255,.18)}.rc-clock .rc-h{font-size:10px;opacity:.6}
+.rc-card{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;border-radius:24px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(10px)}
+.rc-card img{grid-column:1/-1;width:100%;aspect-ratio:2.2;object-fit:cover;border-radius:16px}
+.rc-card div{display:flex;flex-direction:column;gap:2px;padding:10px;border-radius:14px;background:rgba(255,255,255,.08);min-width:0}
+.rc-card b{font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rc-card small{font-size:12px;opacity:.75}
+.rc-share{align-self:center;justify-content:center;min-width:240px;margin-top:6px}
+.rc-intro h2{font-size:clamp(52px,11vw,92px)}
 /* full player: minimal layout */
 .dk-open{display:none}
 .full.min-ui .f-queue,.full.min-ui .f-tools,.full.min-ui .moms,.full.min-ui .f-vol,.full.min-ui [data-act=compose],.full.min-ui .full-top [data-go=mixer]{display:none!important}
@@ -840,7 +908,8 @@ a.btn{text-decoration:none;color:inherit}
 .full{position:fixed;inset:0;z-index:60;overflow:auto;view-transition-name:full;background:#1d2236;color:#fff}
 .full .bg{position:fixed}
 .full-inner{position:relative;max-width:1240px;margin:0 auto;padding-inline:24px;padding-block:calc(18px + env(safe-area-inset-top,0px)) 28px;min-height:100%;display:flex;flex-direction:column;gap:18px}
-.full-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.full-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px}
+.full-top>.st-btn:first-child{justify-self:start}.full-top>.grp{justify-self:end}
 .full-top span{font-weight:600;font-size:13px;text-align:center;opacity:.85}
 .full-top .grp{display:flex;gap:8px}
 .full-main{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:24px;align-items:center}
@@ -870,7 +939,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
 .q-list{overflow:auto;display:flex;flex-direction:column;gap:2px;scrollbar-width:thin}
 .q-item{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:12px;align-items:center;padding:7px 8px;border-radius:12px;text-align:left}
 .q-item:hover{background:rgba(255,255,255,.1)}
-.q-item img{width:42px;height:42px;border-radius:9px;object-fit:cover}
+.q-item img{width:42px;height:42px;border-radius:9px;object-fit:cover;background:var(--hover);flex:none}
 .q-item b{display:block;font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .q-item span{display:block;font-size:12px;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .q-item em{font-style:normal;font-size:12px;opacity:.7;font-variant-numeric:tabular-nums}
@@ -1107,6 +1176,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     <symbol id="i-blend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 17c4 0 6-10 9-10s5 10 9 10"/><path d="M3 7c4 0 6 10 9 10s5-10 9-10" opacity=".5"/></symbol>
     <symbol id="i-rain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 14a4 4 0 0 1 .5-8 5 5 0 0 1 9.5 1.5A3.3 3.3 0 0 1 17 14z"/><path d="M8 17.5 7 20M12 17.5 11 20M16 17.5l-1 2.5"/></symbol>
     <symbol id="i-feed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-7l-4.5 3.5V16.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5z"/><path d="M8 10h8M8 13h5"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></symbol>
     <symbol id="i-layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="3"/><path d="M12 4v16M12 11h8.5"/></symbol>
     <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.8-3.3 3.2-5 6-5s5.2 1.7 6 5"/><circle cx="16.8" cy="9.3" r="2.5"/><path d="M16.5 14.3c2.3.1 4 1.5 4.6 4.2"/></symbol>
     <symbol id="i-history" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3.5 4.5V9H8"/><path d="M12 8v4.5l3 2"/></symbol>
@@ -1158,6 +1228,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
       <button class="m-logo press" data-go="home" aria-label="KMP, на главную"><span>kmp<i></i></span></button>
       <span class="m-title" id="mTitle"></span>
       <button class="m-icon acct-btn press" data-go="me" aria-label="Аккаунт"><svg class="ic"><use href="#i-user"/></svg></button>
+      <button class="m-icon press room-m" data-act="room-open" aria-label="Слушать вместе"><svg class="ic"><use href="#i-users"/></svg></button>
       <button class="m-icon press" data-go="search" aria-label="Поиск"><svg class="ic"><use href="#i-search"/></svg></button>
       <button class="pill pill-ghost press" data-go="library"><svg class="ic"><use href="#i-library"/></svg>Вся музыка</button>
       <div class="search-pill glass-strong">
@@ -1167,6 +1238,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
       </div>
       <button class="theme-m m-icon press" data-act="theme" aria-label="Сменить тему"><svg class="ic"><use href="#i-moon"/></svg></button>
       <button class="pill pill-accent press" data-act="upload" aria-label="Добавить треки"><svg class="ic"><use href="#i-upload"/></svg><span>Добавить</span></button>
+      <button class="room-top press" data-act="room-open" aria-label="Слушать вместе"><svg class="ic"><use href="#i-users"/></svg><span>Вместе</span></button>
       <button class="acct-chip press" data-go="me" aria-label="Профиль"><span class="acct-ava"><svg class="ic"><use href="#i-user"/></svg></span><span class="acct-name">Войти</span></button>
     </header>
     <div id="view"></div>
@@ -2399,7 +2471,7 @@ function legacyNet(t) {
 async function resolveStream(t) {
   const n = t.net || legacyNet(t); if (!n) throw new Error('нет источника');
   if (n.src === 'archive') { if (!n.url) n.url = await archiveFile(n.item); return n.url; }
-  if (n.src === 'deezer') return n.url;
+  if (n.src === 'deezer' || n.src === 'url') return n.url;
   if (NET.mode === 'server') return n.src === 'audius' ? 'api/stream?src=audius&id=' + encodeURIComponent(n.raw) : `api/stream?src=${n.src}&url=` + encodeURIComponent(n.url);
   if (NET.mode === 'direct') return n.src === 'audius' ? `${await audiusHost()}/v1/tracks/${encodeURIComponent(n.raw)}/stream?app_name=KMP_PLAYER` : n.url;
   throw new Error('offline');
@@ -3109,12 +3181,12 @@ function meHTML() {
           <label>О себе<textarea name="bio" maxlength="160" placeholder="Что слушаешь, что любишь">${esc(P.bio || '')}</textarea></label>
           <button class="btn btn-accent press" type="submit" style="align-self:flex-start">Сохранить профиль</button>
         </form></div>
-      <div class="card-s"><h3>Моя активность</h3><button class="btn press" data-go="labs" style="align-self:flex-start">${ic('flask')}Лаборатория и статистика</button><p>Треков в библиотеке: <strong>${trackObjs(S.order).filter(t => t.kind !== 'demo').length}</strong>, в любимом: <strong>${S.liked.size}</strong>, плейлистов: <strong>${S.pls.length}</strong>, своих пресетов: <strong>${userPresets.length}</strong>.</p><button class="btn press" data-go="feed">${ic('feed')}Мои посты в ленте</button></div>
+      <div class="card-s"><h3>Моя активность</h3><button class="btn btn-accent press" data-act="recap" style="align-self:flex-start">${ic('sparkle')}Мой музыкальный итог</button><button class="btn press" data-go="labs" style="align-self:flex-start">${ic('flask')}Лаборатория и статистика</button><p>Треков в библиотеке: <strong>${trackObjs(S.order).filter(t => t.kind !== 'demo').length}</strong>, в любимом: <strong>${S.liked.size}</strong>, плейлистов: <strong>${S.pls.length}</strong>, своих пресетов: <strong>${userPresets.length}</strong>.</p><button class="btn press" data-go="feed">${ic('feed')}Мои посты в ленте</button></div>
       ${cloudCardHTML()}
       <div class="card-s wide danger-zone"><h3>Удаление аккаунта</h3><p>Удалит профиль, все треки из облака, посты, комментарии и лайки. Треки на этом устройстве останутся.</p><button class="btn btn-danger press" data-act="acct-delete" style="align-self:flex-start">${ic('trash')}<span>Удалить аккаунт</span></button></div>
     </div>`;
 }
-if (window.KMP_DEBUG) window.__kmp = { Cloud, T, S, E, synth, ensureBuffer, srcFor, statsAll, TK, trickOn, trickOff, applyFX, get VN() { return VN; }, get FX() { return FX; } };
+if (window.KMP_DEBUG) window.__kmp = { get ROOM() { return ROOM; }, Cloud, T, S, E, synth, ensureBuffer, srcFor, statsAll, TK, trickOn, trickOff, applyFX, get VN() { return VN; }, get FX() { return FX; } };
 /* ================= labs ================= */
 const LABS = [
   { k: 'oneplayer', t: 'Один плеер', d: 'Если KMP открыт в двух окнах, играет только одно. Защищает от двойного звука.' },
@@ -3573,6 +3645,7 @@ document.addEventListener('click', e => {
       case 'xy-hold': XY.hold = !XY.hold; a.setAttribute('aria-pressed', XY.hold); toast(XY.hold ? 'Звук остаётся там, где отпустишь палец' : 'После касания звук возвращается'); break;
       case 'dk-tone': S.keepTone = !S.keepTone; store.set('keepTone', S.keepTone); setRate(); syncDock(); toast(S.keepTone ? 'Скорость меняется, тон остаётся прежним' : 'Скорость меняет и тон, как на пластинке'); break;
       case 'dk-rec': recToggle(); break;
+      case 'recap': openRecap(30); break;
       case 'full-layout': setFullLayout(S.fullLayout === 'min' ? 'full' : 'min', true); break;
       case 'dock-open': { const f = $('#full'); f.classList.toggle('dock-open'); break; }
       case 'dk-pitch': { const v = Math.max(-6, Math.min(6, FX.pitch + +a.dataset.d)); if (v === FX.pitch) break; FX.pitch = v; fxChanged(); if (!TK.pitch) toast('Смена тональности не поддерживается в этом браузере'); break; }
@@ -4073,7 +4146,7 @@ function setArtMode(m) {
   const lb = $('#lyrBtn'); if (lb) lb.setAttribute('aria-pressed', m === 'lyrics');
   $$('[data-act=dk-vinyl]').forEach(b => b.setAttribute('aria-pressed', m === 'vinyl')); $$('[data-act=dk-xy]').forEach(b => b.setAttribute('aria-pressed', m === 'xy'));
   if (m === 'lyrics') loadLyrics(cur());
-  if (m === 'vinyl') { const t = cur(); if (t) $('#vnLabel').src = t.cover; sizeArtCanvas($('#vnRing')); }
+  if (m === 'vinyl') { const t = cur(); if (t) $('#vnLabel').src = t.cover; $('#fVinyl').classList.toggle('used', store.get('vnUsed', 0) >= 3); $('.vn-hint').textContent = IS_MOBILE ? 'Крути пластинку пальцем' : 'Крути пластинку мышкой'; sizeArtCanvas($('#vnRing')); }
   if (m === 'xy') sizeArtCanvas($('#xyCv'));
 }
 function sizeArtCanvas(cv) { if (!cv) return; const d = Math.min(devicePixelRatio || 1, 2), w = Math.round(cv.clientWidth * d), h = Math.round(cv.clientHeight * d); if (w && h && (cv.width !== w || cv.height !== h)) { cv.width = w; cv.height = h; } cv._d = d; }
@@ -4085,7 +4158,7 @@ function vnSetRate(r) { const d = E.deck; if (!d) return; setPitchPref(d.el, fal
 document.addEventListener('pointerdown', e => {
   const disc = e.target.closest && e.target.closest('#vnDisc'); if (!disc) return; e.preventDefault();
   try { disc.setPointerCapture(e.pointerId); } catch (er) {}
-  VN.drag = true; VN.lastA = vnAngle(e); VN.t = performance.now(); VN.vel = 0; $('#fVinyl').classList.add('drag');
+  VN.drag = true; $('#fVinyl').classList.add('used'); store.set('vnUsed', (store.get('vnUsed', 0) || 0) + 1); VN.lastA = vnAngle(e); VN.t = performance.now(); VN.vel = 0; $('#fVinyl').classList.add('drag');
 });
 document.addEventListener('pointermove', e => {
   if (!VN.drag) return; const a = vnAngle(e), now = performance.now(); let d = a - VN.lastA; if (d > 180) d -= 360; if (d < -180) d += 360;
@@ -4210,7 +4283,14 @@ function roomLeave(silent) {
 async function roomRef(t) {
   if (ROOM.refCache[t.id] && ROOM.refCache[t.id].exp > Date.now()) return ROOM.refCache[t.id].r;
   const r = trackRef(t); delete r.peaks; if (r.cover && !/^https?:/.test(r.cover)) delete r.cover;
-  if (r.src === 'local' || r.src === 'itunes') { try { const u = await srcFor(t); if (/^https?:/.test(u) && !/\/api\//.test(u)) { r.src = 'url'; r.url = u; } } catch (e) {} }
+  if (r.src === 'local' || r.src === 'itunes') {
+    try {
+      if (t.kind === 'upload' && !t.cloud && Cloud.user && t.blob) { toast(`Загружаю «${t.title}» в облако, чтобы друзья его услышали…`); await Cloud.uploadTrack(t); }
+      if (t.cloud && t.path && Cloud.user) { r.src = 'url'; r.url = await Cloud.signedUrl(t); }
+      else { const u = await srcFor(t); if (/^https?:/.test(u) && !/\/api\//.test(u)) { r.src = 'url'; r.url = u; } }
+    } catch (e) {}
+    if (r.src === 'local' && t.kind === 'upload' && !ROOM.warned) { ROOM.warned = true; toast(Cloud.user ? 'Этот трек не получилось отправить друзьям, попробуй ещё раз' : 'Войди в аккаунт, чтобы друзья в комнате слышали твои загруженные треки'); }
+  }
   ROOM.refCache[t.id] = { r, exp: Date.now() + 3 * 3600e3 }; return r;
 }
 async function roomSend(force) {
@@ -4353,7 +4433,7 @@ function historyHTML() {
   }
   if (!S.hist.length) body = `<div class="empty">${ic('history')}<h3>Здесь будет вся твоя история</h3><p>Каждый трек, который ты слушаешь дольше 20 секунд, попадёт сюда с датой и временем. Даже через год сможешь найти ту самую песню.</p></div>`;
   else if (!list.length) body = `<p class="net-note">Ничего не нашлось</p>`;
-  return headHTML('', 'История', S.hist.length ? `${S.hist.length} ${plural(S.hist.length, 'прослушивание', 'прослушивания', 'прослушиваний')} · ${totalMin >= 60 ? (totalMin / 60).toFixed(1).replace('.', ',') + ' ч' : totalMin + ' мин'}` : 'Всё, что ты слушал', '')
+  return headHTML('', 'История', S.hist.length ? `${S.hist.length} ${plural(S.hist.length, 'прослушивание', 'прослушивания', 'прослушиваний')} · ${totalMin >= 60 ? (totalMin / 60).toFixed(1).replace('.', ',') + ' ч' : totalMin + ' мин'}` : 'Всё, что ты слушал', S.hist.length ? `<button class="btn btn-accent press" data-act="recap">${ic('sparkle')}Мой итог</button>` : '')
     + (S.hist.length ? `<label class="h-search">${ic('search')}<input id="histQ" type="search" placeholder="Найти в истории: песня или артист" value="${esc(S.histQ)}" autocomplete="off"></label>` : '') + back + `<div class="h-list">${body}</div>`;
 }
 document.addEventListener('input', e => { if (e.target.id !== 'histQ') return; S.histQ = e.target.value; const pos = e.target.selectionStart; renderView(); const n = $('#histQ'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (er) {} } });
@@ -4371,6 +4451,106 @@ function setFullLayout(m, say) {
   if (say) toast(m === 'min' ? 'Минималистичный вид' : 'Полный вид: звук, эффекты и очередь');
   const rs = () => { sizeCanvas($('#fWave')); ['vnRing', 'xyCv'].forEach(id => sizeArtCanvas($('#' + id))); }; requestAnimationFrame(rs); setTimeout(rs, 350); setTimeout(rs, 900);
 }
+/* ================= recap: your music, any time (stories) ================= */
+const artistOf = a => String(a || 'Без артиста').split(/\s*(?:,|&|feat\.?|ft\.?| x | · )\s*/i)[0].trim() || 'Без артиста';
+function recapData(days) {
+  const now = Date.now(), from = days ? now - days * 864e5 : 0;
+  const H = [...S.hist, ...(HIST.cur && HIST.cur.s >= 20 ? [{ ...HIST.cur }] : [])].filter(h => h.at >= from);
+  if (!H.length) return null;
+  const tr = {}, ar = {}, hours = new Array(24).fill(0), dayS = {};
+  let total = 0;
+  for (const h of H) {
+    const s0 = h.s || 0; total += s0;
+    const k = (h.t + '|' + h.a).toLowerCase(); (tr[k] = tr[k] || { i: h.i, t: h.t, a: h.a, s: 0, n: 0 }).s += s0; tr[k].n++;
+    const an = artistOf(h.a), ak = an.toLowerCase(); (ar[ak] = ar[ak] || { a: an, s: 0, n: 0, i: h.i }).s += s0; ar[ak].n++;
+    const d = new Date(h.at); hours[d.getHours()] += s0; const dk = d.toDateString(); dayS[dk] = (dayS[dk] || 0) + s0;
+  }
+  const tracks = Object.values(tr).sort((a, b) => b.s - a.s), artists = Object.values(ar).sort((a, b) => b.s - a.s);
+  const best = Object.entries(dayS).sort((a, b) => b[1] - a[1])[0];
+  const buckets = [[0, 5, 'Ночная птица', 'Больше всего музыки у тебя звучит глубокой ночью, когда весь город спит'], [6, 11, 'Ранняя пташка', 'Ты включаешь музыку с самого утра и заряжаешь ею день'], [12, 17, 'Дневной слушатель', 'Музыка — твой саундтрек к делам, дороге и работе'], [18, 23, 'Вечерний мечтатель', 'Твоё время — вечер: свет выключен, звук погромче']];
+  const pers = buckets.map(([a, b, n, d]) => ({ n, d, v: hours.slice(a, b + 1).reduce((x, y) => x + y, 0) })).sort((a, b) => b.v - a.v)[0];
+  let streak = 0; for (let i = 0; i < 400; i++) { const dk = new Date(now - i * 864e5).toDateString(); if ((dayS[dk] || 0) >= 60) streak++; else if (i > 0) break; }
+  return { days, total, plays: H.length, tracks, artists, hours, best: best ? { d: new Date(best[0]), s: best[1] } : null, pers, streak, uniq: tracks.length };
+}
+const fmtMin = s => { const m = Math.round(s / 60); return m >= 600 ? Math.round(m / 60) + ' ч' : m >= 120 ? (m / 60).toFixed(1).replace('.', ',') + ' ч' : m + ' мин'; };
+const RC = { i: 0, n: 0, t: 0, paused: false, raf: 0, data: null, days: 30, start: 0, pal: null };
+async function openRecap(days) {
+  let d = recapData(days); if (!d && days) { d = recapData(0); days = 0; }
+  if (!d) { toast('Послушай немного музыки, и здесь появится твой итог'); return; }
+  RC.data = d; RC.days = days; RC.i = 0;
+  const top = d.tracks[0], tt = T.get(top.i);
+  RC.pal = tt ? await ensurePalette(tt) : PAL.cur; RC.cover = tt ? tt.cover : histCover(top);
+  let el = $('#recap'); if (!el) { el = document.createElement('div'); el.id = 'recap'; el.className = 'recap'; document.body.appendChild(el); }
+  const P = RC.pal; el.style.setProperty('--r0', rgbCss(P[0])); el.style.setProperty('--r1', rgbCss(P[1])); el.style.setProperty('--r2', rgbCss(P[2])); el.style.setProperty('--r3', rgbCss(P[3]));
+  const period = days === 7 ? 'неделю' : days === 30 ? 'месяц' : 'всё время', periodT = days === 7 ? 'Твоя неделя' : days === 30 ? 'Твой месяц' : 'Всё твоё время';
+  const cov = (h, cls = '') => `<img class="${cls}" src="${T.has(h.i) ? T.get(h.i).cover : histCover(h)}" alt="">`;
+  const films = Math.max(1, Math.round(d.total / 60 / 110));
+  const maxH = Math.max(...d.hours, 1);
+  const clock = `<svg class="rc-clock" viewBox="-110 -110 220 220">${d.hours.map((v, h) => { const a = (h / 24) * Math.PI * 2 - Math.PI / 2, r0 = 46, r1 = r0 + 8 + v / maxH * 52; return `<line x1="${(Math.cos(a) * r0).toFixed(1)}" y1="${(Math.sin(a) * r0).toFixed(1)}" x2="${(Math.cos(a) * r1).toFixed(1)}" y2="${(Math.sin(a) * r1).toFixed(1)}" style="--d:${h * 30}ms" />`; }).join('')}<circle r="30" class="rc-dot"/>${[0, 6, 12, 18].map(h => { const a = h / 24 * Math.PI * 2 - Math.PI / 2; return `<text class="rc-h" x="${(Math.cos(a) * 104).toFixed(0)}" y="${(Math.sin(a) * 104 + 4).toFixed(0)}">${h}</text>`; }).join('')}</svg>`;
+  const slides = [
+    `<div class="rc-s rc-intro"><p class="rc-k">KMP · итог</p><h2>${periodT}<br>в музыке</h2><p class="rc-sub">Листай вперёд</p><div class="rc-per">${[[7, 'Неделя'], [30, 'Месяц'], [0, 'Всё время']].map(([v, l]) => `<button data-rp="${v}" class="${v === days ? 'on' : ''}">${l}</button>`).join('')}</div></div>`,
+    `<div class="rc-s"><p class="rc-k">За ${period} ты слушал</p><h2 class="rc-big"><span data-count="${Math.round(d.total / 60)}">0</span></h2><p class="rc-unit">${plural(Math.round(d.total / 60), 'минуту', 'минуты', 'минут')} музыки</p><p class="rc-sub">Это как ${films} ${plural(films, 'полнометражный фильм', 'полнометражных фильма', 'полнометражных фильмов')}. ${d.plays} ${plural(d.plays, 'прослушивание', 'прослушивания', 'прослушиваний')}, ${d.uniq} ${plural(d.uniq, 'разный трек', 'разных трека', 'разных треков')}.</p></div>`,
+    `<div class="rc-s rc-top1"><p class="rc-k">Трек, который не отпускал</p>${cov(top, 'rc-cov')}<h2>${esc(top.t)}</h2><p class="rc-sub">${esc(top.a)} · ${top.n} ${plural(top.n, 'раз', 'раза', 'раз')} · ${fmtMin(top.s)}</p></div>`,
+    `<div class="rc-s"><p class="rc-k">Твой топ-5</p><ol class="rc-list">${d.tracks.slice(0, 5).map((h, i) => `<li style="--d:${i * 120}ms"><b>${i + 1}</b>${cov(h)}<span><em>${esc(h.t)}</em><small>${esc(h.a)}</small></span><i>${fmtMin(h.s)}</i></li>`).join('')}</ol></div>`,
+    `<div class="rc-s"><p class="rc-k">Артисты, которых ты слушал больше всех</p><ol class="rc-list rc-art">${d.artists.slice(0, 3).map((h, i) => `<li style="--d:${i * 160}ms"><b>${i + 1}</b>${cov(h)}<span><em>${esc(h.a)}</em><small>${fmtMin(h.s)} · ${h.n} ${plural(h.n, 'прослушивание', 'прослушивания', 'прослушиваний')}</small></span></li>`).join('')}</ol></div>`,
+    `<div class="rc-s"><p class="rc-k">Когда ты слушаешь</p>${clock}<h3>${d.pers.n}</h3><p class="rc-sub">${d.pers.d}</p></div>`,
+    `<div class="rc-s"><p class="rc-k">Самый музыкальный день</p>${d.best ? `<h2 class="rc-mid">${d.best.d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}</h2><p class="rc-unit">${d.best.d.toLocaleDateString('ru-RU', { weekday: 'long' })} · ${fmtMin(d.best.s)}</p>` : ''}${d.streak > 1 ? `<p class="rc-sub rc-streak">🔥 ${d.streak} ${plural(d.streak, 'день', 'дня', 'дней')} подряд с музыкой</p>` : ''}</div>`,
+    `<div class="rc-s rc-end"><p class="rc-k">Твой итог</p><div class="rc-card"><img src="${RC.cover}" alt=""><div><b>${fmtMin(d.total)}</b><small>музыки за ${period}</small></div><div><b>${esc(top.t)}</b><small>главный трек</small></div><div><b>${esc(d.artists[0].a)}</b><small>главный артист</small></div><div><b>${d.pers.n}</b><small>твой ритм</small></div></div><button class="btn btn-accent press rc-share" data-rc="share">${ic('story')}Поделиться итогом</button></div>`
+  ];
+  RC.n = slides.length;
+  el.innerHTML = `<div class="rc-bg"><i></i><i></i><i></i></div><div class="rc-bars">${slides.map(() => '<span><i></i></span>').join('')}</div><button class="rc-x press" data-rc="close" aria-label="Закрыть">${ic('close')}</button><div class="rc-stage">${slides.join('')}</div>`;
+  el.hidden = false; document.body.classList.add('noscroll');
+  rcShow(0);
+}
+function rcShow(i) {
+  const el = $('#recap'); if (!el) return; RC.i = Math.max(0, Math.min(RC.n - 1, i)); RC.start = performance.now(); RC.paused = false;
+  el.querySelectorAll('.rc-s').forEach((s, k) => s.classList.toggle('on', k === RC.i));
+  el.querySelectorAll('.rc-bars span').forEach((b, k) => { b.classList.toggle('done', k < RC.i); b.querySelector('i').style.transform = k < RC.i ? 'scaleX(1)' : 'scaleX(0)'; });
+  const cnt = el.querySelector('.rc-s.on [data-count]'); if (cnt) { const to = +cnt.dataset.count, t0 = performance.now(); const st = now => { const k = Math.min(1, (now - t0) / 1400), e = 1 - Math.pow(1 - k, 3); cnt.textContent = Math.round(to * e).toLocaleString('ru-RU'); if (k < 1 && cnt.isConnected) requestAnimationFrame(st); }; requestAnimationFrame(st); }
+  cancelAnimationFrame(RC.raf); const dur = RC.i === RC.n - 1 ? 0 : 6500;
+  const tick = now => { if (!$('#recap') || $('#recap').hidden) return; const bar = el.querySelectorAll('.rc-bars span i')[RC.i]; if (RC.paused) { RC.start += 16; } const k = dur ? Math.min(1, (now - RC.start) / dur) : 1; if (bar) bar.style.transform = `scaleX(${k})`; if (dur && k >= 1) { rcShow(RC.i + 1); return; } RC.raf = requestAnimationFrame(tick); };
+  RC.raf = requestAnimationFrame(tick);
+}
+function closeRecap() { const el = $('#recap'); if (el) { el.hidden = true; el.innerHTML = ''; } cancelAnimationFrame(RC.raf); if (!FULL) document.body.classList.remove('noscroll'); }
+document.addEventListener('click', e => {
+  const el = e.target.closest && e.target.closest('#recap'); if (!el) return;
+  const rp = e.target.closest('[data-rp]'); if (rp) { openRecap(+rp.dataset.rp); return; }
+  const b = e.target.closest('[data-rc]'); if (b) { if (b.dataset.rc === 'close') closeRecap(); else if (b.dataset.rc === 'share') shareRecap(); return; }
+  const x = e.clientX / innerWidth; if (x < .3) rcShow(RC.i - 1); else rcShow(RC.i + 1);
+});
+document.addEventListener('pointerdown', e => { if (e.target.closest && e.target.closest('#recap') && !e.target.closest('button')) RC.paused = true; });
+document.addEventListener('pointerup', () => { RC.paused = false; });
+document.addEventListener('keydown', e => { const el = $('#recap'); if (!el || el.hidden) return; if (e.key === 'Escape') { e.stopImmediatePropagation(); closeRecap(); } else if (e.key === 'ArrowRight') rcShow(RC.i + 1); else if (e.key === 'ArrowLeft') rcShow(RC.i - 1); }, true);
+async function shareRecap() {
+  const d = RC.data; if (!d) return; toast('Рисую итог…');
+  const W = 1080, H = 1920, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d'), P = RC.pal;
+  const fam = getComputedStyle(document.documentElement), fd = fam.getPropertyValue('--f-display') || 'system-ui', fb = fam.getPropertyValue('--f-body') || 'system-ui';
+  const g = x.createLinearGradient(0, 0, W * .7, H); g.addColorStop(0, rgbCss(P[2])); g.addColorStop(.5, rgbCss(P[1])); g.addColorStop(1, rgbCss(P[0])); x.fillStyle = g; x.fillRect(0, 0, W, H);
+  const rg = x.createRadialGradient(W * .8, H * .15, 0, W * .8, H * .15, 700); rg.addColorStop(0, rgbCss(P[3].map(v => Math.min(1, v * 1.2)))); rg.addColorStop(1, 'rgba(0,0,0,0)'); x.globalAlpha = .55; x.fillStyle = rg; x.fillRect(0, 0, W, H); x.globalAlpha = 1;
+  const sh = x.createLinearGradient(0, H * .35, 0, H); sh.addColorStop(0, 'rgba(0,0,0,0)'); sh.addColorStop(1, 'rgba(0,0,0,.5)'); x.fillStyle = sh; x.fillRect(0, 0, W, H);
+  const period = RC.days === 7 ? 'неделя' : RC.days === 30 ? 'месяц' : 'всё время';
+  x.fillStyle = 'rgba(255,255,255,.85)'; x.font = `700 38px ${fb}`; x.fillText('KMP · мой ' + (RC.days === 7 ? 'итог недели' : RC.days === 30 ? 'итог месяца' : 'музыкальный итог'), 80, 150);
+  x.fillStyle = '#fff'; x.font = `300 190px ${fd}`; x.fillText(Math.round(d.total / 60).toLocaleString('ru-RU'), 70, 400);
+  x.font = `600 46px ${fb}`; x.fillText(plural(Math.round(d.total / 60), 'минута', 'минуты', 'минут') + ' музыки · ' + period, 84, 470);
+  const img = await loadImg(RC.cover); const cs = 420, cy = 560;
+  x.save(); x.shadowColor = 'rgba(0,0,0,.45)'; x.shadowBlur = 80; x.shadowOffsetY = 30; rrect(x, 80, cy, cs, cs, 40); x.fillStyle = rgbCss(P[0]); x.fill(); x.restore();
+  if (img) { x.save(); rrect(x, 80, cy, cs, cs, 40); x.clip(); const k = Math.max(cs / img.width, cs / img.height); x.drawImage(img, 80 + (cs - img.width * k) / 2, cy + (cs - img.height * k) / 2, img.width * k, img.height * k); x.restore(); }
+  x.fillStyle = 'rgba(255,255,255,.7)'; x.font = `700 30px ${fb}`; x.fillText('ГЛАВНЫЙ ТРЕК', 540, cy + 60);
+  x.fillStyle = '#fff'; x.font = `600 54px ${fb}`; let yy = cy + 130; for (const l of wrapText(x, d.tracks[0].t, 460, 3)) { x.fillText(l, 540, yy); yy += 62; }
+  x.fillStyle = 'rgba(255,255,255,.75)'; x.font = `500 36px ${fb}`; x.fillText(wrapText(x, d.tracks[0].a, 460, 1)[0] || '', 540, yy + 4);
+  let y = cy + cs + 120; x.fillStyle = 'rgba(255,255,255,.7)'; x.font = `700 30px ${fb}`; x.fillText('ТОП-5 ТРЕКОВ', 80, y); y += 30;
+  d.tracks.slice(0, 5).forEach((h, i) => { y += 72; x.fillStyle = 'rgba(255,255,255,.55)'; x.font = `300 52px ${fd}`; x.fillText(String(i + 1), 80, y); x.fillStyle = '#fff'; x.font = `600 42px ${fb}`; x.fillText(wrapText(x, h.t, 700, 1)[0], 150, y - 6); x.fillStyle = 'rgba(255,255,255,.65)'; x.font = `500 28px ${fb}`; x.fillText(wrapText(x, h.a, 700, 1)[0] || '', 150, y + 28); x.textAlign = 'right'; x.fillText(fmtMin(h.s), W - 80, y - 6); x.textAlign = 'left'; y += 24; });
+  y += 80; x.fillStyle = 'rgba(255,255,255,.7)'; x.font = `700 30px ${fb}`; x.fillText('ТВОЙ РИТМ', 80, y); x.fillText('ГЛАВНЫЙ АРТИСТ', 560, y);
+  x.fillStyle = '#fff'; x.font = `600 46px ${fb}`; x.fillText(d.pers.n, 80, y + 62); x.fillText(wrapText(x, d.artists[0].a, 440, 1)[0], 560, y + 62);
+  x.fillStyle = '#fff'; x.beginPath(); x.arc(122, 1840, 42, 0, 7); x.fill(); x.fillStyle = '#131826'; x.font = `700 30px ${fd}`; x.textAlign = 'center'; x.fillText('kmp', 122, 1850); x.textAlign = 'left';
+  x.fillStyle = 'rgba(255,255,255,.9)'; x.font = `600 34px ${fb}`; x.fillText('Слушаю в KMP', 184, 1852);
+  let blob = null; try { blob = await new Promise(r => c.toBlob(r, 'image/png')); } catch (e) {}
+  if (!blob) { toast('Не получилось нарисовать итог'); return; }
+  const file = new File([blob], 'KMP - мой итог.png', { type: 'image/png' });
+  if (IS_MOBILE && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'Мой итог в KMP' }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 30000); toast('Итог сохранён в загрузки');
+}
+
 /* ================= story card ================= */
 const loadImg = src => new Promise(res => { if (!src) return res(null); const im = new Image(); if (/^https?:/.test(src) && !src.startsWith(location.origin)) im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
 function rrect(x, X, Y, W, H, R) { x.beginPath(); x.moveTo(X + R, Y); x.arcTo(X + W, Y, X + W, Y + H, R); x.arcTo(X + W, Y + H, X, Y + H, R); x.arcTo(X, Y + H, X, Y, R); x.arcTo(X, Y, X + W, Y, R); x.closePath(); }
