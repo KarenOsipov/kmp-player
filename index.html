@@ -511,18 +511,41 @@ img.ava{object-fit:cover}
 .pet-bod{transform-origin:100px 186px;transition:transform .09s linear}
 .pet-egg{animation:petWobble 3s ease-in-out infinite;transform-origin:100px 180px}
 @keyframes petWobble{0%,70%,100%{rotate:0deg}78%{rotate:-6deg}86%{rotate:5deg}93%{rotate:-2deg}}
+.pet-aura{animation:petAura 4s ease-in-out infinite;transform-origin:100px 112px}
+@keyframes petAura{50%{opacity:.7;scale:1.05}}
+.pet-halo{animation:petHalo 14s linear infinite;transform-origin:100px 108px}@keyframes petHalo{to{rotate:360deg}}
+.rar-legend .pet-bod{filter:drop-shadow(0 0 6px rgba(255,200,90,.7))}
+.pet-spark{animation:petSpark 2.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}@keyframes petSpark{0%,100%{opacity:0;scale:.4}50%{opacity:1;scale:1}}
 .mood-happy .pet-bod,.mood-sleep .pet-bod{animation:petBreath 3.4s ease-in-out infinite}
 @keyframes petBreath{50%{scale:1.03 .97}}
-.mood-dance .pet-arm-l{animation:petArmL .5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 0}
-.mood-dance .pet-arm-r{animation:petArmR .5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 0}
-@keyframes petArmL{to{rotate:28deg}}@keyframes petArmR{to{rotate:-28deg}}
+.mood-dance .pet-arm-l{animation:petArmL .5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 10%}
+.mood-dance .pet-arm-r{animation:petArmR .5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 10%}
+@keyframes petArmL{to{rotate:30deg}}@keyframes petArmR{to{rotate:-30deg}}
+.pet-wing{transform-box:fill-box;animation:petWing 1.6s ease-in-out infinite}.pet-wing-l{transform-origin:100% 40%}.pet-wing-r{transform-origin:0 40%;animation-delay:.1s}
+.mood-dance .pet-wing{animation-duration:.45s}
+@keyframes petWing{50%{scale:1 .8;rotate:-6deg}}
+.pet-tail{transform-box:fill-box;transform-origin:0 100%;animation:petTail 1.8s ease-in-out infinite}.mood-dance .pet-tail{animation-duration:.5s}@keyframes petTail{50%{rotate:-8deg}}
+.pet-tent path{animation:petTent 2.2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 0}@keyframes petTent{50%{rotate:8deg}}
+.sp-jelly .pet-bod,.sp-spirit .pet-bod{animation:petFloat 3s ease-in-out infinite}@keyframes petFloat{50%{translate:0 -8px}}
+.pet-flame{animation:petFlame .9s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}@keyframes petFlame{to{scale:1.15 1.3}}
+.pet-led{animation:petLed 1.2s steps(2) infinite}@keyframes petLed{50%{opacity:.35}}
 .pet-z{animation:petZ 2.4s ease-in-out infinite}@keyframes petZ{0%{opacity:0;translate:0 6px}40%{opacity:1}100%{opacity:0;translate:6px -12px}}
 .pet-bub{animation:petBub 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:0 100%}@keyframes petBub{50%{scale:1.08}}
 .mood-sick .pet-bod{animation:petShiver .25s linear infinite}@keyframes petShiver{50%{translate:1.5px 0}}
+.pet-fx>*{transform-box:fill-box;transform-origin:center}
+.fx-stars>*{animation:petSpark 2.6s ease-in-out infinite}
+.fx-embers>*{animation:petRise 2.8s ease-in infinite}
+.fx-bubbles>*{animation:petRise 3.6s ease-in-out infinite}
+.fx-notes>*{animation:petRise 3.2s ease-in-out infinite}
+.fx-bolts>*{animation:petFlash 1.6s steps(3) infinite}
+@keyframes petRise{0%{opacity:0;translate:0 10px}20%{opacity:1}100%{opacity:0;translate:6px -46px}}
+@keyframes petFlash{0%,60%,100%{opacity:0}70%,85%{opacity:1}}
+.pet-art.evo{animation:petEvo 1.2s var(--ease)}
+@keyframes petEvo{0%{filter:brightness(4) saturate(0);scale:.7}40%{filter:brightness(2.2)}100%{filter:none;scale:1}}
 .pet-home{display:grid;grid-template-columns:84px minmax(0,1fr) auto;align-items:center;gap:16px;width:100%;margin:22px 0 22px;padding:12px 18px 12px 12px;border-radius:24px;background:var(--surface);border:1px solid var(--line);text-align:left;box-shadow:var(--shadow)}
 .pet-home.hungry{border-color:color-mix(in srgb,#f5a524 60%,transparent);background:color-mix(in srgb,#f5a524 9%,var(--surface))}
 .pet-home.sick{border-color:color-mix(in srgb,#2fd36b 60%,transparent);background:color-mix(in srgb,#2fd36b 8%,var(--surface))}
-.ph-art{width:84px;height:84px;border-radius:20px;background:var(--hover);padding:4px}
+.ph-art{width:84px;height:84px;border-radius:20px;background:radial-gradient(circle at 50% 60%,var(--hover),transparent 75%),var(--hover);padding:4px}
 .ph-t{display:flex;flex-direction:column;gap:4px;min-width:0}
 .ph-t small{font-size:12px;font-weight:700;color:var(--muted)}.ph-t b{font:400 24px/1.1 var(--f-display)}
 .ph-t em{font-style:normal;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -531,27 +554,51 @@ img.ava{object-fit:cover}
 .hungry .ph-bar i,.pet-stage.hungry .pet-bar i{background:#f5a524}.sick .ph-bar i,.pet-stage.sick .pet-bar i{background:#2fd36b}
 .pet-home>.ic{width:20px;height:20px;color:var(--muted)}
 .pet-wrap{display:flex;flex-direction:column;gap:18px}
-.pet-stage{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:28px;align-items:center;padding:24px;border-radius:30px;background:radial-gradient(120% 100% at 20% 10%,color-mix(in srgb,var(--accent) 14%,var(--surface)),var(--surface));border:1px solid var(--line)}
-.pet-art{aspect-ratio:1;width:100%;max-width:340px;justify-self:center}
+.pet-stage{--elc:#7c5cff;position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:28px;align-items:center;padding:24px;border-radius:32px;background:radial-gradient(90% 90% at 22% 30%,color-mix(in srgb,var(--elc) 30%,transparent),transparent 70%),linear-gradient(160deg,color-mix(in srgb,var(--elc) 22%,#0f1220),#0f1220);color:#fff;border:1px solid rgba(255,255,255,.08)}
+.pet-stage .pet-k,.pet-stage .pet-task small,.pet-stage .pet-stats dt{color:rgba(255,255,255,.65)}
+.pet-stage .pet-bar,.pet-stage .pet-stats div{background:rgba(255,255,255,.1)}
+.pet-stage .pet-pill{background:rgba(255,255,255,.14)}
+.el-night{--elc:#6d5bff}.el-bass{--elc:#ff5a36}.el-speed{--elc:#ffd23f}.el-dream{--elc:#ff6fd8}.el-chill{--elc:#2fd39a}
+.pet-art{aspect-ratio:1;width:100%;max-width:360px;justify-self:center}
 .pet-info{display:flex;flex-direction:column;gap:12px;align-items:flex-start;min-width:0}
+.pet-badges{display:flex;gap:6px;flex-wrap:wrap}
+.pb{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:10px;background:rgba(255,255,255,.14);color:inherit;letter-spacing:.02em}
+.pb.el{background:color-mix(in srgb,var(--elc) 35%,transparent)}
+.pb.rr-rare{background:linear-gradient(135deg,#7fd3ff,#b18cff);color:#101326}
+.pb.rr-legend{background:linear-gradient(135deg,#ffe9a8,#ffb347,#ff7ad9);color:#2a1300;animation:legShine 3s linear infinite;background-size:200% 200%}
+@keyframes legShine{50%{background-position:100% 100%}}
 .pet-k{margin:0;font-size:13px;font-weight:700;color:var(--muted)}
 .pet-info h2{margin:0;font:300 clamp(40px,5vw,60px)/1 var(--f-display);letter-spacing:-.03em}
-.pet-name{font:inherit;color:inherit;border-bottom:2px dashed transparent;padding:0}.pet-name:hover{border-color:var(--line)}
+.pet-name{font:inherit;color:inherit;border-bottom:2px dashed transparent;padding:0}.pet-name:hover{border-color:rgba(255,255,255,.3)}
 .pet-pill{font-size:13px;font-weight:700;padding:5px 12px;border-radius:12px;background:var(--hover)}
-.pet-pill.hungry{background:#f5a524;color:#231600}.pet-pill.sick{background:#2fd36b;color:#06120a}
+.pet-pill.hungry{background:#f5a524!important;color:#231600}.pet-pill.sick{background:#2fd36b!important;color:#06120a}
 .pet-task{display:flex;flex-direction:column;gap:8px;width:100%;max-width:420px}.pet-task p{margin:0;font-size:15px;line-height:1.4}.pet-task small{font-size:12.5px;color:var(--muted);font-weight:600}
-.pet-live{display:flex;align-items:center;gap:8px;margin:0;font-size:14px;font-weight:600;color:var(--accent)}.pet-live .ic{width:18px;height:18px}
+.pet-live{display:flex;align-items:center;gap:8px;margin:0;font-size:14px;font-weight:600;color:var(--elc)}.pet-live .ic{width:18px;height:18px}
+.pet-affw{width:100%;max-width:420px;display:flex;flex-direction:column;gap:6px}
+.pet-aff{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.pa{display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:700;opacity:.6}.pa.on{opacity:1}
+.pa i{display:block;height:5px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}.pa b{display:block;height:100%;background:var(--elc);border-radius:3px}
 .pet-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 0;width:100%;max-width:420px}
 .pet-stats div{padding:10px 12px;border-radius:14px;background:var(--hover);min-width:0}.pet-stats dt{font-size:11.5px;font-weight:700;color:var(--muted)}.pet-stats dd{margin:2px 0 0;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pet-how{padding:18px 20px;border-radius:24px;background:var(--surface);border:1px solid var(--line)}
 .pet-how h3{margin:0 0 10px;font:400 20px var(--f-display)}
 .pet-how ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
 .pet-how li{display:flex;gap:10px;font-size:13.5px;line-height:1.45;color:var(--muted)}.pet-how li .ic{width:18px;height:18px;flex:none;color:var(--accent);margin-top:1px}
-.pet-col{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
-.pc-pet{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:20px;background:var(--surface);border:1px solid var(--line);min-width:0}
-.pc-pet span{aspect-ratio:1;border-radius:14px;background:var(--hover);padding:6px}
-.pc-pet b{font:400 20px var(--f-display);margin-top:4px}.pc-pet small{font-size:12px;color:var(--muted)}.pc-pet em{font-style:normal;font-size:12px;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@media (max-width:760px){#fFrom{visibility:hidden}.pet-stage{grid-template-columns:1fr;padding:18px;gap:14px}.pet-art{max-width:260px}.pet-home{grid-template-columns:72px minmax(0,1fr) auto;margin-top:18px}.ph-art{width:72px;height:72px}.pet-col{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pet-col{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.pc-pet{--elc:#7c5cff;display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:22px;background:linear-gradient(160deg,color-mix(in srgb,var(--elc) 20%,#141827),#141827);color:#fff;border:1px solid rgba(255,255,255,.08);min-width:0}
+.pc-pet.rar-legend{box-shadow:0 0 0 1.5px #ffc46b,0 10px 30px -12px #ffb347}
+.pc-pet>span{aspect-ratio:1;border-radius:16px;background:radial-gradient(circle at 50% 60%,color-mix(in srgb,var(--elc) 30%,transparent),transparent 70%);padding:6px}
+.pc-pet b{font:400 20px var(--f-display)}.pc-pet small{font-size:12px;opacity:.65}.pc-pet em{font-style:normal;font-size:12px;color:var(--elc);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:760px){.pet-stage{grid-template-columns:1fr;padding:18px;gap:14px}.pet-art{max-width:270px}.pet-home{grid-template-columns:72px minmax(0,1fr) auto;margin-top:18px}.ph-art{width:72px;height:72px}.pet-col{grid-template-columns:repeat(2,minmax(0,1fr))}.pet-aff{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.pet-dex{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.pd{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
+.pd span{width:100%;aspect-ratio:1}
+.pd:not(.got) .pet-svg{filter:brightness(0) opacity(.22)}
+.pd:not(.got) .pet-svg *{animation:none!important}
+.pd b{font-size:12px;font-weight:700;color:var(--muted)}.pd.got b{color:var(--ink)}
+.pet-gills path{animation:petTent 2s ease-in-out infinite;transform-box:fill-box;transform-origin:0 50%}
+.pet-rain path{animation:petRain 1.2s linear infinite}@keyframes petRain{from{opacity:1;translate:0 0}to{opacity:0;translate:0 14px}}
+.pet-ear-flop{transform-box:fill-box;transform-origin:0 100%;animation:petTail 2.4s ease-in-out infinite}
 /* recap stories */
 .recap{position:fixed;inset:0;z-index:99;color:#fff;overflow:hidden;background:var(--r0,#111);user-select:none;-webkit-user-select:none}
 .recap[hidden]{display:none}
@@ -3241,7 +3288,7 @@ function meHTML() {
       <div class="card-s wide danger-zone"><h3>Удаление аккаунта</h3><p>Удалит профиль, все треки из облака, посты, комментарии и лайки. Треки на этом устройстве останутся.</p><button class="btn btn-danger press" data-act="acct-delete" style="align-self:flex-start">${ic('trash')}<span>Удалить аккаунт</span></button></div>
     </div>`;
 }
-if (window.KMP_DEBUG) window.__kmp = { petTick: (...a) => petTick(...a), petCheck: () => petCheck(), get ROOM() { return ROOM; }, get TKo() { return TK.on; }, Cloud, T, S, E, synth, ensureBuffer, srcFor, statsAll, TK, trickOn, trickOff, applyFX, get VN() { return VN; }, get FX() { return FX; } };
+if (window.KMP_DEBUG) window.__kmp = { petSVG: (...a) => petSVG(...a), petTick: (...a) => petTick(...a), petCheck: () => petCheck(), get ROOM() { return ROOM; }, get TKo() { return TK.on; }, Cloud, T, S, E, synth, ensureBuffer, srcFor, statsAll, TK, trickOn, trickOff, applyFX, get VN() { return VN; }, get FX() { return FX; } };
 /* ================= labs ================= */
 const LABS = [
   { k: 'oneplayer', t: 'Один плеер', d: 'Если KMP открыт в двух окнах, играет только одно. Защищает от двойного звука.' },
@@ -4625,103 +4672,200 @@ async function shareRecap() {
 }
 
 /* ================= music pet ================= */
-const PET_NAMES = ['Бублик', 'Пиксель', 'Луна', 'Моти', 'Кекс', 'Эхо', 'Басик', 'Нота', 'Ритм', 'Фанк', 'Тоша', 'Зефир', 'Бит', 'Соня', 'Грув', 'Вайб', 'Лофи', 'Мятка', 'Тембр', 'Шорох'];
+const PET_NAMES = ['Бублик', 'Пиксель', 'Луна', 'Моти', 'Кекс', 'Эхо', 'Басик', 'Нота', 'Ритм', 'Фанк', 'Тоша', 'Зефир', 'Бит', 'Соня', 'Грув', 'Вайб', 'Лофи', 'Мятка', 'Тембр', 'Шорох', 'Искра', 'Комета', 'Дабби', 'Сэмпл'];
 const PET_ST = [{ n: 'Яйцо', at: 0 }, { n: 'Малыш', at: 10 }, { n: 'Ребёнок', at: 70 }, { n: 'Подросток', at: 250 }, { n: 'Взрослый', at: 600 }];
+const PET_SP = { blob: 'Блоб', fox: 'Лисёнок', drake: 'Дракончик', jelly: 'Медузка', bot: 'Робот', spirit: 'Дух', cat: 'Котёнок', bunny: 'Зайка', owl: 'Совёнок', axo: 'Аксолотль', shroom: 'Грибок', cloud: 'Облачко', star: 'Звёздочка', peng: 'Пингвинчик' };
+const PET_SPK = Object.keys(PET_SP);
+const PET_ACC = ['phones', 'cap', 'bow', 'glasses', 'scarf', 'flower', 'phones', 'star'];
+const FACE_DY = { shroom: 16, star: 8, cloud: 10, jelly: -2 };
+const PET_EL = {
+  night: { n: 'Ночь', d: 'Слушаешь ночью', h: 255, h2: 215, fx: 'stars' },
+  bass: { n: 'Бас', d: 'Любишь качающий низ', h: 12, h2: 38, fx: 'embers' },
+  speed: { n: 'Скорость', d: 'Ускоряешь треки', h: 52, h2: 188, fx: 'bolts' },
+  dream: { n: 'Мечта', d: 'Замедляешь, добавляешь зал', h: 318, h2: 270, fx: 'bubbles' },
+  chill: { n: 'Чилл', d: 'Слушаешь как есть', h: 152, h2: 110, fx: 'notes' }
+};
+const PET_RAR = { common: { n: 'Обычный' }, rare: { n: 'Редкий' }, legend: { n: 'Легендарный' } };
 const PET_MEAL_H = 6, PET_FEED = 15, PET_CURE = 30, PET_ADULT_DAYS = 4;
-function petNew() { const seed = Math.random().toString(36).slice(2, 9), now = Date.now(); return { id: 'p' + seed, seed, name: PET_NAMES[Math.random() * PET_NAMES.length | 0], born: now, stage: 0, grow: 0, hunger: { on: false, got: 0, since: 0 }, sick: { on: false, got: 0, since: 0 }, nextMeal: 0, lastCheck: now, fav: {}, u: now }; }
-S.pet = store.get('pet', null) || petNew(); S.petCol = store.get('petCol', []);
+function petNew() {
+  const seed = Math.random().toString(36).slice(2, 9), now = Date.now(), r = Math.random();
+  const sp = PET_SPK[Math.random() * PET_SPK.length | 0];
+  return { id: 'p' + seed, seed, sp, rar: r < .05 ? 'legend' : r < .25 ? 'rare' : 'common', name: PET_NAMES[Math.random() * PET_NAMES.length | 0], born: now, stage: 0, grow: 0, hunger: { on: false, got: 0, since: 0 }, sick: { on: false, got: 0, since: 0 }, nextMeal: 0, lastCheck: now, fav: {}, aff: {}, v: 0, u: now };
+}
+function petNorm(P) { if (!P) return P; if (!P.sp) P.sp = PET_SPK[rng('sp' + P.seed)() * 6 | 0]; if (!P.rar) P.rar = 'common'; if (!P.aff) P.aff = {}; if (P.v == null) P.v = Math.round((P.grow || 0) * 10); return P; }
+S.pet = petNorm(store.get('pet', null)) || petNew(); S.petCol = store.get('petCol', []).map(petNorm);
 let petSaveT = 0;
-function petSave(sync) { S.pet.u = Date.now(); store.set('pet', S.pet); if (sync) { clearTimeout(petSaveT); petSaveT = setTimeout(() => { try { Cloud.statsChanged(); } catch (e) {} }, 500); } petBadge(); }
+function petSave(sync) { S.pet.v = (S.pet.v || 0) + 1; S.pet.u = Date.now(); store.set('pet', S.pet); if (sync) { clearTimeout(petSaveT); petSaveT = setTimeout(() => { try { Cloud.statsChanged(); } catch (e) {} }, 500); } petBadge(); }
+function petEl(P = S.pet) { const a = P.aff || {}; let best = 'chill', bv = 0; for (const k in PET_EL) if ((a[k] || 0) > bv) { bv = a[k]; best = k; } return P.el || best; }
 function petMood(P = S.pet) { if (P.stage === 0) return 'egg'; if (P.sick.on) return 'sick'; if (P.hunger.on) return 'hungry'; if (E.playing) return 'dance'; const h = new Date().getHours(); return h < 7 ? 'sleep' : 'happy'; }
 function petDays(P = S.pet) { return Math.floor((Date.now() - P.born) / 864e5); }
 function petCheck() {
-  const P = S.pet, now = Date.now();
+  const P = S.pet, now = Date.now(); let ch = false;
   if (P.stage >= 1) {
-    if (!P.hunger.on && P.nextMeal && now >= P.nextMeal) { P.hunger = { on: true, got: 0, since: now }; toast(`${P.name} проголодался. Включи музыку на ${PET_FEED} минут, чтобы покормить`); }
+    if (!P.hunger.on && P.nextMeal && now >= P.nextMeal) { P.hunger = { on: true, got: 0, since: now }; ch = true; toast(`${P.name} проголодался. Включи музыку на ${PET_FEED} минут, чтобы покормить`); }
     const hrs = Math.min(48, Math.max(0, (now - P.lastCheck) / 3600e3));
-    if (!P.sick.on && hrs > 0) { let pr = 1 - Math.pow(1 - .02, hrs); if (P.hunger.on && now - P.hunger.since > 24 * 3600e3) pr = 1; if (Math.random() < pr) { P.sick = { on: true, got: 0, since: now }; toast(`${P.name} заболел. ${PET_CURE} минут музыки его вылечат`); } }
+    if (!P.sick.on && hrs > 0) { let pr = 1 - Math.pow(1 - .02, hrs); if (P.hunger.on && now - P.hunger.since > 24 * 3600e3) pr = 1; if (Math.random() < pr) { P.sick = { on: true, got: 0, since: now }; ch = true; toast(`${P.name} заболел. ${PET_CURE} минут музыки его вылечат`); } }
   }
-  P.lastCheck = now; petSave(); if (S.view === 'pet') paintPet();
+  P.lastCheck = now;
+  if (ch) petSave(true); else store.set('pet', P);
+  petBadge(); if (S.view === 'pet') paintPet();
+}
+function petStyleNow() {
+  const h = new Date().getHours();
+  if (h >= 22 || h < 5) return 'night';
+  if (FX.speed >= 106) return 'speed';
+  if (FX.bass >= 4 || FX.harm > 0 || ['bass', 'club', 'phonk', 'drift', 'car', 'sub', 'slowbass'].includes(FXP)) return 'bass';
+  if (FX.reverb >= 30 || FX.speed <= 92 || FX.chorus > 20 || FX.phaser > 20) return 'dream';
+  return 'chill';
 }
 function petTick(dt) {
   const P = S.pet, t = cur(), m = dt / 60; if (!t) return;
   const f = P.fav[t.id] || (P.fav[t.id] = { t: t.title, a: t.artist, s: 0 }); f.s += dt;
-  if (P.sick.on) { P.sick.got += m; if (P.sick.got >= PET_CURE) { P.sick = { on: false, got: 0, since: 0 }; toast(`${P.name} выздоровел! Музыка лечит`); } }
-  else if (P.hunger.on) { P.hunger.got += m; if (P.hunger.got >= PET_FEED) { P.hunger = { on: false, got: 0, since: 0 }; P.nextMeal = Date.now() + PET_MEAL_H * 3600e3; toast(`${P.name} наелся и доволен`); } }
+  if (P.stage >= 1) { const k = petStyleNow(); P.aff[k] = (P.aff[k] || 0) + dt * (k === 'chill' ? .6 : 1); }
+  let evt = null;
+  if (P.sick.on) { P.sick.got += m; if (P.sick.got >= PET_CURE) { P.sick = { on: false, got: 0, since: 0 }; toast(`${P.name} выздоровел! Музыка лечит`); evt = 1; } }
+  else if (P.hunger.on) { P.hunger.got += m; if (P.hunger.got >= PET_FEED) { P.hunger = { on: false, got: 0, since: 0 }; P.nextMeal = Date.now() + PET_MEAL_H * 3600e3; toast(`${P.name} наелся и доволен`); evt = 1; } }
   else {
     P.grow += m;
     const next = PET_ST[P.stage + 1];
     if (next && P.grow >= next.at && (P.stage + 1 < 4 || petDays(P) >= PET_ADULT_DAYS)) {
-      P.stage++;
+      P.stage++; evt = 'evo';
       if (P.stage === 1) { P.nextMeal = Date.now() + PET_MEAL_H * 3600e3; toast(`Из яйца вылупился ${P.name}! Загляни к нему`); }
-      else if (P.stage === 4) { petGraduate(); return; }
-      else toast(`${P.name} подрос: теперь ${PET_ST[P.stage].n.toLowerCase()}`);
+      else if (P.stage === 4) { P.el = petEl(P); petGraduate(); return; }
+      else { if (P.stage === 3) P.el = petEl(P); toast(`${P.name} эволюционировал: ${PET_ST[P.stage].n.toLowerCase()}${P.stage >= 2 ? ', стихия «' + PET_EL[petEl(P)].n + '»' : ''}`); }
     }
   }
-  PET_TICK.acc += dt; if (PET_TICK.acc > 10) { PET_TICK.acc = 0; for (const k of Object.keys(P.fav)) if (P.fav[k].s < 30 && Object.keys(P.fav).length > 30) delete P.fav[k]; petSave(true); if (S.view === 'pet') paintPet(); }
+  PET_TICK.acc += dt;
+  if (evt || PET_TICK.acc > 10) { PET_TICK.acc = 0; const ks = Object.keys(P.fav); if (ks.length > 30) ks.sort((a, b) => P.fav[a].s - P.fav[b].s).slice(0, ks.length - 30).forEach(k => delete P.fav[k]); petSave(true); if (S.view === 'pet') { if (evt === 'evo') { renderView(); petEvoFx(); } else paintPet(); } }
 }
 const PET_TICK = { acc: 0 };
-function petFav(P) { const f = Object.values(P.fav || {}).sort((a, b) => b.s - a.s)[0]; return f || null; }
+function petFav(P) { return Object.values(P.fav || {}).sort((a, b) => b.s - a.s)[0] || null; }
 function petGraduate() {
   const P = S.pet, f = petFav(P);
-  S.petCol.push({ id: P.id, seed: P.seed, name: P.name, born: P.born, grown: Date.now(), min: Math.round(P.grow), fav: f ? f.t + (f.a ? ' · ' + f.a : '') : '' });
+  S.petCol.push({ id: P.id, seed: P.seed, sp: P.sp, rar: P.rar, el: P.el || petEl(P), name: P.name, born: P.born, grown: Date.now(), min: Math.round(P.grow), fav: f ? f.t + (f.a ? ' · ' + f.a : '') : '' });
   store.set('petCol', S.petCol);
   const name = P.name; S.pet = petNew(); petSave(true);
   toast(`${name} вырос и переехал в коллекцию! Тебя ждёт новое яйцо`);
   if (S.view === 'pet') renderView();
   try { for (let i = 0; i < 6; i++) setTimeout(() => showReaction('🎉', name), i * 180); } catch (e) {}
 }
+const petScore = P => (P.stage || 0) * 1e6 + (P.grow || 0) * 10 + (P.v || 0) * 1e-3;
 function petMerge(d) {
   if (!d) return;
-  if (d.pet && d.pet.id && d.pet.u > (S.pet.u || 0)) { S.pet = d.pet; store.set('pet', S.pet); }
-  if (Array.isArray(d.petCol)) { const have = new Set(S.petCol.map(x => x.id)); let ch = false; for (const x of d.petCol) if (x && x.id && !have.has(x.id)) { S.petCol.push(x); ch = true; } if (ch) store.set('petCol', S.petCol); if (S.pet && S.petCol.some(x => x.id === S.pet.id)) { S.pet = petNew(); store.set('pet', S.pet); } }
+  if (Array.isArray(d.petCol)) { const have = new Set(S.petCol.map(x => x.id)); let ch = false; for (const x of d.petCol) if (x && x.id && !have.has(x.id)) { S.petCol.push(petNorm(x)); ch = true; } if (ch) store.set('petCol', S.petCol); }
+  const R0 = d.pet && d.pet.id ? petNorm(d.pet) : null, L = S.pet, done = new Set(S.petCol.map(x => x.id));
+  let pick = L;
+  if (done.has(L.id)) pick = R0 && !done.has(R0.id) ? R0 : petNew();
+  else if (R0 && !done.has(R0.id)) {
+    if (R0.id === L.id) pick = (R0.v || 0) > (L.v || 0) ? R0 : L;
+    else pick = petScore(R0) > petScore(L) ? R0 : L;
+  }
+  if (pick !== L) { S.pet = pick; store.set('pet', S.pet); if (S.view === 'pet') renderView(); }
   petBadge();
 }
 function petBadge() { const need = S.pet.stage >= 1 && (S.pet.hunger.on || S.pet.sick.on); $$('.pet-nav').forEach(b => b.classList.toggle('need', need)); const hc = $('#petHome'); if (hc) hc.outerHTML = petHomeHTML(); }
 setInterval(petCheck, 60000); setTimeout(petCheck, 1500); addEventListener('visibilitychange', () => { if (!document.hidden) petCheck(); });
 
-function petSVG(seed, stage, mood, prog = 0) {
-  const r = rng('pet' + seed), h1 = r() * 360 | 0, h2 = (h1 + 30 + r() * 90) % 360 | 0, ears = r() * 6 | 0, pat = r() * 4 | 0, shp = r() * 3 | 0, uid = 'g' + seed + stage;
-  const sick = mood === 'sick', sat = sick ? 22 : 68, c1 = `hsl(${sick ? 95 : h1} ${sat}% ${sick ? 72 : 70}%)`, c2 = `hsl(${sick ? 110 : h2} ${sat}% ${sick ? 55 : 52}%)`, dark = `hsl(${h1} 30% 18%)`;
-  const defs = `<defs><linearGradient id="${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient><radialGradient id="${uid}s" cx=".35" cy=".3" r=".7"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
-  if (stage === 0) {
-    const cracks = prog > .35 ? `<path d="M72 98l10 8 8-10 9 9 9-8 9 9 11-8" fill="none" stroke="${dark}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="${Math.min(1, (prog - .35) * 2.5)}"/>` : '';
-    return `<svg viewBox="0 0 200 200" class="pet-svg">${defs}<ellipse cx="100" cy="186" rx="44" ry="7" fill="rgba(0,0,0,.18)"/><g class="pet-bod pet-egg"><path d="M100 36c30 0 52 48 52 84 0 34-23 62-52 62s-52-28-52-62c0-36 22-84 52-84z" fill="url(#${uid})"/>${[[82, 80, 9], [118, 104, 7], [92, 140, 11], [124, 150, 6]].map(([x, y, rr]) => `<circle cx="${x}" cy="${y}" r="${rr}" fill="#fff" opacity=".35"/>`).join('')}<path d="M100 36c30 0 52 48 52 84 0 34-23 62-52 62s-52-28-52-62c0-36 22-84 52-84z" fill="url(#${uid}s)"/>${cracks}</g></svg>`;
-  }
-  const k = [0, .7, .82, .92, 1][stage], rx = [52, 46, 40][shp] * k, ry = [50, 56, 62][shp] * k, cy = 186 - ry - 6, top = cy - ry, eyeY = cy - ry * .18, ex = rx * .38, er = (stage === 1 ? 11 : 9) * (0.8 + k * .25);
-  const earCol = `url(#${uid})`;
-  const earsSvg = [
-    `<path d="M${100 - rx * .75} ${top + ry * .35} L${100 - rx * .55} ${top - ry * .35} L${100 - rx * .15} ${top + ry * .12}Z M${100 + rx * .75} ${top + ry * .35} L${100 + rx * .55} ${top - ry * .35} L${100 + rx * .15} ${top + ry * .12}Z" fill="${earCol}"/>`,
-    `<ellipse cx="${100 - rx * .35}" cy="${top - ry * .25}" rx="${rx * .16}" ry="${ry * .5}" fill="${earCol}"/><ellipse cx="${100 + rx * .35}" cy="${top - ry * .25}" rx="${rx * .16}" ry="${ry * .5}" fill="${earCol}"/>`,
-    `<path d="M${100 - rx * .25} ${top + 6} Q${100 - rx * .45} ${top - 22} ${100 - rx * .6} ${top - 28} M${100 + rx * .25} ${top + 6} Q${100 + rx * .45} ${top - 22} ${100 + rx * .6} ${top - 28}" stroke="${dark}" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="${100 - rx * .6}" cy="${top - 30}" r="6" fill="${c2}"/><circle cx="${100 + rx * .6}" cy="${top - 30}" r="6" fill="${c2}"/>`,
-    `<path d="M${100 - rx * .5} ${top + 10} q-6 -22 6 -30 q2 16 8 24Z M${100 + rx * .5} ${top + 10} q6 -22 -6 -30 q-2 16 -8 24Z" fill="#f7e7c9"/>`,
-    `<circle cx="${100 - rx * .62}" cy="${top + ry * .2}" r="${rx * .24}" fill="${earCol}"/><circle cx="${100 + rx * .62}" cy="${top + ry * .2}" r="${rx * .24}" fill="${earCol}"/>`,
-    `<path d="M100 ${top + 4} q-10 -20 4 -26 q-6 12 6 18" fill="${c2}"/>`][ears];
-  const patSvg = [``, [[-.35, .1, .12], [.3, .3, .1], [-.1, .5, .08]].map(([x, y, rr]) => `<circle cx="${100 + rx * x}" cy="${cy + ry * y}" r="${rx * rr}" fill="#fff" opacity=".28"/>`).join(''), `<ellipse cx="100" cy="${cy + ry * .38}" rx="${rx * .55}" ry="${ry * .45}" fill="#fff" opacity=".3"/>`, [0, 1, 2].map(i => `<path d="M${100 - rx * .8} ${cy + ry * (.15 + i * .22)} Q100 ${cy + ry * (.05 + i * .22)} ${100 + rx * .8} ${cy + ry * (.15 + i * .22)}" stroke="#fff" stroke-width="4" opacity=".22" fill="none"/>`).join('')][pat];
-  let eyes, mouth, extra = '';
-  const eL = 100 - ex, eR = 100 + ex, my = cy + ry * .22;
-  if (mood === 'dance' || mood === 'happy') {
-    eyes = mood === 'dance' ? `<path d="M${eL - er} ${eyeY + 2} q${er} -${er * 1.3} ${er * 2} 0 M${eR - er} ${eyeY + 2} q${er} -${er * 1.3} ${er * 2} 0" stroke="${dark}" stroke-width="4" fill="none" stroke-linecap="round"/>` : [eL, eR].map(x => `<circle cx="${x}" cy="${eyeY}" r="${er}" fill="${dark}"/><circle cx="${x + er * .35}" cy="${eyeY - er * .35}" r="${er * .35}" fill="#fff"/>`).join('');
-    mouth = `<path d="M${100 - 10 * k} ${my} q${10 * k} ${12 * k} ${20 * k} 0" stroke="${dark}" stroke-width="3.5" fill="${mood === 'dance' ? '#ff7b8a' : 'none'}" stroke-linecap="round"/>`;
-  } else if (mood === 'hungry') {
-    eyes = [eL, eR].map(x => `<circle cx="${x}" cy="${eyeY}" r="${er}" fill="${dark}"/><circle cx="${x + er * .2}" cy="${eyeY - er * .5}" r="${er * .38}" fill="#fff"/>`).join('');
-    mouth = `<ellipse cx="100" cy="${my + 4}" rx="${7 * k + 2}" ry="${9 * k + 2}" fill="${dark}"/><ellipse cx="100" cy="${my + 8}" rx="${5 * k}" ry="${4 * k}" fill="#ff7b8a"/>`;
-    extra = `<g class="pet-bub"><rect x="136" y="${Math.max(8, top - 38)}" width="54" height="34" rx="14" fill="#fff"/><path d="M146 ${Math.max(8, top - 38) + 32} l-8 10 16 -10z" fill="#fff"/><text x="163" y="${Math.max(8, top - 38) + 24}" text-anchor="middle" font-size="18">🎵</text></g>`;
-  } else if (mood === 'sick') {
-    eyes = [eL, eR].map(x => `<path d="M${x - er} ${eyeY} q${er} ${er * .8} ${er * 2} 0" stroke="${dark}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`).join('');
-    mouth = `<path d="M${100 - 10 * k} ${my + 4} q5 -5 10 0 q5 5 10 0" stroke="${dark}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-    extra = `<rect x="${100 + 6}" y="${my - 1}" width="${28 * k}" height="6" rx="3" fill="#fff" transform="rotate(18 ${106} ${my})"/><circle cx="${106 + 27 * k}" cy="${my + 9 * k}" r="4" fill="#ff4d4f"/><path d="M${100 + rx * .7} ${top + ry * .3} q6 10 0 14 q-6 -4 0 -14z" fill="#8fd3ff"/>`;
-  } else {
-    eyes = [eL, eR].map(x => `<path d="M${x - er} ${eyeY} h${er * 2}" stroke="${dark}" stroke-width="3.5" stroke-linecap="round"/>`).join('');
-    mouth = `<circle cx="100" cy="${my + 3}" r="${3.5 * k + 1}" fill="${dark}"/>`;
-    extra = `<text x="${100 + rx * .6}" y="${top - 6}" font-size="22" font-weight="700" fill="#fff" class="pet-z">z</text><text x="${100 + rx * .6 + 16}" y="${top - 22}" font-size="15" font-weight="700" fill="#fff" class="pet-z" style="animation-delay:.6s">z</text>`;
-  }
-  const phones = stage >= 3 ? `<path d="M${100 - rx * .92} ${cy - ry * .15} Q100 ${top - ry * .55} ${100 + rx * .92} ${cy - ry * .15}" stroke="#20242f" stroke-width="7" fill="none" stroke-linecap="round"/><rect x="${100 - rx - 9}" y="${cy - ry * .3}" width="18" height="${ry * .5}" rx="8" fill="#ff6a3c"/><rect x="${100 + rx - 9}" y="${cy - ry * .3}" width="18" height="${ry * .5}" rx="8" fill="#ff6a3c"/>` : '';
-  const arms = `<ellipse class="pet-arm pet-arm-l" cx="${100 - rx * .95}" cy="${cy + ry * .2}" rx="${9 * k + 3}" ry="${14 * k + 3}" fill="${c2}"/><ellipse class="pet-arm pet-arm-r" cx="${100 + rx * .95}" cy="${cy + ry * .2}" rx="${9 * k + 3}" ry="${14 * k + 3}" fill="${c2}"/>`;
-  const feet = `<ellipse cx="${100 - rx * .45}" cy="${cy + ry * .95}" rx="${13 * k + 3}" ry="${7 * k + 2}" fill="${c2}"/><ellipse cx="${100 + rx * .45}" cy="${cy + ry * .95}" rx="${13 * k + 3}" ry="${7 * k + 2}" fill="${c2}"/>`;
-  const crown = stage === 4 ? `<path d="M${100 - 16} ${top - 2} l6 -16 10 10 10 -10 6 16z" fill="#ffc83d" stroke="#e0a100" stroke-width="2" stroke-linejoin="round"/>` : '';
-  return `<svg viewBox="0 0 200 200" class="pet-svg mood-${mood}">${defs}<ellipse cx="100" cy="188" rx="${rx * .85}" ry="7" fill="rgba(0,0,0,.18)" class="pet-shadow"/><g class="pet-bod">${earsSvg}${arms}${feet}<ellipse cx="100" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#${uid})"/>${patSvg}<ellipse cx="100" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#${uid}s)"/><ellipse cx="${eL - er * .6}" cy="${my - 2}" rx="${8 * k}" ry="${5 * k}" fill="#ff8fa3" opacity=".6"/><ellipse cx="${eR + er * .6}" cy="${my - 2}" rx="${8 * k}" ry="${5 * k}" fill="#ff8fa3" opacity=".6"/>${eyes}${mouth}${phones}${crown}${extra}</g></svg>`;
+/* ---- pet art ---- */
+function petColors(P, stage) {
+  const r = rng('pc' + P.seed), h0 = r() * 360 | 0, el = PET_EL[P.el || petEl(P)], mix = stage >= 3 ? 1 : stage === 2 ? .55 : 0;
+  const lerpH = (a, b, k) => { let d = ((b - a + 540) % 360) - 180; return (a + d * k + 360) % 360 | 0; };
+  const h1 = lerpH(h0, el.h, mix), h2 = lerpH((h0 + 50) % 360, el.h2, mix);
+  return { h1, h2, el };
 }
+function petSVG(P, stageOv, moodOv, prog = 0) {
+  P = petNorm(P); const stage = stageOv == null ? P.stage : stageOv, mood = moodOv || petMood(P), uid = 'q' + P.seed + stage + mood.slice(0, 2);
+  const { h1, h2, el } = petColors(P, stage), sick = mood === 'sick';
+  const L = (h, s, l) => `hsl(${h} ${s}% ${l}%)`;
+  const c1 = sick ? L(95, 25, 74) : L(h1, 78, 72), c2 = sick ? L(110, 28, 52) : L(h2, 72, 52), c3 = sick ? L(110, 25, 40) : L(h2, 60, 38), ink = L(h1, 40, 14), glow = L(el.h, 95, 62);
+  const leg = P.rar === 'legend', rare = P.rar === 'rare';
+  let defs = `<defs><linearGradient id="${uid}b" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset=".65" stop-color="${c2}"/><stop offset="1" stop-color="${c3}"/></linearGradient><radialGradient id="${uid}h" cx=".32" cy=".26" r=".6"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".35" stop-color="#fff" stop-opacity=".12"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></radialGradient><radialGradient id="${uid}a" cx=".5" cy=".55" r=".5"><stop offset="0" stop-color="${glow}" stop-opacity="${stage >= 2 ? .55 : .3}"/><stop offset="1" stop-color="${glow}" stop-opacity="0"/></radialGradient><radialGradient id="${uid}i" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="${L(el.h, 90, 70)}"/><stop offset="1" stop-color="${ink}"/></radialGradient>${leg ? `<linearGradient id="${uid}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe9a8"/><stop offset=".5" stop-color="#ffb347"/><stop offset="1" stop-color="#ff7ad9"/></linearGradient>` : ''}</defs>`;
+  const aura = `<ellipse cx="100" cy="112" rx="96" ry="92" fill="url(#${uid}a)" class="pet-aura"/>`;
+  const shadow = `<ellipse cx="100" cy="189" rx="46" ry="7" fill="rgba(0,0,0,.2)" class="pet-shadow"/>`;
+  const halo = leg ? `<circle cx="100" cy="108" r="86" fill="none" stroke="url(#${uid}g)" stroke-width="2.5" stroke-dasharray="4 10" class="pet-halo"/>` : '';
+  const sparks = (leg || rare) && stage > 0 ? [[26, 60], [172, 52], [160, 150], [34, 146], [100, 20]].map(([x, y], i) => `<path d="M${x} ${y - 7}l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="${leg ? '#ffd76a' : '#fff'}" class="pet-spark" style="animation-delay:${i * .4}s"/>`).join('') : '';
+  const fx = stage >= 2 && !sick ? petParticles(el.fx, uid, glow) : '';
+  if (stage === 0) {
+    const eggFill = leg ? `url(#${uid}g)` : `url(#${uid}b)`;
+    const cracks = prog > .35 ? `<path d="M70 98l10 8 8-10 9 9 9-8 9 9 11-8" fill="none" stroke="${ink}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="${Math.min(1, (prog - .35) * 2.5).toFixed(2)}"/>` : '';
+    const dots = [[80, 78, 8], [120, 100, 6], [90, 140, 10], [126, 150, 5], [108, 62, 4]].map(([x, y, rr]) => `<circle cx="${x}" cy="${y}" r="${rr}" fill="#fff" opacity=".4"/>`).join('');
+    return `<svg viewBox="0 0 200 200" class="pet-svg rar-${P.rar}">${defs}${aura}${halo}${shadow}<g class="pet-bod pet-egg"><path d="M100 34c31 0 53 49 53 86 0 35-24 63-53 63s-53-28-53-63c0-37 22-86 53-86z" fill="${eggFill}"/>${dots}<path d="M100 34c31 0 53 49 53 86 0 35-24 63-53 63s-53-28-53-63c0-37 22-86 53-86z" fill="url(#${uid}h)"/>${cracks}</g>${sparks}</svg>`;
+  }
+  const k = [0, .72, .84, .94, 1][stage], face = petFace(P, mood, stage, k, ink, uid);
+  const body = PET_BODY[P.sp](k, `url(#${uid}b)`, c1, c2, c3, ink, uid, stage, mood);
+  const phones = stage >= 3 ? petAcc(P, k, leg, uid) : '';
+  const _old = false ? `<path d="M${100 - 44 * k} ${118 - 6 * k} Q100 ${62 - 20 * k} ${100 + 44 * k} ${118 - 6 * k}" stroke="#1d2130" stroke-width="7" fill="none" stroke-linecap="round"/><rect x="${100 - 52 * k}" y="${108 - 6 * k}" width="16" height="${30 * k}" rx="7" fill="#ff6a3c"/><rect x="${100 + 52 * k - 16}" y="${108 - 6 * k}" width="16" height="${30 * k}" rx="7" fill="#ff6a3c"/>` : '';
+  const crown = stage === 4 ? `<path d="M86 ${64 - 22 * k} l6 -16 8 9 8 -9 6 16z" fill="${leg ? `url(#${uid}g)` : '#ffc83d'}" stroke="#d99a00" stroke-width="2" stroke-linejoin="round"/>` : '';
+  return `<svg viewBox="0 0 200 200" class="pet-svg mood-${mood} sp-${P.sp} rar-${P.rar}">${defs}${aura}${halo}${fx}${shadow}<g class="pet-bod">${body}${face}${phones}${crown}</g>${sparks}</svg>`;
+}
+function petParticles(kind, uid, glow) {
+  const pts = [[30, 150], [168, 130], [50, 60], [150, 50], [100, 30], [178, 88], [22, 96]];
+  return `<g class="pet-fx fx-${kind}">` + pts.map(([x, y], i) => {
+    const st = `style="animation-delay:${(i * .55).toFixed(2)}s"`;
+    if (kind === 'stars') return `<path d="M${x} ${y - 5}l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z" fill="#fff" ${st}/>`;
+    if (kind === 'embers') return `<circle cx="${x}" cy="${y + 20}" r="${2 + i % 3}" fill="${i % 2 ? '#ffb347' : '#ff5a36'}" ${st}/>`;
+    if (kind === 'bolts') return `<path d="M${x} ${y - 8}l-5 9h5l-3 8 8-11h-5l3-6z" fill="#fff36b" ${st}/>`;
+    if (kind === 'bubbles') return `<circle cx="${x}" cy="${y + 10}" r="${3 + i % 3}" fill="none" stroke="#fff" stroke-width="1.5" ${st}/>`;
+    return `<text x="${x}" y="${y}" font-size="${12 + i % 3 * 3}" fill="${glow}" ${st}>${i % 2 ? '♪' : '♫'}</text>`;
+  }).join('') + '</g>';
+}
+function petAcc(P, k, leg, uid) {
+  const a = P.rar === 'legend' ? 'star' : PET_ACC[rng('acc' + P.seed)() * PET_ACC.length | 0], top = 118 - 58 * k, cy = 118 + (FACE_DY[P.sp] || 0);
+  if (P.sp === 'bot' && a === 'phones') return '';
+  if (a === 'phones') return `<path d="M${100 - 44 * k} ${cy - 6 * k} Q100 ${top - 22 * k} ${100 + 44 * k} ${cy - 6 * k}" stroke="#1d2130" stroke-width="7" fill="none" stroke-linecap="round"/><rect x="${100 - 52 * k}" y="${cy - 12 * k}" width="16" height="${30 * k}" rx="7" fill="#ff6a3c"/><rect x="${100 + 52 * k - 16}" y="${cy - 12 * k}" width="16" height="${30 * k}" rx="7" fill="#ff6a3c"/>`;
+  if (a === 'cap') return `<path d="M${100 - 34 * k} ${top + 16 * k} Q100 ${top - 22 * k} ${100 + 34 * k} ${top + 16 * k}Z" fill="#2f6bff"/><path d="M${100 + 18 * k} ${top + 14 * k} q${34 * k} -2 ${40 * k} ${8 * k} q-${22 * k} 4 -${40 * k} 0z" fill="#1f4fd1"/><circle cx="100" cy="${top - 4 * k}" r="4" fill="#fff"/>`;
+  if (a === 'bow') return `<g transform="translate(${100 + 26 * k} ${top + 8 * k}) rotate(18)"><path d="M0 0 l-16 -10 v20z M0 0 l16 -10 v20z" fill="#ff5c8a"/><circle r="5" fill="#ff8fb0"/></g>`;
+  if (a === 'glasses') return `<g fill="rgba(20,24,40,.85)" stroke="#111" stroke-width="2"><rect x="${100 - 32 * k}" y="${cy - 20 * k}" width="${26 * k}" height="${18 * k}" rx="${6 * k}"/><rect x="${100 + 6 * k}" y="${cy - 20 * k}" width="${26 * k}" height="${18 * k}" rx="${6 * k}"/></g><path d="M${100 - 6 * k} ${cy - 12 * k} h${12 * k}" stroke="#111" stroke-width="2"/><path d="M${100 - 28 * k} ${cy - 17 * k} l6 0" stroke="#fff" stroke-width="2" opacity=".7"/>`;
+  if (a === 'scarf') return `<path d="M${100 - 38 * k} ${cy + 24 * k} Q100 ${cy + 38 * k} ${100 + 38 * k} ${cy + 24 * k} l0 ${10 * k} Q100 ${cy + 50 * k} ${100 - 38 * k} ${cy + 34 * k}Z" fill="#e8453c"/><path d="M${100 + 18 * k} ${cy + 36 * k} l${8 * k} ${24 * k} l${10 * k} -2 l-${6 * k} -${24 * k}z" fill="#c8352d"/>`;
+  if (a === 'flower') return `<g transform="translate(${100 - 28 * k} ${top + 10 * k})">${[0, 72, 144, 216, 288].map(r => `<ellipse rx="5" ry="8" cy="-7" fill="#fff" transform="rotate(${r})"/>`).join('')}<circle r="4.5" fill="#ffc83d"/></g>`;
+  if (a === 'star') return `<path d="M${100 + 24 * k} ${top - 2} l3 7 7 1 -5 5 1 7 -6 -3 -6 3 1 -7 -5 -5 7 -1z" fill="${leg ? `url(#${uid}g)` : '#ffd76a'}" stroke="#e0a100" stroke-width="1.5" stroke-linejoin="round"/>`;
+  return '';
+}
+function petFace(P, mood, stage, k, ink, uid) {
+  const cy = 118 + (FACE_DY[P.sp] || 0), eyeY = cy - 10 * k, ex = 18 * k, er = (stage === 1 ? 11.5 : 10) * (.85 + k * .2), my = cy + 14 * k, eL = 100 - ex, eR = 100 + ex;
+  if (P.sp === 'bot') {
+    const scr = `<rect x="${100 - 34 * k}" y="${cy - 26 * k}" width="${68 * k}" height="${44 * k}" rx="${12 * k}" fill="#0e1320"/>`;
+    const led = '#6ff7ff';
+    const e = mood === 'dance' || mood === 'happy' ? `<path d="M${eL - 7} ${eyeY + 3} q7 -9 14 0 M${eR - 7} ${eyeY + 3} q7 -9 14 0" stroke="${led}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`
+      : mood === 'sleep' ? `<path d="M${eL - 7} ${eyeY} h14 M${eR - 7} ${eyeY} h14" stroke="${led}" stroke-width="3.5" stroke-linecap="round"/>`
+      : mood === 'sick' ? `<path d="M${eL - 6} ${eyeY - 6} l12 12 m0 -12 l-12 12 M${eR - 6} ${eyeY - 6} l12 12 m0 -12 l-12 12" stroke="#9dff8a" stroke-width="3" stroke-linecap="round"/>`
+      : `<rect x="${eL - 6}" y="${eyeY - 8}" width="12" height="16" rx="5" fill="${led}"/><rect x="${eR - 6}" y="${eyeY - 8}" width="12" height="16" rx="5" fill="${led}"/>`;
+    const m = mood === 'hungry' ? `<rect x="${100 - 8}" y="${my - 6}" width="16" height="10" rx="4" fill="${led}"/>` : mood === 'dance' ? `<path d="M${100 - 12} ${my - 5} q12 10 24 0" stroke="${led}" stroke-width="3" fill="none" stroke-linecap="round"/>` : `<path d="M${100 - 8} ${my - 3} h16" stroke="${led}" stroke-width="3" stroke-linecap="round"/>`;
+    return scr + e + m + petExtra(mood, cy, k, ink);
+  }
+  let eyes, mouth;
+  const shiny = x => `<ellipse cx="${x}" cy="${eyeY}" rx="${er}" ry="${er * 1.12}" fill="url(#${uid}i)"/><circle cx="${x + er * .38}" cy="${eyeY - er * .42}" r="${er * .36}" fill="#fff"/><circle cx="${x - er * .35}" cy="${eyeY + er * .4}" r="${er * .16}" fill="#fff" opacity=".8"/>`;
+  if (mood === 'dance') { eyes = `<path d="M${eL - er} ${eyeY + 3} q${er} -${er * 1.4} ${er * 2} 0 M${eR - er} ${eyeY + 3} q${er} -${er * 1.4} ${er * 2} 0" stroke="${ink}" stroke-width="4.2" fill="none" stroke-linecap="round"/>`; mouth = `<path d="M${100 - 11 * k} ${my - 2} q${11 * k} ${14 * k} ${22 * k} 0z" fill="#ff6f86" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>`; }
+  else if (mood === 'happy') { eyes = shiny(eL) + shiny(eR); mouth = `<path d="M${100 - 9 * k} ${my} q${9 * k} ${10 * k} ${18 * k} 0" stroke="${ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`; }
+  else if (mood === 'hungry') { eyes = shiny(eL) + shiny(eR); mouth = `<ellipse cx="100" cy="${my + 3}" rx="${7 * k + 2}" ry="${9 * k + 2}" fill="${ink}"/><ellipse cx="100" cy="${my + 7}" rx="${5 * k}" ry="${4 * k}" fill="#ff6f86"/>`; }
+  else if (mood === 'sick') { eyes = [eL, eR].map(x => `<path d="M${x - er} ${eyeY} q${er} ${er * .8} ${er * 2} 0" stroke="${ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`).join(''); mouth = `<path d="M${100 - 10 * k} ${my + 3} q5 -5 10 0 q5 5 10 0" stroke="${ink}" stroke-width="3" fill="none" stroke-linecap="round"/>`; }
+  else { eyes = [eL, eR].map(x => `<path d="M${x - er} ${eyeY + 1} q${er} ${er * .5} ${er * 2} 0" stroke="${ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`).join(''); mouth = `<ellipse cx="100" cy="${my + 2}" rx="${3.2 * k + 1}" ry="${2.6 * k + 1}" fill="${ink}"/>`; }
+  const blush = `<ellipse cx="${eL - er * .7}" cy="${my - 3}" rx="${8 * k}" ry="${4.5 * k}" fill="#ff8fa3" opacity=".55"/><ellipse cx="${eR + er * .7}" cy="${my - 3}" rx="${8 * k}" ry="${4.5 * k}" fill="#ff8fa3" opacity=".55"/>`;
+  return blush + eyes + mouth + petExtra(mood, cy, k, ink);
+}
+function petExtra(mood, cy, k, ink) {
+  if (mood === 'hungry') return `<g class="pet-bub"><rect x="138" y="22" width="52" height="34" rx="15" fill="#fff"/><path d="M148 54l-9 10 17-10z" fill="#fff"/><text x="164" y="46" text-anchor="middle" font-size="18">🎵</text></g>`;
+  if (mood === 'sick') return `<g><g transform="rotate(-24 ${100 - 26 * k} ${cy - 44 * k})"><rect x="${100 - 44 * k}" y="${cy - 50 * k}" width="${36 * k}" height="${13 * k}" rx="${6 * k}" fill="#f6d7b0"/><rect x="${100 - 32 * k}" y="${cy - 50 * k}" width="${12 * k}" height="${13 * k}" fill="#e9bf8f"/><circle cx="${100 - 29 * k}" cy="${cy - 45 * k}" r="1.3" fill="#c99a66"/><circle cx="${100 - 23 * k}" cy="${cy - 41 * k}" r="1.3" fill="#c99a66"/></g><path d="M${100 + 40 * k} ${cy - 40 * k} q6 10 0 14 q-6 -4 0 -14z" fill="#8fd3ff"/><text x="${100 + 46 * k}" y="${cy - 52 * k}" font-size="16" fill="#9dff8a" font-weight="700">~</text></g>`;
+  if (mood === 'sleep') return `<text x="${140}" y="${60}" font-size="22" font-weight="700" fill="#fff" class="pet-z">z</text><text x="${156}" y="${42}" font-size="15" font-weight="700" fill="#fff" class="pet-z" style="animation-delay:.6s">z</text>`;
+  return '';
+}
+const PET_BODY = {
+  blob: (k, f, c1, c2, c3, ink, uid) => `<ellipse class="pet-arm pet-arm-l" cx="${100 - 50 * k}" cy="${128}" rx="${9 * k + 3}" ry="${15 * k + 3}" fill="${c2}"/><ellipse class="pet-arm pet-arm-r" cx="${100 + 50 * k}" cy="${128}" rx="${9 * k + 3}" ry="${15 * k + 3}" fill="${c2}"/><ellipse cx="${100 - 22 * k}" cy="182" rx="${13 * k + 3}" ry="${7 * k + 2}" fill="${c3}"/><ellipse cx="${100 + 22 * k}" cy="182" rx="${13 * k + 3}" ry="${7 * k + 2}" fill="${c3}"/><path d="M100 ${60 + 20 * (1 - k)} c-20 -18 -8 -34 4 -30 c-10 10 6 18 -4 30z" fill="${c2}"/><ellipse cx="100" cy="${182 - 58 * k}" rx="${54 * k}" ry="${58 * k}" fill="${f}"/><ellipse cx="100" cy="${182 - 40 * k}" rx="${30 * k}" ry="${26 * k}" fill="#fff" opacity=".22"/><ellipse cx="100" cy="${182 - 58 * k}" rx="${54 * k}" ry="${58 * k}" fill="url(#${uid}h)"/>`,
+  fox: (k, f, c1, c2, c3, ink, uid) => `<path class="pet-tail" d="M${100 + 30 * k} ${170} C${100 + 90 * k} ${160} ${100 + 86 * k} ${90} ${100 + 60 * k} ${88} C${100 + 72 * k} ${120} ${100 + 50 * k} ${140} ${100 + 26 * k} ${150}Z" fill="${c2}"/><path d="M${100 + 62 * k} ${88} c10 4 14 14 10 24 c-6 -6 -12 -12 -10 -24z" fill="#fff" opacity=".9"/><path d="M${100 - 44 * k} ${118 - 30 * k} L${100 - 40 * k} ${118 - 88 * k} L${100 - 8 * k} ${118 - 44 * k}Z M${100 + 44 * k} ${118 - 30 * k} L${100 + 40 * k} ${118 - 88 * k} L${100 + 8 * k} ${118 - 44 * k}Z" fill="${c2}"/><path d="M${100 - 38 * k} ${118 - 40 * k} L${100 - 37 * k} ${118 - 72 * k} L${100 - 18 * k} ${118 - 46 * k}Z M${100 + 38 * k} ${118 - 40 * k} L${100 + 37 * k} ${118 - 72 * k} L${100 + 18 * k} ${118 - 46 * k}Z" fill="#ffc4d0"/><ellipse cx="${100 - 22 * k}" cy="183" rx="${12 * k + 3}" ry="${7 * k + 2}" fill="${c3}"/><ellipse cx="${100 + 22 * k}" cy="183" rx="${12 * k + 3}" ry="${7 * k + 2}" fill="${c3}"/><ellipse cx="100" cy="${184 - 56 * k}" rx="${50 * k}" ry="${56 * k}" fill="${f}"/><path d="M${100 - 34 * k} ${118 + 4 * k} Q100 ${118 + 44 * k} ${100 + 34 * k} ${118 + 4 * k} Q100 ${118 + 22 * k} ${100 - 34 * k} ${118 + 4 * k}Z" fill="#fff" opacity=".85"/><ellipse cx="100" cy="${184 - 56 * k}" rx="${50 * k}" ry="${56 * k}" fill="url(#${uid}h)"/>`,
+  drake: (k, f, c1, c2, c3, ink, uid) => `<path class="pet-wing pet-wing-l" d="M${100 - 36 * k} ${120} C${100 - 90 * k} ${80} ${100 - 96 * k} ${130} ${100 - 80 * k} ${150} C${100 - 70 * k} ${136} ${100 - 60 * k} ${142} ${100 - 40 * k} ${146}Z" fill="${c3}"/><path class="pet-wing pet-wing-r" d="M${100 + 36 * k} ${120} C${100 + 90 * k} ${80} ${100 + 96 * k} ${130} ${100 + 80 * k} ${150} C${100 + 70 * k} ${136} ${100 + 60 * k} ${142} ${100 + 40 * k} ${146}Z" fill="${c3}"/><path d="M${100 + 30 * k} 176 q${40 * k} 6 ${52 * k} -18 l6 -10 -2 14 q-12 20 -54 22z" fill="${c2}"/><path d="M${100 - 26 * k} ${118 - 40 * k} l-8 -${26 * k} 18 ${16 * k}z M${100 + 26 * k} ${118 - 40 * k} l8 -${26 * k} -18 ${16 * k}z" fill="#f4e3c1"/><ellipse cx="${100 - 22 * k}" cy="183" rx="${13 * k + 3}" ry="${7 * k + 2}" fill="${c3}"/><ellipse cx="${100 + 22 * k}" cy="183" rx="${13 * k + 3}" ry="${7 * k + 2}" fill="${c3}"/><ellipse cx="100" cy="${184 - 57 * k}" rx="${50 * k}" ry="${57 * k}" fill="${f}"/>${[0, 1, 2].map(i => `<path d="M${100 - 20 * k} ${140 + i * 13 * k} q${20 * k} ${6 * k} ${40 * k} 0" stroke="#fff" stroke-width="3" fill="none" opacity=".35"/>`).join('')}<path d="M100 ${184 - 114 * k} l-5 -10 5 3 5 -3z" fill="${c2}"/><ellipse cx="100" cy="${184 - 57 * k}" rx="${50 * k}" ry="${57 * k}" fill="url(#${uid}h)"/>`,
+  jelly: (k, f, c1, c2, c3, ink, uid) => `<g class="pet-tent">${[-30, -15, 0, 15, 30].map((x, i) => `<path d="M${100 + x * k} ${140} q${-8 + (i % 2) * 16} 18 0 32 q${8 - (i % 2) * 16} 10 0 20" stroke="${c2}" stroke-width="${6 * k}" fill="none" stroke-linecap="round" opacity=".85" style="animation-delay:${i * .15}s"/>`).join('')}</g><path d="M${100 - 56 * k} ${140} C${100 - 58 * k} ${140 - 100 * k} ${100 + 58 * k} ${140 - 100 * k} ${100 + 56 * k} ${140} Q${100 + 42 * k} ${150} ${100 + 28 * k} ${142} Q${100 + 14 * k} ${152} 100 ${142} Q${100 - 14 * k} ${152} ${100 - 28 * k} ${142} Q${100 - 42 * k} ${150} ${100 - 56 * k} ${140}Z" fill="${f}" opacity=".92"/><path d="M${100 - 56 * k} ${140} C${100 - 58 * k} ${140 - 100 * k} ${100 + 58 * k} ${140 - 100 * k} ${100 + 56 * k} ${140}Z" fill="url(#${uid}h)"/>${[[-26, 80], [22, 72], [34, 108]].map(([x, y]) => `<circle cx="${100 + x * k}" cy="${140 - (140 - y) * k}" r="${4 * k}" fill="#fff" opacity=".45"/>`).join('')}`,
+  bot: (k, f, c1, c2, c3, ink, uid) => `<path d="M100 ${118 - 60 * k} v-${18 * k}" stroke="${c3}" stroke-width="4" stroke-linecap="round"/><circle cx="100" cy="${118 - 82 * k}" r="${7 * k}" fill="#ff6a3c" class="pet-led"/><rect class="pet-arm pet-arm-l" x="${100 - 66 * k}" y="${120}" width="${16 * k}" height="${34 * k}" rx="${8 * k}" fill="${c3}"/><rect class="pet-arm pet-arm-r" x="${100 + 50 * k}" y="${120}" width="${16 * k}" height="${34 * k}" rx="${8 * k}" fill="${c3}"/><rect x="${100 - 30 * k}" y="${176}" width="${22 * k}" height="10" rx="4" fill="${c3}"/><rect x="${100 + 8 * k}" y="${176}" width="${22 * k}" height="10" rx="4" fill="${c3}"/><rect x="${100 - 52 * k}" y="${184 - 118 * k}" width="${104 * k}" height="${112 * k}" rx="${26 * k}" fill="${f}"/><rect x="${100 - 52 * k}" y="${184 - 118 * k}" width="${104 * k}" height="${112 * k}" rx="${26 * k}" fill="url(#${uid}h)"/><circle cx="${100 - 40 * k}" cy="${184 - 104 * k}" r="3" fill="${c3}"/><circle cx="${100 + 40 * k}" cy="${184 - 104 * k}" r="3" fill="${c3}"/><rect x="${100 - 20 * k}" y="${160}" width="${40 * k}" height="${10 * k}" rx="4" fill="#0e1320" opacity=".35"/>`,
+  cat: (k, f, c1, c2, c3, ink, uid) => `<path class="pet-tail" d="M${100 + 40 * k} 172 c${36 * k} -4 ${44 * k} -40 ${26 * k} -58 c-6 -6 -14 0 -8 6 c10 12 2 36 -22 42z" fill="${c2}"/><path d="M${100 - 46 * k} ${118 - 22 * k} Q${100 - 50 * k} ${118 - 78 * k} ${100 - 14 * k} ${118 - 48 * k}Z M${100 + 46 * k} ${118 - 22 * k} Q${100 + 50 * k} ${118 - 78 * k} ${100 + 14 * k} ${118 - 48 * k}Z" fill="${c2}"/><path d="M${100 - 40 * k} ${118 - 32 * k} Q${100 - 42 * k} ${118 - 62 * k} ${100 - 22 * k} ${118 - 46 * k}Z M${100 + 40 * k} ${118 - 32 * k} Q${100 + 42 * k} ${118 - 62 * k} ${100 + 22 * k} ${118 - 46 * k}Z" fill="#ffc4d0"/><ellipse cx="${100 - 22 * k}" cy="183" rx="${12 * k + 3}" ry="${7 * k + 2}" fill="#fff" opacity=".9"/><ellipse cx="${100 + 22 * k}" cy="183" rx="${12 * k + 3}" ry="${7 * k + 2}" fill="#fff" opacity=".9"/><ellipse cx="100" cy="${184 - 56 * k}" rx="${52 * k}" ry="${56 * k}" fill="${f}"/>${[0, 1, 2].map(i => `<path d="M${100 - 6 + i * 6} ${184 - 108 * k} v${10 * k}" stroke="${c3}" stroke-width="3" stroke-linecap="round" opacity=".6"/>`).join('')}<path d="M${100 - 52 * k} ${126} h-14 M${100 - 52 * k} ${132} l-13 4 M${100 + 52 * k} ${126} h14 M${100 + 52 * k} ${132} l13 4" stroke="${ink}" stroke-width="1.6" stroke-linecap="round" opacity=".6"/><ellipse cx="100" cy="${184 - 56 * k}" rx="${52 * k}" ry="${56 * k}" fill="url(#${uid}h)"/>`,
+  bunny: (k, f, c1, c2, c3, ink, uid) => `<ellipse cx="${100 - 18 * k}" cy="${118 - 74 * k}" rx="${11 * k}" ry="${36 * k}" fill="${f}" transform="rotate(-10 ${100 - 18 * k} ${118 - 40 * k})"/><ellipse cx="${100 - 18 * k}" cy="${118 - 74 * k}" rx="${5 * k}" ry="${26 * k}" fill="#ffc4d0" transform="rotate(-10 ${100 - 18 * k} ${118 - 40 * k})"/><g class="pet-ear-flop"><ellipse cx="${100 + 30 * k}" cy="${118 - 62 * k}" rx="${11 * k}" ry="${34 * k}" fill="${f}" transform="rotate(38 ${100 + 18 * k} ${118 - 40 * k})"/><ellipse cx="${100 + 30 * k}" cy="${118 - 62 * k}" rx="${5 * k}" ry="${24 * k}" fill="#ffc4d0" transform="rotate(38 ${100 + 18 * k} ${118 - 40 * k})"/></g><circle cx="${100 + 48 * k}" cy="164" r="${10 * k}" fill="#fff"/><ellipse cx="${100 - 22 * k}" cy="183" rx="${14 * k + 3}" ry="${7 * k + 2}" fill="${c2}"/><ellipse cx="${100 + 22 * k}" cy="183" rx="${14 * k + 3}" ry="${7 * k + 2}" fill="${c2}"/><ellipse cx="100" cy="${184 - 55 * k}" rx="${50 * k}" ry="${55 * k}" fill="${f}"/><ellipse cx="100" cy="${184 - 34 * k}" rx="${28 * k}" ry="${24 * k}" fill="#fff" opacity=".3"/><rect x="${100 - 5 * k}" y="${118 + 20 * k}" width="${10 * k}" height="${8 * k}" rx="2" fill="#fff" stroke="${ink}" stroke-width="1.2"/><ellipse cx="100" cy="${184 - 55 * k}" rx="${50 * k}" ry="${55 * k}" fill="url(#${uid}h)"/>`,
+  owl: (k, f, c1, c2, c3, ink, uid) => `<path d="M${100 - 40 * k} ${118 - 44 * k} l-10 -${24 * k} ${24 * k} ${12 * k}z M${100 + 40 * k} ${118 - 44 * k} l10 -${24 * k} -${24 * k} ${12 * k}z" fill="${c3}"/><path class="pet-arm pet-arm-l" d="M${100 - 48 * k} ${110} q-${22 * k} ${30 * k} -2 ${56 * k} q${8 * k} -${26 * k} 2 -${56 * k}z" fill="${c3}"/><path class="pet-arm pet-arm-r" d="M${100 + 48 * k} ${110} q${22 * k} ${30 * k} 2 ${56 * k} q-${8 * k} -${26 * k} -2 -${56 * k}z" fill="${c3}"/><path d="M${100 - 16 * k} 184 l4 -8 4 8 4 -8 4 8 M${100 + 4 * k} 184 l4 -8 4 8 4 -8 4 8" stroke="#ffb13d" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="100" cy="${184 - 58 * k}" rx="${50 * k}" ry="${58 * k}" fill="${f}"/>${[0, 1, 2].map(i => `<path d="M${100 - 14 * k + i * 14 * k - 6} ${150 + (i % 2) * 8} q6 6 12 0" stroke="#fff" stroke-width="2.5" fill="none" opacity=".45"/>`).join('')}<circle cx="${100 - 18 * k}" cy="${108 - 2 * k}" r="${17 * k}" fill="#fff" opacity=".85"/><circle cx="${100 + 18 * k}" cy="${108 - 2 * k}" r="${17 * k}" fill="#fff" opacity=".85"/><path d="M100 ${118 + 2 * k} l-5 -6 h10z" fill="#ffb13d"/><ellipse cx="100" cy="${184 - 58 * k}" rx="${50 * k}" ry="${58 * k}" fill="url(#${uid}h)"/>`,
+  axo: (k, f, c1, c2, c3, ink, uid) => `<g class="pet-gills">${[-1, 1].map(sd => [0, 1, 2].map(i => `<path d="M${100 + sd * 44 * k} ${104 + i * 12 * k} q${sd * 22 * k} ${-10 + i * 6} ${sd * 30 * k} ${-4 + i * 8}" stroke="#ff7bb0" stroke-width="${7 * k}" fill="none" stroke-linecap="round"/>`).join('')).join('')}</g><path class="pet-tail" d="M${100 + 36 * k} 170 q${40 * k} 0 ${52 * k} -18 q-${10 * k} ${24 * k} -${50 * k} 28z" fill="${c2}"/><ellipse cx="${100 - 22 * k}" cy="183" rx="${12 * k + 3}" ry="${6 * k + 2}" fill="${c2}"/><ellipse cx="${100 + 22 * k}" cy="183" rx="${12 * k + 3}" ry="${6 * k + 2}" fill="${c2}"/><ellipse cx="100" cy="${184 - 52 * k}" rx="${58 * k}" ry="${52 * k}" fill="${f}"/><ellipse cx="100" cy="${184 - 52 * k}" rx="${58 * k}" ry="${52 * k}" fill="url(#${uid}h)"/>`,
+  shroom: (k, f, c1, c2, c3, ink, uid) => `<ellipse cx="${100 - 18 * k}" cy="183" rx="${12 * k + 2}" ry="${6 * k + 2}" fill="#e9d6bd"/><ellipse cx="${100 + 18 * k}" cy="183" rx="${12 * k + 2}" ry="${6 * k + 2}" fill="#e9d6bd"/><rect x="${100 - 34 * k}" y="${184 - 72 * k}" width="${68 * k}" height="${70 * k}" rx="${26 * k}" fill="#fbead3"/><path d="M${100 - 70 * k} ${184 - 70 * k} Q${100 - 66 * k} ${184 - 150 * k} 100 ${184 - 152 * k} Q${100 + 66 * k} ${184 - 150 * k} ${100 + 70 * k} ${184 - 70 * k} Q100 ${184 - 58 * k} ${100 - 70 * k} ${184 - 70 * k}Z" fill="${f}"/>${[[-40, 100], [8, 88], [36, 110], [-12, 118]].map(([x, y]) => `<circle cx="${100 + x * k}" cy="${184 - y * k}" r="${(8 + Math.abs(x) % 5) * k}" fill="#fff" opacity=".9"/>`).join('')}<path d="M${100 - 70 * k} ${184 - 70 * k} Q${100 - 66 * k} ${184 - 150 * k} 100 ${184 - 152 * k} Q${100 + 66 * k} ${184 - 150 * k} ${100 + 70 * k} ${184 - 70 * k}Z" fill="url(#${uid}h)"/>`,
+  cloud: (k, f, c1, c2, c3, ink, uid) => `<g class="pet-rain">${[-20, 0, 20].map((x, i) => `<path d="M${100 + x * k} 176 q3 6 0 9 q-3 -3 0 -9z" fill="#8fd3ff" style="animation-delay:${i * .3}s"/>`).join('')}</g><g fill="#f4f7ff"><circle cx="${100 - 42 * k}" cy="${140 - 4 * k}" r="${24 * k}"/><circle cx="${100 + 42 * k}" cy="${140 - 4 * k}" r="${24 * k}"/><circle cx="${100 - 18 * k}" cy="${140 - 26 * k}" r="${32 * k}"/><circle cx="${100 + 20 * k}" cy="${140 - 30 * k}" r="${36 * k}"/><rect x="${100 - 66 * k}" y="${140 - 4 * k}" width="${132 * k}" height="${26 * k}" rx="${13 * k}"/></g><rect x="${100 - 66 * k}" y="${140 + 6 * k}" width="${132 * k}" height="${16 * k}" rx="${8 * k}" fill="${c1}" opacity=".55"/><circle cx="${100 - 30 * k}" cy="${140 - 40 * k}" r="${10 * k}" fill="#fff" opacity=".9"/>`,
+  star: (k, f, c1, c2, c3, ink, uid) => { const pts = []; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = (i % 2 ? 34 : 70) * k; pts.push([100 + Math.cos(a) * rr, 124 + Math.sin(a) * rr + 4]); } return `<path d="M${pts.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L')}Z" fill="${f}" stroke="${c3}" stroke-width="${6 * k}" stroke-linejoin="round"/><path d="M${pts.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' L')}Z" fill="url(#${uid}h)"/>`; },
+  peng: (k, f, c1, c2, c3, ink, uid) => `<path class="pet-arm pet-arm-l" d="M${100 - 44 * k} 118 q-${20 * k} ${26 * k} -${8 * k} ${48 * k} q${10 * k} -${16 * k} ${8 * k} -${48 * k}z" fill="#232a3d"/><path class="pet-arm pet-arm-r" d="M${100 + 44 * k} 118 q${20 * k} ${26 * k} ${8 * k} ${48 * k} q-${10 * k} -${16 * k} -${8 * k} -${48 * k}z" fill="#232a3d"/><ellipse cx="${100 - 16 * k}" cy="184" rx="${12 * k + 2}" ry="${5 * k + 2}" fill="#ffb13d"/><ellipse cx="${100 + 16 * k}" cy="184" rx="${12 * k + 2}" ry="${5 * k + 2}" fill="#ffb13d"/><ellipse cx="100" cy="${184 - 60 * k}" rx="${46 * k}" ry="${60 * k}" fill="#232a3d"/><ellipse cx="100" cy="${184 - 50 * k}" rx="${36 * k}" ry="${46 * k}" fill="#f5f7ff"/><path d="M${100 - 40 * k} ${184 - 92 * k} Q100 ${184 - 128 * k} ${100 + 40 * k} ${184 - 92 * k}" stroke="${f}" stroke-width="${8 * k}" fill="none" stroke-linecap="round"/><path d="M100 ${118 + 6 * k} l-6 -5 h12z" fill="#ffb13d"/><ellipse cx="100" cy="${184 - 60 * k}" rx="${46 * k}" ry="${60 * k}" fill="url(#${uid}h)"/>`,
+  spirit: (k, f, c1, c2, c3, ink, uid) => `<path d="M100 ${184 - 128 * k} c-10 12 -2 20 0 26 c4 -8 14 -14 0 -26z" fill="#fff6a8" class="pet-flame"/><path class="pet-ghost" d="M${100 - 50 * k} ${120} C${100 - 52 * k} ${120 - 72 * k} ${100 + 52 * k} ${120 - 72 * k} ${100 + 50 * k} ${120} L${100 + 50 * k} ${168} Q${100 + 38 * k} ${184} ${100 + 26 * k} ${170} Q${100 + 13 * k} ${186} 100 ${170} Q${100 - 13 * k} ${186} ${100 - 26 * k} ${170} Q${100 - 38 * k} ${184} ${100 - 50 * k} ${168}Z" fill="${f}" opacity=".9"/><path d="M${100 - 50 * k} ${120} C${100 - 52 * k} ${120 - 72 * k} ${100 + 52 * k} ${120 - 72 * k} ${100 + 50 * k} ${120}Z" fill="url(#${uid}h)"/><ellipse class="pet-arm pet-arm-l" cx="${100 - 54 * k}" cy="130" rx="${8 * k + 2}" ry="${13 * k + 2}" fill="${c2}" opacity=".9"/><ellipse class="pet-arm pet-arm-r" cx="${100 + 54 * k}" cy="130" rx="${8 * k + 2}" ry="${13 * k + 2}" fill="${c2}" opacity=".9"/>`
+};
+
 function petStatus(P = S.pet) {
   const mood = petMood(P);
   if (mood === 'egg') { const need = PET_ST[1].at - P.grow; return { mood, label: 'греется', task: `Слушай музыку, и из яйца кто-то вылупится`, cur: P.grow, max: PET_ST[1].at, left: `ещё ${Math.max(1, Math.ceil(need))} мин музыки`, tone: 'grow' }; }
@@ -4732,27 +4876,40 @@ function petStatus(P = S.pet) {
   const waitDays = P.stage + 1 === 4 && P.grow >= next.at ? PET_ADULT_DAYS - petDays(P) : 0;
   return { mood, label: mood === 'dance' ? 'Танцует' : mood === 'sleep' ? 'Спит' : 'Счастлив', task: waitDays > 0 ? `Почти взрослый: осталось подождать ${waitDays} ${plural(waitDays, 'день', 'дня', 'дней')}` : `Растёт, пока играет музыка. Дальше: ${next.n.toLowerCase()}`, cur: P.grow - PET_ST[P.stage].at, max: next.at - PET_ST[P.stage].at, left: waitDays > 0 ? '' : `ещё ${Math.max(1, Math.ceil(next.at - P.grow))} мин`, tone: 'grow' };
 }
+function petBadges(P) {
+  const el = PET_EL[P.el || petEl(P)];
+  return `${P.stage > 0 ? `<span class="pb sp">${PET_SP[P.sp]}</span>` : ''}${P.stage >= 2 ? `<span class="pb el el-${P.el || petEl(P)}">${el.n}</span>` : ''}${P.rar !== 'common' && P.stage > 0 ? `<span class="pb rr rr-${P.rar}">${PET_RAR[P.rar].n}</span>` : ''}`;
+}
 function petHomeHTML() {
   const P = S.pet, st = petStatus(P), pct = Math.min(100, st.cur / st.max * 100);
-  return `<button class="pet-home press ${st.tone}" id="petHome" data-go="pet"><span class="ph-art">${petSVG(P.seed, P.stage, st.mood, P.grow / PET_ST[1].at)}</span><span class="ph-t"><small>${PET_ST[P.stage].n} · ${st.label}</small><b>${esc(P.name)}</b><span class="ph-bar"><i style="width:${pct}%"></i></span><em>${st.tone === 'grow' ? st.left || st.task : st.task + ' · ' + st.left}</em></span>${ic('arrow')}</button>`;
+  return `<button class="pet-home press ${st.tone}" id="petHome" data-go="pet"><span class="ph-art">${petSVG(P, null, st.mood, P.grow / PET_ST[1].at)}</span><span class="ph-t"><small>${PET_ST[P.stage].n} · ${st.label}</small><b>${esc(P.name)}</b><span class="ph-bar"><i style="width:${pct}%"></i></span><em>${st.tone === 'grow' ? st.left || st.task : st.task + ' · ' + st.left}</em></span>${ic('arrow')}</button>`;
 }
 function petHTML() {
   const P = S.pet, st = petStatus(P), pct = Math.min(100, st.cur / st.max * 100), f = petFav(P);
-  const col = S.petCol.slice().reverse();
-  return headHTML('', 'Питомец', 'Растёт, пока ты слушаешь музыку', '')
-    + `<div class="pet-wrap"><section class="pet-stage ${st.tone}"><div class="pet-art" id="petArt">${petSVG(P.seed, P.stage, st.mood, P.grow / PET_ST[1].at)}</div>
-      <div class="pet-info"><p class="pet-k">${PET_ST[P.stage].n} · ${petDays(P)} ${plural(petDays(P), 'день', 'дня', 'дней')}</p>
+  const col = S.petCol.slice().reverse(), elK = P.el || petEl(P), aff = P.aff || {}, affTot = Object.values(aff).reduce((a, b) => a + b, 0) || 1;
+  const affBars = P.stage >= 1 ? `<div class="pet-aff">${Object.entries(PET_EL).map(([k, e]) => `<div class="pa el-${k} ${k === elK ? 'on' : ''}"><span>${e.n}</span><i><b style="width:${Math.round((aff[k] || 0) / affTot * 100)}%"></b></i></div>`).join('')}</div>` : '';
+  return headHTML('', 'Питомец', 'Растёт, пока ты слушаешь музыку, и меняется от того, как ты её слушаешь', '')
+    + `<div class="pet-wrap"><section class="pet-stage ${st.tone} el-${elK} rar-${P.rar}"><div class="pet-art" id="petArt">${petSVG(P, null, st.mood, P.grow / PET_ST[1].at)}</div>
+      <div class="pet-info"><div class="pet-badges">${petBadges(P)}</div><p class="pet-k">${PET_ST[P.stage].n} · ${petDays(P)} ${plural(petDays(P), 'день', 'дня', 'дней')}</p>
         <h2><button class="pet-name" data-act="pet-rename" aria-label="Переименовать">${esc(P.name)}</button></h2>
         <span class="pet-pill ${st.tone}">${st.label}</span>
         <div class="pet-task"><p>${st.task}</p>${st.max > 1 ? `<div class="pet-bar"><i style="width:${pct}%"></i></div><small>${st.left}</small>` : ''}</div>
         ${!E.playing ? `<button class="btn btn-accent press" data-act="toggle">${ic('play')}Включить музыку</button>` : `<p class="pet-live">${ic('vol')}Музыка играет, ${esc(P.name)} ${st.tone === 'grow' ? 'растёт' : st.tone === 'hungry' ? 'кушает' : 'лечится'}</p>`}
+        ${affBars ? `<div class="pet-affw"><p class="pet-k">Стихия ${P.stage >= 3 ? 'выбрана' : 'формируется'} по тому, как ты слушаешь</p>${affBars}</div>` : ''}
         <dl class="pet-stats"><div><dt>Вырос на музыке</dt><dd>${Math.round(P.grow)} мин</dd></div><div><dt>Любимый трек</dt><dd>${f ? esc(f.t) : '—'}</dd></div></dl>
       </div></section>
-      <section class="pet-how"><h3>Как это работает</h3><ul><li>${ic('play')}<span>Питомец растёт, только когда играет музыка в KMP. Путь до взрослого — примерно ${PET_ST[4].at / 60} часов музыки и хотя бы ${PET_ADULT_DAYS} дня.</span></li><li>${ic('bassic')}<span>Раз в ${PET_MEAL_H} часов он голодает: ${PET_FEED} минут музыки его накормят.</span></li><li>${ic('heart')}<span>Иногда он болеет: вылечат ${PET_CURE} минут музыки. Пока голоден или болен, он не растёт.</span></li><li>${ic('sparkle')}<span>Взрослый питомец переезжает в коллекцию, а тебе достаётся новое яйцо.</span></li></ul></section>
+      <section class="pet-how"><h3>Как это работает</h3><ul><li>${ic('play')}<span>Питомец растёт, только когда играет музыка в KMP. До взрослого нужно примерно ${PET_ST[4].at / 60} часов музыки и хотя бы ${PET_ADULT_DAYS} дня.</span></li><li>${ic('sparkle')}<span>Из яйца может вылупиться лисёнок, дракончик, медузка, робот, дух или блоб. Бывают редкие и легендарные.</span></li><li>${ic('sliders')}<span>Стихия зависит от того, как ты слушаешь: ночью — Ночь, с басом — Бас, ускоряешь — Скорость, с залом и slowed — Мечта, без эффектов — Чилл.</span></li><li>${ic('heart')}<span>Раз в ${PET_MEAL_H} часов он голодает (${PET_FEED} минут музыки), иногда болеет (${PET_CURE} минут). В это время он не растёт.</span></li></ul></section>
+      ${petDexHTML()}
       <section class="block"><div class="block-head"><h2>Коллекция</h2><span class="link">${S.petCol.length} ${plural(S.petCol.length, 'питомец', 'питомца', 'питомцев')}</span></div>
-      ${col.length ? `<div class="pet-col">${col.map(x => `<div class="pc-pet"><span>${petSVG(x.seed, 4, 'happy')}</span><b>${esc(x.name)}</b><small>Вырос за ${Math.max(1, Math.round((x.grown - x.born) / 864e5))} ${plural(Math.max(1, Math.round((x.grown - x.born) / 864e5)), 'день', 'дня', 'дней')} · ${x.min} мин музыки</small>${x.fav ? `<em>♪ ${esc(x.fav)}</em>` : ''}</div>`).join('')}</div>` : `<p class="net-note">Здесь будут жить твои выросшие питомцы</p>`}</section></div>`;
+      ${col.length ? `<div class="pet-col">${col.map(x => `<div class="pc-pet el-${x.el || 'chill'} rar-${x.rar || 'common'}"><span>${petSVG({ ...x, stage: 4, hunger: { on: 0 }, sick: { on: 0 } }, 4, 'happy')}</span><div class="pet-badges">${petBadges({ ...x, stage: 4 })}</div><b>${esc(x.name)}</b><small>Вырос за ${Math.max(1, Math.round((x.grown - x.born) / 864e5))} ${plural(Math.max(1, Math.round((x.grown - x.born) / 864e5)), 'день', 'дня', 'дней')} · ${x.min} мин музыки</small>${x.fav ? `<em>♪ ${esc(x.fav)}</em>` : ''}</div>`).join('')}</div>` : `<p class="net-note">Здесь будут жить твои выросшие питомцы</p>`}</section></div>`;
 }
-function paintPet() { const a = $('#petArt'); if (!a) return; const P = S.pet, st = petStatus(P); const key = P.stage + st.mood + (P.stage === 0 ? Math.floor(P.grow / PET_ST[1].at * 4) : ''); if (a.dataset.k !== key) { a.dataset.k = key; a.innerHTML = petSVG(P.seed, P.stage, st.mood, P.grow / PET_ST[1].at); } const bar = $('.pet-bar i'); if (bar) bar.style.width = Math.min(100, st.cur / st.max * 100) + '%'; const sm = $('.pet-task small'); if (sm) sm.textContent = st.left; }
+function petDexHTML() {
+  const seen = new Set(S.petCol.map(x => x.sp)); if (S.pet.stage > 0) seen.add(S.pet.sp);
+  const rares = S.petCol.filter(x => x.rar === 'rare').length, legs = S.petCol.filter(x => x.rar === 'legend').length;
+  return `<section class="block"><div class="block-head"><h2>Питомцедекс</h2><span class="link">Открыто ${seen.size} из ${PET_SPK.length} · редких ${rares} · легендарных ${legs}</span></div><div class="pet-dex">${PET_SPK.map((sp, i) => { const got = seen.has(sp); return `<div class="pd ${got ? 'got' : ''}"><span>${petSVG({ seed: 'dex' + i, sp, el: 'chill', rar: 'common', stage: 3, aff: {}, hunger: { on: 0 }, sick: { on: 0 } }, 3, 'happy')}</span><b>${got ? PET_SP[sp] : '???'}</b></div>`; }).join('')}</div></section>`;
+}
+function paintPet() { const a = $('#petArt'); if (!a) return; const P = S.pet, st = petStatus(P); const key = P.stage + st.mood + (P.el || petEl(P)) + (P.stage === 0 ? Math.floor(P.grow / PET_ST[1].at * 4) : ''); if (a.dataset.k !== key) { a.dataset.k = key; a.innerHTML = petSVG(P, null, st.mood, P.grow / PET_ST[1].at); } const bar = $('.pet-bar i'); if (bar) bar.style.width = Math.min(100, st.cur / st.max * 100) + '%'; const sm = $('.pet-task small'); if (sm) sm.textContent = st.left; }
+function petEvoFx() { const a = $('#petArt'); if (!a) return; a.classList.remove('evo'); void a.offsetWidth; a.classList.add('evo'); }
 function petDance() {
   const els = $$('.pet-svg .pet-bod'); if (!els.length) return;
   const b = E.playing ? SC.bass : 0, sy = 1 - b * .07, sx = 1 + b * .06, ty = -b * 16;
