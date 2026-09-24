@@ -3842,7 +3842,8 @@ addEventListener('dragenter', e => { if ([...(e.dataTransfer?.types || [])].incl
 addEventListener('dragleave', () => { dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) $('#drop').hidden = true; });
 addEventListener('dragover', e => e.preventDefault());
 addEventListener('drop', e => { e.preventDefault(); dragDepth = 0; $('#drop').hidden = true; if (e.dataTransfer?.files?.length) importFiles(e.dataTransfer.files); });
-addEventListener('scroll', () => { if (!menu.hidden) closeMenu(); }, { passive: true });
+addEventListener('scroll', () => { if (!menu.hidden && !menu.classList.contains('as-sheet') && !menu.contains(document.activeElement)) closeMenu(); }, { passive: true });
+if (window.visualViewport) { const vvFit = () => { if (menu.hidden || !menu.classList.contains('as-sheet')) { menu.style.bottom = ''; return; } const vv = visualViewport, kb = Math.max(0, innerHeight - vv.height - vv.offsetTop); menu.style.bottom = kb ? kb + 'px' : ''; }; visualViewport.addEventListener('resize', vvFit); visualViewport.addEventListener('scroll', vvFit); }
 if ('mediaSession' in navigator) { try { navigator.mediaSession.setActionHandler('play', () => play()); navigator.mediaSession.setActionHandler('pause', () => pause()); navigator.mediaSession.setActionHandler('nexttrack', () => next(false)); navigator.mediaSession.setActionHandler('previoustrack', () => prev()); navigator.mediaSession.setActionHandler('seekto', d => { seek(d.seekTime); updateMediaPosition(); }); navigator.mediaSession.setActionHandler('seekbackward', () => seek(curTime() - 10)); navigator.mediaSession.setActionHandler('seekforward', () => seek(curTime() + 10)); } catch (e) {} }
 
 /* ================= waveforms ================= */
