@@ -439,6 +439,57 @@ img.ava{object-fit:cover}
 .full-top .st-btn[aria-pressed="true"]{background:#fff;color:#131826}
 @media (max-width:860px){.f-art{width:auto}.f-lyrics{width:min(76vw,340px)}}
 @media (max-width:760px){.full.lyr-on .f-art .f-lyrics{width:calc(100vw - 32px);aspect-ratio:auto;height:52vh}.full.lyr-on .f-art .f-cover{height:0;visibility:hidden}.f-lyrics p{font-size:23px}.full-top .grp{gap:6px}.full-top .grp .st-btn{width:40px;height:40px}}
+/* quick sound dock */
+.f-dock{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:22px;background:rgba(10,12,22,.22);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.dk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.dk{display:flex;flex-direction:column;gap:8px;padding:10px 12px 12px;border-radius:16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);transition:background .25s,border-color .25s;cursor:pointer;min-width:0}
+.dk.on{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.22)}
+.dk-h{display:flex;align-items:center;gap:6px;font-size:12.5px;min-width:0}
+.dk-h .ic{width:16px;height:16px;flex:none;opacity:.85}
+.dk-h b{font-weight:600;white-space:nowrap}
+.dk-h output{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums;font-size:12px;opacity:.9;white-space:nowrap}
+.dk.on .dk-h output{color:#fff;opacity:1}
+.dk-r{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:linear-gradient(to right,#fff var(--v,0%),rgba(255,255,255,.22) var(--v,0%));outline:none;margin:0;cursor:pointer}
+.dk-r::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.18),0 4px 12px rgba(0,0,0,.35);transition:transform .15s}
+.dk-r::-moz-range-thumb{width:18px;height:18px;border:0;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.18)}
+.dk-r:active::-webkit-slider-thumb{transform:scale(1.2)}
+.dk-chips{display:flex;flex-wrap:wrap;gap:8px}
+.dk-chips::-webkit-scrollbar{display:none}
+.dk-chip{flex:none;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border-radius:18px;font-size:13px;font-weight:600;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);transition:background .2s,color .2s}
+.dk-chip .ic{width:16px;height:16px}
+.dk-chip:hover{background:rgba(255,255,255,.18)}
+.dk-chip[aria-pressed="true"]{background:#fff;color:#131826;border-color:#fff}
+.dk-rec .ic{color:#ff4d4f}
+.dk-rec.recording{background:#e5484d!important;border-color:#e5484d!important;color:#fff!important;animation:recPulse 1.4s ease-in-out infinite}
+.dk-rec.recording .ic{color:#fff}
+.st-btn.dk-rec.recording{background:#e5484d;color:#fff}
+@keyframes recPulse{50%{box-shadow:0 0 0 8px rgba(229,72,77,.18)}}
+/* vinyl */
+.f-vinyl{position:relative;width:100%;aspect-ratio:1;display:grid;place-items:center;touch-action:none;user-select:none;-webkit-user-select:none}
+.f-vinyl[hidden],.f-xy[hidden]{display:none!important}
+.full.vinyl-on .f-cover,.full.xy-on .f-cover{visibility:hidden}
+.vn-ring{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.vn-disc{position:relative;width:84%;aspect-ratio:1;border-radius:50%;background:#0c0c10;box-shadow:0 30px 70px -20px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.06);cursor:grab;will-change:transform}
+.f-vinyl.drag .vn-disc{cursor:grabbing}
+.vn-grooves{position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,rgba(255,255,255,.035) 0 1px,transparent 1px 3px),radial-gradient(circle,transparent 30%,rgba(255,255,255,.03) 31%,transparent 60%)}
+.vn-label{position:absolute;left:31%;top:31%;width:38%;height:38%;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px rgba(0,0,0,.35)}
+.vn-hole{position:absolute;left:48.5%;top:48.5%;width:3%;height:3%;border-radius:50%;background:#0c0c10;box-shadow:0 0 0 1px rgba(255,255,255,.2)}
+.vn-sheen{position:absolute;width:84%;aspect-ratio:1;border-radius:50%;pointer-events:none;background:conic-gradient(from 30deg,transparent 0deg,rgba(255,255,255,.12) 20deg,transparent 50deg,transparent 180deg,rgba(255,255,255,.08) 205deg,transparent 235deg)}
+.vn-hint{position:absolute;bottom:-4px;font-size:12px;font-weight:600;opacity:.65;pointer-events:none}
+/* xy pad */
+.f-xy{position:relative;width:100%;aspect-ratio:1;border-radius:26px;overflow:hidden;background:rgba(10,12,22,.3);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);touch-action:none;user-select:none;-webkit-user-select:none}
+.f-xy canvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
+.xy-l{position:absolute;font-size:11.5px;font-weight:700;letter-spacing:.02em;opacity:.6;pointer-events:none;text-transform:uppercase}
+.xy-l1{left:14px;top:50%;transform:translateY(-50%)}.xy-l2{right:14px;top:50%;transform:translateY(-50%)}.xy-l3{top:12px;left:50%;transform:translateX(-50%)}.xy-l4{bottom:12px;left:50%;transform:translateX(-50%)}
+.xy-hold{position:absolute;top:10px;right:10px;height:30px;padding:0 12px;border-radius:15px;font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18)}
+.xy-hold[aria-pressed="true"]{background:#fff;color:#131826}
+@media (max-width:860px){.f-vinyl,.f-xy{width:min(76vw,340px)}}
+@media (max-width:760px){
+  .dk-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -12px;padding:0 12px}
+  .f-dock{margin-inline:-4px;padding:12px}
+  .full.vinyl-on .f-art .f-vinyl,.full.xy-on .f-art .f-xy{width:min(84vw,380px)}
+  .full.vinyl-on .f-art .f-cover,.full.xy-on .f-art .f-cover{height:0}
+}
 /* update pill */
 .upd-pill{position:fixed;left:50%;transform:translateX(-50%);top:calc(14px + env(safe-area-inset-top,0px));z-index:90;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;border-radius:22px;border:1px solid var(--line);box-shadow:0 14px 40px -12px rgba(0,0,0,.45);font-weight:600;font-size:14px;color:var(--ink);animation:updIn .45s var(--spring,ease) both;max-width:calc(100vw - 24px)}
 .upd-pill span{display:flex;align-items:center;gap:8px;white-space:nowrap}.upd-pill .ic{width:17px;height:17px;color:var(--accent)}
@@ -975,6 +1026,14 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     <symbol id="i-blend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 17c4 0 6-10 9-10s5 10 9 10"/><path d="M3 7c4 0 6 10 9 10s5-10 9-10" opacity=".5"/></symbol>
     <symbol id="i-rain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 14a4 4 0 0 1 .5-8 5 5 0 0 1 9.5 1.5A3.3 3.3 0 0 1 17 14z"/><path d="M8 17.5 7 20M12 17.5 11 20M16 17.5l-1 2.5"/></symbol>
     <symbol id="i-feed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-7l-4.5 3.5V16.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5z"/><path d="M8 10h8M8 13h5"/></symbol>
+    <symbol id="i-bassic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12h2l2-6 3 12 3-9 2 5 2-2h4"/></symbol>
+    <symbol id="i-vinyl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 5.5a6.5 6.5 0 0 1 6.5 6.5"/></symbol>
+    <symbol id="i-xy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="14.5" cy="9.5" r="2.2"/><path d="M14.5 3.5v3.8M14.5 11.7v8.8M3.5 9.5h8.8M16.7 9.5h3.8"/></symbol>
+    <symbol id="i-rec" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.5" fill="currentColor"/></symbol>
+    <symbol id="i-tone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></symbol>
+    <symbol id="i-speed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 17a8.5 8.5 0 1 1 15 0"/><path d="m12 13 4-4.5"/><circle cx="12" cy="13" r="1.2"/></symbol>
+    <symbol id="i-space" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-orbit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M3 12c0-2.5 4-4.5 9-4.5s9 2 9 4.5-4 4.5-9 4.5c-2.3 0-4.4-.4-6-1.1"/><path d="m4.5 13.8 1.5 1.6-2 .6"/></symbol>
     <symbol id="i-scene" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3.5"/><path d="m3.5 16.5 5-5 4 4 2.5-2.5 5.5 5"/><circle cx="15.5" cy="8.5" r="1.6"/></symbol>
     <symbol id="i-lyrics" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h11M4 10.5h8M4 15h6"/><path d="M17.5 17.5V8.5l3-1"/><circle cx="15.8" cy="17.6" r="1.9"/></symbol>
     <symbol id="i-story" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="3"/><rect x="8.5" y="6" width="7" height="7" rx="1.5"/><path d="M8.5 16.5h7"/></symbol>
@@ -1067,7 +1126,9 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     </div>
     <div class="full-main">
       <section class="f-stage">
-        <div class="f-art"><div class="f-glow" id="fGlow"></div><img class="f-cover" id="fCover" alt=""><div class="f-lyrics" id="fLyr" hidden></div></div>
+        <div class="f-art"><div class="f-glow" id="fGlow"></div><img class="f-cover" id="fCover" alt=""><div class="f-lyrics" id="fLyr" hidden></div>
+          <div class="f-vinyl" id="fVinyl" hidden><canvas class="vn-ring" id="vnRing"></canvas><div class="vn-disc" id="vnDisc"><div class="vn-grooves"></div><img class="vn-label" id="vnLabel" alt=""><i class="vn-hole"></i></div><div class="vn-sheen"></div><span class="vn-hint">Крути пластинку пальцем</span></div>
+          <div class="f-xy" id="fXY" hidden><canvas id="xyCv"></canvas><span class="xy-l xy-l1">Глухо</span><span class="xy-l xy-l2">Звонко</span><span class="xy-l xy-l3">Эхо и зал</span><span class="xy-l xy-l4">Сухо</span><button class="xy-hold" data-act="xy-hold" aria-pressed="false">Держать</button></div></div>
         <div class="f-info">
           <div class="f-title"><div><h2 id="fTitle"></h2><p id="fArtist"></p></div><button class="cbtn press like-cur" data-act="like-cur" aria-label="В любимое"><svg class="ic"><use href="#i-heart"/></svg></button></div>
           <div class="f-wave"><canvas class="wave" id="fWave" aria-label="Перемотка"></canvas><div class="f-times"><span id="fCur">0:00</span><span id="fDur">0:00</span></div></div>
@@ -1077,6 +1138,21 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
             <button class="st-play gp" data-act="toggle" aria-label="Играть или пауза"><svg class="ic ic-play"><use href="#i-play"/></svg><svg class="ic ic-pause"><use href="#i-pause"/></svg></button>
             <button class="cbtn press" data-act="next" aria-label="Следующий"><svg class="ic"><use href="#i-next"/></svg></button>
             <button class="cbtn press rep" data-act="repeat" aria-label="Повтор" aria-pressed="false"><svg class="ic"><use href="#i-repeat"/></svg><span class="one" hidden>1</span></button>
+          </div>
+          <div class="f-dock" id="fDock">
+            <div class="dk-grid">
+              <label class="dk" data-dkk="speed"><span class="dk-h"><svg class="ic"><use href="#i-speed"/></svg><b>Скорость</b><output id="dkv-speed"></output></span><input type="range" class="dk-r" data-dk="speed" min="50" max="150" step="1" aria-label="Скорость"></label>
+              <label class="dk" data-dkk="bass"><span class="dk-h"><svg class="ic"><use href="#i-bassic"/></svg><b>Бас</b><output id="dkv-bass"></output></span><input type="range" class="dk-r" data-dk="bass" min="0" max="12" step="0.5" aria-label="Бас"></label>
+              <label class="dk" data-dkk="reverb"><span class="dk-h"><svg class="ic"><use href="#i-space"/></svg><b>Зал</b><output id="dkv-reverb"></output></span><input type="range" class="dk-r" data-dk="reverb" min="0" max="100" step="1" aria-label="Реверб"></label>
+              <label class="dk" data-dkk="rotate"><span class="dk-h"><svg class="ic"><use href="#i-orbit"/></svg><b>8D</b><output id="dkv-rotate"></output></span><input type="range" class="dk-r" data-dk="rotate" min="0" max="100" step="1" aria-label="8D"></label>
+            </div>
+            <div class="dk-chips">
+              <button class="dk-chip press" data-act="dk-tone" aria-pressed="false"><svg class="ic"><use href="#i-tone"/></svg>Сохранять тон</button>
+              <button class="dk-chip press" data-act="dk-vinyl" aria-pressed="false"><svg class="ic"><use href="#i-vinyl"/></svg>Винил</button>
+              <button class="dk-chip press" data-act="dk-xy" aria-pressed="false"><svg class="ic"><use href="#i-xy"/></svg>XY-пэд</button>
+              <button class="dk-chip dk-rec press" data-act="dk-rec"><svg class="ic"><use href="#i-rec"/></svg><span>Записать ремикс</span></button>
+              <button class="dk-chip press" data-act="fx-reset"><svg class="ic"><use href="#i-reset"/></svg>Сбросить звук</button>
+            </div>
           </div>
           <div class="f-tools">
             <button class="tool press" data-act="loop-a" aria-pressed="false" title="Начало петли, клавиша [">A</button>
@@ -1328,7 +1404,7 @@ function wavBlob(buf) {
 }
 function keepAliveSet() {}
 function applyVol() { if (!E.gain) return; const v = S.muted ? 0 : S.vol * S.vol; E.gain.gain.setTargetAtTime(v, E.ctx.currentTime, .03); if (E.raw && E.deck === E.raw && E.playing) E.raw.el.volume = deckTarget(E.raw); }
-function setPitchPref(el) { el.preservesPitch = false; el.mozPreservesPitch = false; el.webkitPreservesPitch = false; }
+function setPitchPref(el, force) { const k = force == null ? !!S.keepTone : force; el.preservesPitch = k; el.mozPreservesPitch = k; el.webkitPreservesPitch = k; }
 function play() {
   ac(); const d = E.deck;
   if (!d || !d.id) return playAt(S.qi);
@@ -1685,7 +1761,7 @@ function trickOn(k) {
     const len = k === 'st4' ? beat : k === 'st8' ? beat / 2 : k === 'st16' ? beat / 4 : k === 'frz' ? .12 : 4;
     TK.node.port.postMessage({ m: k === 'rev' ? 2 : k === 'frz' ? 3 : 1, len }); toWet();
   } else if (k === 'stop') {
-    const els = [...E.decks, E.raw].filter(Boolean).map(d => d.el), r0 = E.rate || 1, t0 = performance.now();
+    const els = [...E.decks, E.raw].filter(Boolean).map(d => d.el), r0 = E.rate || 1, t0 = performance.now(); els.forEach(el => setPitchPref(el, false));
     clearInterval(TK.rateT);
     TK.rateT = setInterval(() => { const p = Math.min(1, (performance.now() - t0) / 900), r = Math.max(.07, r0 * Math.pow(1 - p, 1.6)); els.forEach(el => { try { el.playbackRate = r; } catch (e) {} }); if (p >= 1) clearInterval(TK.rateT); }, 30);
     F.tIn.gain.cancelScheduledValues(t); F.tIn.gain.setValueAtTime(1, t); F.tIn.gain.linearRampToValueAtTime(0, t + .95);
@@ -1809,7 +1885,7 @@ function parseCode(code) {
     return { name: String(o.n || 'Пресет').slice(0, 60), p };
   } catch (e) { return null; }
 }
-function markFXBtn() { $$('.fx-btn').forEach(b => b.classList.toggle('fx-on', FXP !== 'flat')); }
+function markFXBtn() { try { syncDock(); } catch (e) {} $$('.fx-btn').forEach(b => b.classList.toggle('fx-on', FXP !== 'flat')); }
 async function ensureBuffer(t) {
   if (t.kind !== 'demo' || t.url) return true;
   if (!t._synth) t._synth = synth(t).then(buf => {
@@ -2392,6 +2468,7 @@ function mixerHTML() {
           <button class="st-btn press" data-act="fx-save">${ic('save')}<span>Сохранить</span></button>
           <button class="st-btn press" data-act="fx-update" id="fxUpd" hidden>${ic('save')}<span>Обновить</span></button>
           <button class="st-btn press" data-act="fx-reset" aria-label="Сбросить всё">${ic('reset')}<span>Сбросить</span></button>
+          <button class="st-btn press dk-rec" data-act="dk-rec" aria-label="Записать ремикс">${ic('rec')}<span>Записать ремикс</span></button>
           <button class="st-btn press" data-act="fx-import" aria-label="Вставить код пресета">${ic('plus')}<span>Код</span></button>
         </div></div>
     </section>
@@ -2403,6 +2480,7 @@ function mixerHTML() {
       <div class="console one ${S.mixTab === 'eq' ? 'is-eq' : ''}" id="mixPanel">${mixPanelHTML()}</div></section>
     <section class="block"><div class="block-head"><h2>Умные функции</h2></div><div class="sm-list">
       ${row('sliders', 'Свой звук для трека', '', '<button class="switch" role="switch" aria-checked="false" data-act="fx-bind" id="swBind" aria-label="Свой звук для трека"></button>', 'bindNote')}
+      ${row('tone', 'Сохранять тон', 'Ускоряй и замедляй песню без эффекта «бурундука»', '<button class="switch" role="switch" aria-checked="false" data-act="dk-tone" aria-label="Сохранять тон"></button>')}
       ${row('vol', 'Выравнивание громкости', 'Тихие и громкие треки звучат одинаково', '<button class="switch" role="switch" aria-checked="false" data-act="norm" id="swNorm" aria-label="Выравнивание громкости"></button>')}
       ${row('blend', 'Плавный переход', 'Следующий трек начинается, пока текущий затихает', `<button class="dd-btn" data-dd="xfade" aria-haspopup="menu"><span data-ddv="xfade"></span><svg class="ic chev"><use href="#i-down"/></svg></button>`)}
       ${row('moon', 'Таймер сна', 'Музыка плавно затихнет и встанет на паузу', `<button class="dd-btn" data-dd="sleep" aria-haspopup="menu"><span data-ddv="sleep"></span><svg class="ic chev"><use href="#i-down"/></svg></button>`, 'sleepNote')}
@@ -2911,7 +2989,7 @@ function meHTML() {
       <div class="card-s wide danger-zone"><h3>Удаление аккаунта</h3><p>Удалит профиль, все треки из облака, посты, комментарии и лайки. Треки на этом устройстве останутся.</p><button class="btn btn-danger press" data-act="acct-delete" style="align-self:flex-start">${ic('trash')}<span>Удалить аккаунт</span></button></div>
     </div>`;
 }
-if (window.KMP_DEBUG) window.__kmp = { Cloud, T, S, E, synth, ensureBuffer, srcFor, statsAll, TK, trickOn, trickOff, applyFX, get FX() { return FX; } };
+if (window.KMP_DEBUG) window.__kmp = { Cloud, T, S, E, synth, ensureBuffer, srcFor, statsAll, TK, trickOn, trickOff, applyFX, get VN() { return VN; }, get FX() { return FX; } };
 /* ================= labs ================= */
 const LABS = [
   { k: 'oneplayer', t: 'Один плеер', d: 'Если KMP открыт в двух окнах, играет только одно. Защищает от двойного звука.' },
@@ -3172,7 +3250,7 @@ function renderNow() {
   $$('[data-act=shuffle]').forEach(b => b.setAttribute('aria-pressed', S.shuffle));
   $$('.rep').forEach(b => { b.setAttribute('aria-pressed', S.repeat !== 'off'); b.querySelector('.one').hidden = S.repeat !== 'one'; });
   ensurePalette(t).then(p => { if (cur() === t) { PAL.target = p; applyScene(); } });
-  applyScene(); if (S.lyricsOn && FULL) loadLyrics(t);
+  applyScene(); if (S.lyricsOn && FULL) loadLyrics(t); if (S.artMode === 'vinyl') { const vl = $('#vnLabel'); if (vl && vl.getAttribute('src') !== t.cover) vl.src = t.cover; }
   if ('mediaSession' in navigator) { try { navigator.mediaSession.metadata = new MediaMetadata({ title: t.title, artist: t.artist, album: t.album || 'KMP', artwork: [{ src: t.cover, sizes: '360x360', type: 'image/jpeg' }] }); } catch (e) {} }
   if (FULL) renderQueue();
   renderMoments();
@@ -3194,7 +3272,7 @@ function setFull(open) {
   $('#pCover').style.viewTransitionName = open ? 'none' : 'np-cover';
   $('#fCover').style.viewTransitionName = open ? 'np-cover' : 'none';
   document.body.classList.toggle('noscroll', open);
-  if (open) { sizeCanvas($('#fullCv')); sizeCanvas($('#fWave')); if (!fullGL) fullGL = makeGL($('#fullCv')); renderQueue(); updateLoopUI(); updateSmartUI(); applyScene(); setLyrics(S.lyricsOn); }
+  if (open) { sizeCanvas($('#fullCv')); sizeCanvas($('#fWave')); if (!fullGL) fullGL = makeGL($('#fullCv')); renderQueue(); updateLoopUI(); updateSmartUI(); applyScene(); S.artMode = S.artMode === 'cover' ? 'cover' : S.artMode; const m = S.artMode; S.artMode = null; setArtMode(m || 'cover'); syncDock(); }
 }
 function openFull(open) { if (open === FULL) return; vt(() => setFull(open)); }
 
@@ -3363,6 +3441,11 @@ document.addEventListener('click', e => {
       case 'pcat': S.pcat = a.dataset.v; $$('[data-act=pcat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.pcat)); $('#presets').innerHTML = presetsHTML(); $('#presets').scrollLeft = 0; break;
       case 'app-update': appUpdate(true); break;
       case 'lyrics': setLyrics(!S.lyricsOn); break;
+      case 'dk-vinyl': setArtMode(S.artMode === 'vinyl' ? 'cover' : 'vinyl'); break;
+      case 'dk-xy': setArtMode(S.artMode === 'xy' ? 'cover' : 'xy'); break;
+      case 'xy-hold': XY.hold = !XY.hold; a.setAttribute('aria-pressed', XY.hold); toast(XY.hold ? 'Звук остаётся там, где отпустишь палец' : 'После касания звук возвращается'); break;
+      case 'dk-tone': S.keepTone = !S.keepTone; store.set('keepTone', S.keepTone); setRate(); syncDock(); toast(S.keepTone ? 'Скорость меняется, тон остаётся прежним' : 'Скорость меняет и тон, как на пластинке'); break;
+      case 'dk-rec': recToggle(); break;
       case 'scene-pick': openScenePicker(a); break;
       case 'upd-reload': location.reload(); break;
       case 'install': if (installPrompt) { installPrompt.prompt(); installPrompt.userChoice.finally(() => { installPrompt = null; if (S.view === 'labs') renderView(); }); } break;
@@ -3653,9 +3736,47 @@ float d=uv.y-y;
 col+=mix(c2,c3,fi/5.)*(exp(-abs(d)*70.)*.75+exp(-abs(d)*9.)*.1);
 col*=mix(1.,.9,step(d,0.)*.35);}
 return col;}
+vec3 rain(vec2 uv,vec2 p,float s){
+vec3 col=mix(c0*.5,c1*.45,uv.y)+c2*.16*fbm(p*1.6+vec2(s,0.));
+for(int i=0;i<3;i++){float fi=float(i);float sc=16.+fi*13.;
+vec2 q=vec2(uv.x*r.x/r.y*sc,uv.y*sc*.22+t*(1.1+fi*.55));vec2 id=floor(q);float rr=h(id+fi*7.);vec2 f=fract(q);
+float x=abs(f.x-.5-(rr-.5)*.6);float st=smoothstep(.07,0.,x)*smoothstep(0.,.8,f.y)*smoothstep(1.,.8,f.y)*step(.7,rr);
+col+=mix(c3,vec3(1.),.55)*st*(.3-fi*.07);}
+for(int j=0;j<10;j++){float fj=float(j);vec2 c=vec2(h(vec2(fj,4.)),h(vec2(fj,5.)));float rs=.02+.03*h(vec2(fj,6.));
+float d=length((uv-c)*vec2(r.x/r.y,1.));col+=mix(c2,c3,h(vec2(fj,7.)))*smoothstep(rs,rs*.4,d)*.18*(.6+.4*sin(t*.7+fj));}
+return col;}
+vec3 dunes(vec2 uv,vec2 p,float s){
+vec3 col=mix(mix(c3,c2,.35)*1.05,c0*.55,smoothstep(.25,1.,uv.y));
+float sd=length((uv-vec2(.72,.66))*vec2(r.x/r.y,1.));
+col+=mix(c3,vec3(1.,.9,.7),.5)*(smoothstep(.085,.08,sd)*.65+exp(-sd*5.)*.28)*(1.+e*.3);
+for(int i=0;i<4;i++){float fi=float(i);
+float y=.46-fi*.1+.05*sin(p.x*(1.1+fi*.45)+s*(2.+fi*1.3)+fi*3.)+.035*fbm(vec2(p.x*2.5+s*(fi+1.)*2.,fi));
+vec3 lc=mix(c1,c0,fi/3.)*(.6-fi*.11);col=mix(col,lc,smoothstep(y+.004,y-.004,uv.y));}
+return col;}
+vec3 lava(vec2 uv,vec2 p,float s){
+vec2 a=vec2(r.x/r.y,1.);vec2 u=uv*a;float f=0.;
+for(int i=0;i<7;i++){float fi=float(i);vec2 c=vec2(.5*a.x+.36*a.x*sin(s*3.*(.35+fi*.13)+fi*1.7),.5+.4*sin(s*2.6*(.4+fi*.11)+fi*2.3));f+=(.009+.0035*fi)/dot(u-c,u-c);}
+f*=1.+e*.5;vec3 col=mix(c0*.4,c1*.6,uv.y);
+col=mix(col,mix(c2,c3,smoothstep(1.4,4.5,f))*.88,smoothstep(.9,1.2,f));col+=c3*smoothstep(.5,.95,f)*.1;
+return col;}
+vec3 deep(vec2 uv,vec2 p,float s){
+vec2 q=p*2.6;float cc=0.;
+for(int i=0;i<3;i++){float fi=float(i);q+=vec2(sin(q.y*1.3+s*6.+fi),cos(q.x*1.1-s*5.+fi*2.))*.55;cc+=1./(1.+18.*abs(sin(q.x+q.y)*.5));}
+cc=pow(cc/3.,2.);
+vec3 col=mix(c0*.3,mix(c1,c2,.5)*.75,uv.y);
+col+=mix(c2,vec3(.8,1.,1.),.45)*cc*.8*(1.+e*.6)*(.35+.65*uv.y);
+col+=c3*pow(max(0.,sin(uv.x*8.+s*4.+uv.y*3.)),8.)*uv.y*.13;
+return col;}
+vec3 bokeh(vec2 uv,vec2 p,float s){
+vec3 col=mix(c0*.32,c1*.42,uv.y);vec2 a=vec2(r.x/r.y,1.);
+for(int i=0;i<22;i++){float fi=float(i);float rx=h(vec2(fi,1.)),ry=h(vec2(fi,2.)),rs=h(vec2(fi,3.));
+vec2 c=vec2((fract(rx+s*(.25+rs*.35))*1.2-.1)*a.x,ry*1.1-.05+.03*sin(s*5.+fi));
+float rad=.022+rs*.05;float d=length(uv*a-c);
+col+=mix(c2,c3,rs)*(smoothstep(rad,rad*.84,d)*(.1+.2*rs)+smoothstep(rad*1.5,rad*.4,d)*.05)*(1.+e*.5);}
+return col;}
 void main(){vec2 uv=gl_FragCoord.xy/r;vec2 p=uv*vec2(r.x/r.y,1.)*1.3;float s=t*.045;
 vec3 col;
-if(md<.5)col=fluid(uv,p,s);else if(md<1.5)col=fog(uv,p,s);else if(md<2.5)col=aurora(uv,p,s);else if(md<3.5)col=cosmos(uv,p,s);else if(md<4.5)col=neon(uv,p,s);else col=waves(uv,p,s);
+if(md<.5)col=fluid(uv,p,s);else if(md<1.5)col=fog(uv,p,s);else if(md<2.5)col=aurora(uv,p,s);else if(md<3.5)col=cosmos(uv,p,s);else if(md<4.5)col=neon(uv,p,s);else if(md<5.5)col=waves(uv,p,s);else if(md<6.5)col=rain(uv,p,s);else if(md<7.5)col=dunes(uv,p,s);else if(md<8.5)col=lava(uv,p,s);else if(md<9.5)col=deep(uv,p,s);else col=bokeh(uv,p,s);
 col*=1.-.3*length(uv-vec2(.5,.6));
 col*=mix(1.,.72,dk);
 col+=(h(gl_FragCoord.xy+fract(t*7.)*91.)-.5)*.035;
@@ -3686,7 +3807,8 @@ function drawGL(G, time, mode, pal) {
 /* ================= scenes (backgrounds) ================= */
 const SCENES = [
   { k: 'fluid', l: 'Жидкость', gl: 0 }, { k: 'fog', l: 'Туман', gl: 1 }, { k: 'aurora', l: 'Сияние', gl: 2 }, { k: 'cosmos', l: 'Космос', gl: 3 },
-  { k: 'neon', l: 'Неон', gl: 4 }, { k: 'waves', l: 'Волны', gl: 5 }, { k: 'cover', l: 'Обложка', gl: -1 }, { k: 'minimal', l: 'Минимал', gl: -2 }, { k: 'auto', l: 'Микс', gl: null }
+  { k: 'neon', l: 'Неон', gl: 4 }, { k: 'waves', l: 'Волны', gl: 5 }, { k: 'rain', l: 'Дождь', gl: 6 }, { k: 'dunes', l: 'Дюны', gl: 7 },
+  { k: 'lava', l: 'Лава-лампа', gl: 8 }, { k: 'deep', l: 'Глубина', gl: 9 }, { k: 'bokeh', l: 'Огни города', gl: 10 }, { k: 'cover', l: 'Обложка', gl: -1 }, { k: 'minimal', l: 'Минимал', gl: -2 }, { k: 'auto', l: 'Микс', gl: null }
 ];
 S.scene = store.get('scene', 'fog');
 function sceneFor(t) { if (S.scene !== 'auto') return S.scene; const pool = SCENES.filter(x => x.gl != null && x.k !== 'minimal'); return pool[Math.floor(rng('sc' + ((t && t.id) || ''))() * pool.length)].k; }
@@ -3712,7 +3834,7 @@ function sceneTile(sc) {
   let bg = urls[sc.k] ? `background-image:url(${urls[sc.k]})` : '';
   if (sc.k === 'cover' && t) bg = `background-image:url("${t.cover}");background-size:cover`;
   if (sc.k === 'minimal') bg = `background:linear-gradient(160deg,${rgbCss(pal[1])},${rgbCss(pal[0])})`;
-  if (sc.k === 'auto') bg = `background-image:${['fog', 'aurora', 'cosmos', 'neon'].map((k, i) => urls[k] ? `url(${urls[k]})` : 'none').join(',')};background-size:50% 50%;background-position:0 0,100% 0,0 100%,100% 100%;background-repeat:no-repeat`;
+  if (sc.k === 'auto') bg = `background-image:${['fog', 'aurora', 'lava', 'bokeh'].map((k, i) => urls[k] ? `url(${urls[k]})` : 'none').join(',')};background-size:50% 50%;background-position:0 0,100% 0,0 100%,100% 100%;background-repeat:no-repeat`;
   return `<button class="sc-tile ${sc.k === 'cover' ? 'is-cover' : ''}" data-scene="${sc.k}" aria-pressed="${S.scene === sc.k}"><span class="sc-img" style='${bg}'></span><b>${sc.l}</b></button>`;
 }
 function openScenePicker(anchor) {
@@ -3789,14 +3911,123 @@ function tickLyrics(force) {
   box.querySelectorAll('p[data-li]').forEach(p => p.classList.toggle('past', +p.dataset.li < idx));
   if (el) { el.classList.add('on'); if (Date.now() > LYR.hold) box.scrollTo({ top: el.offsetTop - box.clientHeight * .38, behavior: force || RM ? 'auto' : 'smooth' }); }
 }
-function setLyrics(on) {
-  S.lyricsOn = on; store.set('lyricsOn', on);
-  $('#full').classList.toggle('lyr-on', on); $('#fLyr').hidden = !on;
-  const b = $('#lyrBtn'); if (b) b.setAttribute('aria-pressed', on);
-  if (on) loadLyrics(cur());
-}
+function setLyrics(on) { setArtMode(on ? 'lyrics' : 'cover'); }
 document.addEventListener('click', e => { const p = e.target.closest('#fLyr p[data-li]'); if (!p || !LYR.synced) return; const l = LYR.lines[+p.dataset.li]; if (l && l.t != null) { seek(l.t); LYR.hold = 0; tickLyrics(true); } });
 ['wheel', 'touchmove'].forEach(ev => document.addEventListener(ev, e => { if (e.target.closest && e.target.closest('#fLyr')) LYR.hold = Date.now() + 4000; }, { passive: true }));
+
+/* ================= quick sound dock ================= */
+S.keepTone = store.get('keepTone', false);
+const DKF = { speed: v => (v / 100).toFixed(2).replace('.', ',') + '×', bass: v => v ? '+' + String(v).replace('.', ',') + ' дБ' : 'выкл', reverb: v => v ? v + '%' : 'выкл', rotate: v => v ? v + '%' : 'выкл' };
+function syncDock() {
+  $$('.dk-r').forEach(r => { const k = r.dataset.dk, v = FX[k]; if (+r.value !== v) r.value = v; const mn = +r.min, mx = +r.max; r.style.setProperty('--v', ((v - mn) / (mx - mn) * 100) + '%'); const o = $('#dkv-' + k); if (o) o.textContent = DKF[k](v); r.closest('.dk').classList.toggle('on', v !== FX_DEF[k]); });
+  $$('[data-act=dk-tone]').forEach(b => b.setAttribute(b.classList.contains('switch') ? 'aria-checked' : 'aria-pressed', !!S.keepTone));
+}
+document.addEventListener('input', e => { const r = e.target.closest && e.target.closest('.dk-r'); if (!r) return; FX[r.dataset.dk] = +r.value; fxChanged(); });
+document.addEventListener('dblclick', e => { const d = e.target.closest && e.target.closest('.dk'); if (!d) return; const k = d.dataset.dkk; FX[k] = FX_DEF[k]; fxChanged(); });
+
+/* art area: cover | lyrics | vinyl | xy */
+S.artMode = store.get('artMode', S.lyricsOn ? 'lyrics' : 'cover');
+function setArtMode(m) {
+  S.artMode = m; store.set('artMode', m); S.lyricsOn = m === 'lyrics'; store.set('lyricsOn', S.lyricsOn);
+  const f = $('#full'); ['lyrics', 'vinyl', 'xy'].forEach(k => f.classList.toggle(k === 'lyrics' ? 'lyr-on' : k + '-on', m === k));
+  $('#fLyr').hidden = m !== 'lyrics'; $('#fVinyl').hidden = m !== 'vinyl'; $('#fXY').hidden = m !== 'xy';
+  const lb = $('#lyrBtn'); if (lb) lb.setAttribute('aria-pressed', m === 'lyrics');
+  $$('[data-act=dk-vinyl]').forEach(b => b.setAttribute('aria-pressed', m === 'vinyl')); $$('[data-act=dk-xy]').forEach(b => b.setAttribute('aria-pressed', m === 'xy'));
+  if (m === 'lyrics') loadLyrics(cur());
+  if (m === 'vinyl') { const t = cur(); if (t) $('#vnLabel').src = t.cover; sizeArtCanvas($('#vnRing')); }
+  if (m === 'xy') sizeArtCanvas($('#xyCv'));
+}
+function sizeArtCanvas(cv) { if (!cv) return; const d = Math.min(devicePixelRatio || 1, 2), w = Math.round(cv.clientWidth * d), h = Math.round(cv.clientHeight * d); if (w && h && (cv.width !== w || cv.height !== h)) { cv.width = w; cv.height = h; } cv._d = d; }
+
+/* vinyl: spins with the music, drag to bend the speed like a DJ */
+const VN = { ang: 0, drag: false, last: 0, lastA: 0, vel: 0, t: 0, bend: 1 };
+function vnAngle(e) { const r = $('#vnDisc').getBoundingClientRect(); return Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) * 180 / Math.PI; }
+function vnSetRate(r) { const d = E.deck; if (!d) return; setPitchPref(d.el, false); try { d.el.playbackRate = Math.max(.07, Math.min(3, r)); } catch (e) {} }
+document.addEventListener('pointerdown', e => {
+  const disc = e.target.closest && e.target.closest('#vnDisc'); if (!disc) return; e.preventDefault();
+  try { disc.setPointerCapture(e.pointerId); } catch (er) {}
+  VN.drag = true; VN.lastA = vnAngle(e); VN.t = performance.now(); VN.vel = 0; $('#fVinyl').classList.add('drag');
+});
+document.addEventListener('pointermove', e => {
+  if (!VN.drag) return; const a = vnAngle(e), now = performance.now(); let d = a - VN.lastA; if (d > 180) d -= 360; if (d < -180) d += 360;
+  const dt = Math.max(8, now - VN.t); VN.ang += d; VN.lastA = a; VN.t = now;
+  const v = d / dt * 1000; VN.vel = VN.vel * .6 + v * .4;
+  if (E.playing) vnSetRate(VN.vel > 20 ? (E.rate || 1) * VN.vel / 198 : .07);
+});
+['pointerup', 'pointercancel'].forEach(ev => document.addEventListener(ev, () => { if (!VN.drag) return; VN.drag = false; $('#fVinyl').classList.remove('drag'); if (E.playing) { const d = E.deck; if (d) { const from = d.el.playbackRate, to = E.rate || 1, t0 = performance.now(); const st = () => { const k = Math.min(1, (performance.now() - t0) / 350); try { d.el.playbackRate = from + (to - from) * k; } catch (e) {} if (k < 1) requestAnimationFrame(st); else setRate(); }; st(); } } }));
+function drawVinyl(dt) {
+  const disc = $('#vnDisc'); if (!disc) return;
+  if (!VN.drag && E.playing) VN.ang += dt * 198 * (E.deck ? E.deck.el.playbackRate : 1);
+  disc.style.transform = `rotate(${VN.ang % 360}deg)`;
+  const cv = $('#vnRing'); if (!cv || !cv.width) return; const x = cv.getContext('2d'), w = cv.width, h = cv.height, cx = w / 2, cy = h / 2, R0 = Math.min(w, h) * .43, N = 96;
+  x.clearRect(0, 0, w, h); const B = SC.bands, pal = PAL.cur, col = rgbCss(pal[3].map(v => Math.min(1, v * 1.3 + .15)));
+  x.lineCap = 'round'; x.strokeStyle = col; x.lineWidth = Math.max(2, w / 180);
+  for (let i = 0; i < N; i++) { const bi = Math.floor((i < N / 2 ? i : N - 1 - i) / (N / 2) * B.length * .8), v = B[bi] || 0, a = i / N * Math.PI * 2 - Math.PI / 2, l = 4 + v * R0 * .2; x.globalAlpha = .35 + v * .65; x.beginPath(); x.moveTo(cx + Math.cos(a) * (R0 + 4), cy + Math.sin(a) * (R0 + 4)); x.lineTo(cx + Math.cos(a) * (R0 + 4 + l), cy + Math.sin(a) * (R0 + 4 + l)); x.stroke(); }
+  x.globalAlpha = 1;
+}
+
+/* XY pad: left-right = dark/bright filter, down-up = dry/echo+hall */
+const XY = { on: false, x: .5, y: 0, trail: [], hold: false, base: null };
+function xyPos(e) { const r = $('#xyCv').getBoundingClientRect(); return { x: Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)), y: Math.max(0, Math.min(1, 1 - (e.clientY - r.top) / r.height)) }; }
+function xyApply() {
+  const fx = Math.abs(XY.x - .5) < .05 ? 0 : Math.round((XY.x - .5) / .45 * 92); FX.filter = Math.max(-95, Math.min(95, fx));
+  FX.echo = Math.round(XY.y * 65); FX.reverb = Math.round(XY.y * 55); FX.room = Math.max(XY.base ? XY.base.room : 50, Math.round(40 + XY.y * 50)); applyFX(); syncDock();
+}
+document.addEventListener('pointerdown', e => {
+  const cv = e.target.closest && e.target.closest('#xyCv'); if (!cv) return; e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (er) {}
+  if (!XY.hold || !XY.base) XY.base = { filter: FX.filter, echo: FX.echo, reverb: FX.reverb, room: FX.room };
+  XY.on = true; Object.assign(XY, xyPos(e)); xyApply();
+});
+document.addEventListener('pointermove', e => { if (!XY.on) return; Object.assign(XY, xyPos(e)); XY.trail.push({ x: XY.x, y: XY.y, a: 1 }); if (XY.trail.length > 40) XY.trail.shift(); xyApply(); });
+['pointerup', 'pointercancel'].forEach(ev => document.addEventListener(ev, () => { if (!XY.on) return; XY.on = false; if (XY.hold) { fxChanged(); XY.base = null; } else if (XY.base) { Object.assign(FX, XY.base); XY.base = null; applyFX(); syncDock(); } }));
+function drawXY(ts) {
+  const cv = $('#xyCv'); if (!cv || !cv.width) return; const x = cv.getContext('2d'), w = cv.width, h = cv.height, d = cv._d || 1;
+  x.clearRect(0, 0, w, h); x.fillStyle = 'rgba(255,255,255,.14)';
+  for (let i = 1; i < 8; i++) for (let j = 1; j < 8; j++) { x.beginPath(); x.arc(i * w / 8, j * h / 8, 1.3 * d, 0, 7); x.fill(); }
+  x.strokeStyle = 'rgba(255,255,255,.18)'; x.lineWidth = d; x.beginPath(); x.moveTo(w / 2, 0); x.lineTo(w / 2, h); x.stroke();
+  const c3 = PAL.cur[3].map(v => Math.min(1, v * 1.25 + .2)), col = rgbCss(c3);
+  XY.trail.forEach(p => { p.a *= .92; x.globalAlpha = p.a * .5; x.fillStyle = col; x.beginPath(); x.arc(p.x * w, (1 - p.y) * h, 10 * d * p.a, 0, 7); x.fill(); }); x.globalAlpha = 1;
+  XY.trail = XY.trail.filter(p => p.a > .05);
+  if (XY.on || XY.hold && XY.base) {
+    const px = XY.x * w, py = (1 - XY.y) * h, rr = (26 + SC.bass * 30) * d, g = x.createRadialGradient(px, py, 0, px, py, rr * 2.2);
+    g.addColorStop(0, col); g.addColorStop(.35, rgbCss(c3.map(v => v * .8)) ); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.beginPath(); x.arc(px, py, rr * 2.2, 0, 7); x.fill();
+    x.fillStyle = '#fff'; x.beginPath(); x.arc(px, py, 7 * d, 0, 7); x.fill();
+    x.strokeStyle = 'rgba(255,255,255,.35)'; x.beginPath(); x.moveTo(px, 0); x.lineTo(px, h); x.moveTo(0, py); x.lineTo(w, py); x.stroke();
+  } else { x.fillStyle = 'rgba(255,255,255,.55)'; x.font = `600 ${15 * d}px ${getComputedStyle(document.body).fontFamily}`; x.textAlign = 'center'; x.fillText('Води пальцем по квадрату', w / 2, h / 2 + 5 * d); }
+}
+
+/* record what you hear (with all effects) into a new track */
+const REC = { mr: null, chunks: [], t0: 0, dest: null, track: null, tm: 0 };
+function recUI() {
+  const on = !!(REC.mr && REC.mr.state === 'recording');
+  $$('[data-act=dk-rec]').forEach(b => { b.classList.toggle('recording', on); const sp = b.querySelector('span'); if (sp) sp.textContent = on ? 'Стоп · ' + fmt((Date.now() - REC.t0) / 1000) : 'Записать ремикс'; });
+}
+function recToggle() {
+  if (REC.mr && REC.mr.state === 'recording') { REC.mr.stop(); return; }
+  if (!E.ctx || !E.playing) { toast('Включи трек, и запись начнётся с того, что звучит'); return; }
+  if (!window.MediaRecorder || !E.ctx.createMediaStreamDestination) { toast('Запись не поддерживается в этом браузере'); return; }
+  if (!REC.dest) REC.dest = E.ctx.createMediaStreamDestination();
+  E.duck.connect(REC.dest);
+  const mime = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/ogg;codecs=opus', 'audio/webm'].find(m => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) || '';
+  try { REC.mr = new MediaRecorder(REC.dest.stream, mime ? { mimeType: mime, audioBitsPerSecond: 192000 } : {}); } catch (e) { toast('Не получилось начать запись'); return; }
+  REC.chunks = []; REC.track = cur(); REC.t0 = Date.now();
+  REC.mr.ondataavailable = e => { if (e.data && e.data.size) REC.chunks.push(e.data); };
+  REC.mr.onstop = () => { clearInterval(REC.tm); try { E.duck.disconnect(REC.dest); } catch (e) {} recUI(); recSave(new Blob(REC.chunks, { type: REC.mr.mimeType || mime || 'audio/webm' })); };
+  REC.mr.start(1000); REC.tm = setInterval(recUI, 500); recUI();
+  toast('Идёт запись: всё, что звучит, попадёт в ремикс');
+}
+async function recSave(blob) {
+  const t = REC.track || cur(), secs = (Date.now() - REC.t0) / 1000;
+  if (!blob.size || secs < 1.5) { toast('Запись слишком короткая'); return; }
+  toast('Сохраняю ремикс…');
+  let file;
+  try { const buf = await E.ctx.decodeAudioData(await blob.arrayBuffer()); file = new File([wavBlob(buf)], `${t ? t.title : 'KMP'} (ремикс).wav`, { type: 'audio/wav' }); }
+  catch (e) { const ext = /mp4/.test(blob.type) ? 'm4a' : /ogg/.test(blob.type) ? 'ogg' : 'webm'; file = new File([blob], `${t ? t.title : 'KMP'} (ремикс).${ext}`, { type: blob.type }); }
+  const coverImg = t && /^data:/.test(t.coverImg || t.cover || '') ? (t.coverImg || t.cover) : null;
+  await importFiles([file], { title: (t ? t.title : 'Запись') + ' (ремикс)', artist: t ? t.artist : '', album: 'Ремиксы KMP', coverImg });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 30000);
+  toast('Ремикс сохранён в библиотеку и скачан');
+}
 
 /* ================= story card ================= */
 const loadImg = src => new Promise(res => { if (!src) return res(null); const im = new Image(); if (/^https?:/.test(src) && !src.startsWith(location.origin)) im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
@@ -3909,7 +4140,7 @@ function loop(ts) {
   const glTick = !IS_MOBILE || (ts - lastGL > 50); if (glTick) lastGL = ts;
   if (glTick && stageGL && stageVisible && !FULL && !document.hidden) drawGL(stageGL, time);
   if (FULL && glTick && !document.hidden && glMode() >= 0) drawGL(fullGL, time);
-  if (FULL && !document.hidden) { const g = $('#fGlow'); if (g) { const b = E.playing ? SC.bass : 0; g.style.transform = `scale(${(1 + b * .16).toFixed(3)})`; g.style.opacity = (.42 + b * .5).toFixed(3); } if (S.lyricsOn) tickLyrics(); }
+  if (FULL && !document.hidden) { const g = $('#fGlow'); if (g) { const b = E.playing ? SC.bass : 0; g.style.transform = `scale(${(1 + b * .16).toFixed(3)})`; g.style.opacity = (.42 + b * .5).toFixed(3); } if (S.lyricsOn) tickLyrics(); if (S.artMode === 'vinyl') drawVinyl(Math.min(.1, (ts - (VN.lt || ts)) / 1000)); if (S.artMode === 'xy') drawXY(ts); } VN.lt = ts;
   const t = cur(), dur = E.buf ? E.buf.duration : (t?.duration || 0), ct = curTime(), p = dur ? ct / dur : 0;
   drawWave(pWave, p); if (stageW && stageVisible && !FULL) drawWave(stageW, p); if (FULL) drawWave(fWave, p);
   if (S.view === 'mixer' && !FULL) { drawEQ(); drawMeters(ts); }
