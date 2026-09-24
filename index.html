@@ -490,6 +490,63 @@ img.ava{object-fit:cover}
   .full.vinyl-on .f-art .f-vinyl,.full.xy-on .f-art .f-xy{width:min(84vw,380px)}
   .full.vinyl-on .f-art .f-cover,.full.xy-on .f-art .f-cover{height:0}
 }
+/* listen together */
+.room-pill{position:fixed;bottom:112px;left:50%;transform:translateX(-50%);z-index:75;display:flex;align-items:center;gap:8px;height:38px;padding:0 14px 0 12px;border-radius:19px;border:1px solid var(--line);box-shadow:0 10px 30px -12px rgba(0,0,0,.45);font-size:13px;color:var(--ink);animation:updIn .45s var(--spring,ease) both}
+.room-pill b{font-weight:700}.room-pill span{font-weight:700;letter-spacing:.12em;opacity:.7;font-variant-numeric:tabular-nums}
+.room-pill .rp-n{display:inline-flex;align-items:center;gap:4px;letter-spacing:0;opacity:.85}.room-pill .rp-n .ic{width:15px;height:15px}
+.rp-dot{width:9px;height:9px;border-radius:50%;background:#2fd36b;box-shadow:0 0 0 0 rgba(47,211,107,.6);animation:rpPing 1.8s infinite}
+.room-pill.warn .rp-dot{background:#f5a524;animation:none}
+@keyframes rpPing{70%{box-shadow:0 0 0 8px rgba(47,211,107,0)}100%{box-shadow:0 0 0 0 rgba(47,211,107,0)}}
+body.noscroll .room-pill{display:none}
+.st-btn.room-btn.on{background:#2fd36b;color:#08130c}
+.rm{display:flex;flex-direction:column;gap:10px;padding:4px 6px 6px}
+.rm .m-label{margin:4px 2px 0}
+.rm-lead,.rm-note{margin:0 2px;font-size:13px;line-height:1.45;color:var(--muted)}
+.rm-wide{justify-content:center;width:100%}
+.rm-code{display:flex;gap:6px;justify-content:center;padding:6px 0}
+.rm-code b{width:44px;height:54px;display:grid;place-items:center;border-radius:12px;background:var(--hover);font:600 26px var(--f-display);letter-spacing:0}
+.rm-join{display:flex;gap:8px}
+.rm-join input{flex:1;min-width:0;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:0 14px;font:700 16px var(--f-body);letter-spacing:.14em;text-transform:uppercase}
+.rm-peers{display:flex;flex-direction:column;gap:6px;max-height:190px;overflow:auto}
+.rm-peer{display:flex;align-items:center;gap:10px;font-size:14px}
+.rm-peer em{font-style:normal;font-size:11px;font-weight:700;padding:3px 8px;border-radius:9px;background:var(--hover);color:var(--muted)}
+.rm-ava{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font:600 13px var(--f-display);overflow:hidden;flex:none}
+.rm-ava img{width:100%;height:100%;object-fit:cover}
+.react-bar{display:flex;gap:6px;justify-content:center;padding:6px;border-radius:22px;background:rgba(10,12,22,.22);border:1px solid rgba(255,255,255,.12)}
+.react-bar[hidden]{display:none}
+.react-bar button{width:42px;height:42px;border-radius:50%;font-size:22px;line-height:1;transition:transform .15s var(--spring,ease),background .2s}
+.react-bar button:hover{background:rgba(255,255,255,.14)}.react-bar button:active{transform:scale(1.35)}
+#reactLayer{position:fixed;inset:0;z-index:95;pointer-events:none;overflow:hidden}
+.rx{position:absolute;bottom:90px;display:flex;flex-direction:column;align-items:center;animation:rxUp 3.1s cubic-bezier(.2,.7,.3,1) forwards}
+.rx span{font-size:46px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
+.rx small{font:700 11px var(--f-body);color:#fff;background:rgba(0,0,0,.45);padding:2px 8px;border-radius:8px;margin-top:2px}
+@keyframes rxUp{0%{transform:translate(0,30px) scale(.4);opacity:0}12%{transform:translate(0,0) scale(1.15);opacity:1}80%{opacity:1}100%{transform:translate(var(--dx),-55vh) scale(.9);opacity:0}}
+.room-tap{position:fixed;left:50%;bottom:calc(120px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:96;display:flex;align-items:center;gap:10px;height:54px;padding:0 24px 0 18px;border-radius:27px;background:#2fd36b;color:#06120a;font-weight:700;font-size:15px;box-shadow:0 16px 40px -10px rgba(47,211,107,.6);animation:updIn .4s var(--spring,ease) both}
+.room-tap .ic{width:20px;height:20px}
+/* history */
+.h-search{display:flex;align-items:center;gap:10px;height:48px;padding:0 16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);margin:4px 0 16px;max-width:560px}
+.h-search .ic{width:18px;height:18px;color:var(--muted)}.h-search input{flex:1;min-width:0;border:0;background:none;outline:none;font:500 15px var(--f-body);color:var(--ink)}
+.hb{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:18px}
+.hb-card{display:flex;align-items:center;gap:12px;padding:10px 14px 10px 10px;border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 16%,var(--surface)),var(--surface));border:1px solid var(--line);text-align:left}
+.hb-card img{width:56px;height:56px;border-radius:12px;object-fit:cover}.hb-card span{display:flex;flex-direction:column;min-width:0;flex:1}
+.hb-card small{font-size:11.5px;font-weight:700;color:var(--accent)}.hb-card b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hb-card em{font-style:normal;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb-card .ic{width:20px;height:20px;color:var(--accent)}
+.h-list{display:flex;flex-direction:column;gap:2px;padding-bottom:20px}
+.h-day{margin:16px 6px 6px;font:600 13px var(--f-body);color:var(--muted);text-transform:capitalize}
+.h-row{display:grid;grid-template-columns:52px 44px minmax(0,1fr) auto;align-items:center;gap:12px;padding:6px 10px;border-radius:14px;text-align:left}
+.h-row:hover{background:var(--hover)}.h-row.gone{opacity:.55}
+.h-tm{font-size:12.5px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.h-row img{width:44px;height:44px;border-radius:10px;object-fit:cover}
+.h-m{display:flex;flex-direction:column;min-width:0}.h-m b{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.h-m em{font-style:normal;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.h-live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px;animation:ping 1.6s infinite}
+.h-s{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.chip .ic{width:15px;height:15px;vertical-align:-3px;margin-right:4px}
+/* pitch stepper */
+.dk-step{display:inline-flex;align-items:center;height:36px;border-radius:18px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);flex:none}
+.dk-step button{width:34px;height:34px;border-radius:50%;font-size:18px;font-weight:600;color:#fff}.dk-step button:hover{background:rgba(255,255,255,.14)}
+.dk-step b{font-size:13px;font-weight:600;min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
+.dk-step.on{background:#fff;color:#131826}.dk-step.on button{color:#131826}
+@media (max-width:760px){.room-pill{bottom:calc(var(--tabh,62px) + var(--barh,60px) + 30px + env(safe-area-inset-bottom,0px))}.react-bar button{width:40px;height:40px}.h-row{grid-template-columns:44px 40px minmax(0,1fr) auto;gap:10px;padding:6px}}
 /* update pill */
 .upd-pill{position:fixed;left:50%;transform:translateX(-50%);top:calc(14px + env(safe-area-inset-top,0px));z-index:90;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;border-radius:22px;border:1px solid var(--line);box-shadow:0 14px 40px -12px rgba(0,0,0,.45);font-weight:600;font-size:14px;color:var(--ink);animation:updIn .45s var(--spring,ease) both;max-width:calc(100vw - 24px)}
 .upd-pill span{display:flex;align-items:center;gap:8px;white-space:nowrap}.upd-pill .ic{width:17px;height:17px;color:var(--accent)}
@@ -1026,6 +1083,8 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     <symbol id="i-blend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 17c4 0 6-10 9-10s5 10 9 10"/><path d="M3 7c4 0 6 10 9 10s5-10 9-10" opacity=".5"/></symbol>
     <symbol id="i-rain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 14a4 4 0 0 1 .5-8 5 5 0 0 1 9.5 1.5A3.3 3.3 0 0 1 17 14z"/><path d="M8 17.5 7 20M12 17.5 11 20M16 17.5l-1 2.5"/></symbol>
     <symbol id="i-feed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-7l-4.5 3.5V16.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5z"/><path d="M8 10h8M8 13h5"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.8-3.3 3.2-5 6-5s5.2 1.7 6 5"/><circle cx="16.8" cy="9.3" r="2.5"/><path d="M16.5 14.3c2.3.1 4 1.5 4.6 4.2"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3.5 4.5V9H8"/><path d="M12 8v4.5l3 2"/></symbol>
     <symbol id="i-bassic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12h2l2-6 3 12 3-9 2 5 2-2h4"/></symbol>
     <symbol id="i-vinyl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 5.5a6.5 6.5 0 0 1 6.5 6.5"/></symbol>
     <symbol id="i-xy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="14.5" cy="9.5" r="2.2"/><path d="M14.5 3.5v3.8M14.5 11.7v8.8M3.5 9.5h8.8M16.7 9.5h3.8"/></symbol>
@@ -1055,6 +1114,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
       <button class="nav-btn press" data-go="home" data-tip="Главная" aria-label="Главная"><svg class="ic"><use href="#i-home"/></svg></button>
       <button class="nav-btn press" data-act="focus-search" data-tip="Поиск" aria-label="Поиск"><svg class="ic"><use href="#i-search"/></svg></button>
       <button class="nav-btn press" data-go="library" data-tip="Вся музыка" aria-label="Вся музыка"><svg class="ic"><use href="#i-library"/></svg></button>
+      <button class="nav-btn press" data-go="history" data-tip="История" aria-label="История"><svg class="ic"><use href="#i-history"/></svg></button>
       <button class="nav-btn press" data-go="liked" data-tip="Любимое" aria-label="Любимое"><svg class="ic"><use href="#i-heart"/></svg></button>
       <button class="nav-btn press" data-go="feed" data-tip="Лента" aria-label="Лента"><svg class="ic"><use href="#i-feed"/></svg></button>
       <button class="nav-btn press" data-go="mixer" data-tip="Микшер" aria-label="Микшер"><svg class="ic"><use href="#i-sliders"/></svg></button>
@@ -1122,7 +1182,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     <div class="full-top">
       <button class="st-btn press" data-act="close-full" aria-label="Свернуть"><svg class="ic"><use href="#i-down"/></svg></button>
       <span id="fFrom">Сейчас играет</span>
-      <div class="grp"><button class="st-btn press" data-act="lyrics" id="lyrBtn" aria-pressed="false" aria-label="Текст песни" data-tip="Текст"><svg class="ic"><use href="#i-lyrics"/></svg></button><button class="st-btn press" data-act="scene-pick" aria-label="Фон" data-tip="Фон"><svg class="ic"><use href="#i-scene"/></svg></button><button class="st-btn press" data-act="compose" aria-label="Поделиться моментом"><svg class="ic"><use href="#i-share"/></svg></button><button class="st-btn press" data-go="mixer" aria-label="Микшер"><svg class="ic"><use href="#i-sliders"/></svg></button><button class="st-btn press" data-act="more-cur" aria-label="Ещё"><svg class="ic"><use href="#i-more"/></svg></button></div>
+      <div class="grp"><button class="st-btn press room-btn" data-act="room-open" aria-label="Слушать вместе" data-tip="Вместе"><svg class="ic"><use href="#i-users"/></svg></button><button class="st-btn press" data-act="lyrics" id="lyrBtn" aria-pressed="false" aria-label="Текст песни" data-tip="Текст"><svg class="ic"><use href="#i-lyrics"/></svg></button><button class="st-btn press" data-act="scene-pick" aria-label="Фон" data-tip="Фон"><svg class="ic"><use href="#i-scene"/></svg></button><button class="st-btn press" data-act="compose" aria-label="Поделиться моментом"><svg class="ic"><use href="#i-share"/></svg></button><button class="st-btn press" data-go="mixer" aria-label="Микшер"><svg class="ic"><use href="#i-sliders"/></svg></button><button class="st-btn press" data-act="more-cur" aria-label="Ещё"><svg class="ic"><use href="#i-more"/></svg></button></div>
     </div>
     <div class="full-main">
       <section class="f-stage">
@@ -1139,6 +1199,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
             <button class="cbtn press" data-act="next" aria-label="Следующий"><svg class="ic"><use href="#i-next"/></svg></button>
             <button class="cbtn press rep" data-act="repeat" aria-label="Повтор" aria-pressed="false"><svg class="ic"><use href="#i-repeat"/></svg><span class="one" hidden>1</span></button>
           </div>
+          <div class="react-bar" hidden><button class="press" data-act="room-react" data-e="🔥" aria-label="Реакция 🔥">🔥</button><button class="press" data-act="room-react" data-e="❤️" aria-label="Реакция ❤️">❤️</button><button class="press" data-act="room-react" data-e="😂" aria-label="Реакция 😂">😂</button><button class="press" data-act="room-react" data-e="🤯" aria-label="Реакция 🤯">🤯</button><button class="press" data-act="room-react" data-e="👏" aria-label="Реакция 👏">👏</button><button class="press" data-act="room-react" data-e="💃" aria-label="Реакция 💃">💃</button></div>
           <div class="f-dock" id="fDock">
             <div class="dk-grid">
               <label class="dk" data-dkk="speed"><span class="dk-h"><svg class="ic"><use href="#i-speed"/></svg><b>Скорость</b><output id="dkv-speed"></output></span><input type="range" class="dk-r" data-dk="speed" min="50" max="150" step="1" aria-label="Скорость"></label>
@@ -1150,6 +1211,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
               <button class="dk-chip press" data-act="dk-tone" aria-pressed="false"><svg class="ic"><use href="#i-tone"/></svg>Сохранять тон</button>
               <button class="dk-chip press" data-act="dk-vinyl" aria-pressed="false"><svg class="ic"><use href="#i-vinyl"/></svg>Винил</button>
               <button class="dk-chip press" data-act="dk-xy" aria-pressed="false"><svg class="ic"><use href="#i-xy"/></svg>XY-пэд</button>
+              <span class="dk-step"><button class="press" data-act="dk-pitch" data-d="-1" aria-label="Ниже на полутон">−</button><b id="dkv-pitch">Тон 0</b><button class="press" data-act="dk-pitch" data-d="1" aria-label="Выше на полутон">+</button></span>
               <button class="dk-chip dk-rec press" data-act="dk-rec"><svg class="ic"><use href="#i-rec"/></svg><span>Записать ремикс</span></button>
               <button class="dk-chip press" data-act="fx-reset"><svg class="ic"><use href="#i-reset"/></svg>Сбросить звук</button>
             </div>
@@ -1406,6 +1468,8 @@ function keepAliveSet() {}
 function applyVol() { if (!E.gain) return; const v = S.muted ? 0 : S.vol * S.vol; E.gain.gain.setTargetAtTime(v, E.ctx.currentTime, .03); if (E.raw && E.deck === E.raw && E.playing) E.raw.el.volume = deckTarget(E.raw); }
 function setPitchPref(el, force) { const k = force == null ? !!S.keepTone : force; el.preservesPitch = k; el.mozPreservesPitch = k; el.webkitPreservesPitch = k; }
 function play() {
+  if (ROOM.ch && !ROOM.host && !ROOM.applying && ROOM.userPaused) { ROOM.userPaused = false; if (ROOM.last) setTimeout(() => roomOnState(ROOM.last), 50); }
+  roomNudgeSoon();
   ac(); const d = E.deck;
   if (!d || !d.id) return playAt(S.qi);
   if (E.playing && !d.el.paused) return;
@@ -1415,8 +1479,9 @@ function play() {
   const go = () => fadeDeck(d, deckTarget(d), .08);
   if (p && p.then) p.then(go).catch(e => { if (E.deck === d) { E.playing = false; setPlayingUI(); if (e && e.name === 'NotAllowedError') toast('Нажми «Играть» ещё раз'); } }); else go();
 }
-function pause() { if (!E.playing) { stopAll(); setPlayingUI(); return; } E.offset = curTime(); savePos(); E.playing = false; haltDeck(E.deck, .14); setPlayingUI(); }
-function seek(x) { const d = E.deck, t = curT(); if (!d || !d.id || (t && t.live)) return; const D = BUFH.duration; x = Math.max(0, Math.min(x, D ? D - .05 : x)); try { d.el.currentTime = x; } catch (e) {} E.offset = x; }
+function pause() { if (ROOM.ch && !ROOM.host && !ROOM.applying) ROOM.userPaused = true; roomNudgeSoon(); if (!E.playing) { stopAll(); setPlayingUI(); return; } E.offset = curTime(); savePos(); E.playing = false; haltDeck(E.deck, .14); setPlayingUI(); }
+function roomNudgeSoon() { try { roomNudge(); } catch (e) {} }
+function seek(x) { roomNudgeSoon(); const d = E.deck, t = curT(); if (!d || !d.id || (t && t.live)) return; const D = BUFH.duration; x = Math.max(0, Math.min(x, D ? D - .05 : x)); try { d.el.currentTime = x; } catch (e) {} E.offset = x; }
 function toggle() { if (!E.ctx || !E.deck || !E.deck.id || E.deck.id !== S.queue[S.qi]) return playAt(S.qi); E.playing ? pause() : play(); }
 function setPlayingUI() {
   document.body.classList.toggle('is-playing', E.playing);
@@ -1567,7 +1632,7 @@ function playList(ids, startId) {
 /* ================= effects chain ================= */
 const EQF = [32, 64, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
 const flabel = f => f >= 1000 ? (f / 1000) + 'к' : String(f);
-const FX_DEF = { eq: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], bass: 0, air: 0, drive: 0, filter: 0, comp: 0, crush: 0, vinyl: 0, wow: 0, chorus: 0, flanger: 0, tremolo: 0, width: 100, reverb: 0, room: 50, echo: 0, rotate: 0, speed: 100, karaoke: 0, harm: 0, phaser: 0, wah: 0, pingpong: 0, gate: 0 };
+const FX_DEF = { eq: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], bass: 0, air: 0, drive: 0, filter: 0, comp: 0, crush: 0, vinyl: 0, wow: 0, chorus: 0, flanger: 0, tremolo: 0, width: 100, reverb: 0, room: 50, echo: 0, rotate: 0, speed: 100, karaoke: 0, pitch: 0, harm: 0, phaser: 0, wah: 0, pingpong: 0, gate: 0 };
 const pct = { min: 0, max: 100, step: 1, u: '%' };
 const KNOBS = [
   { k: 'bass', l: 'Бас+', min: 0, max: 12, step: .5, u: ' дБ', g: 'tone' },
@@ -1576,6 +1641,7 @@ const KNOBS = [
   { k: 'filter', l: 'Фильтр', min: -100, max: 100, step: 1, bi: true, center: 0, fmt: v => v === 0 ? 'выкл' : (v < 0 ? 'НЧ ' + (-v) : 'ВЧ ' + v), g: 'tone' },
   { k: 'comp', l: 'Плотность', ...pct, g: 'tone' },
   { k: 'harm', l: 'Саб-гармоники', ...pct, g: 'tone' },
+  { k: 'pitch', l: 'Тональность', min: -6, max: 6, step: 1, bi: true, center: 0, fmt: v => v === 0 ? '0' : (v > 0 ? '+' : '−') + Math.abs(v) + ' пт', g: 'tone' },
   { k: 'crush', l: 'Биткраш', ...pct, g: 'tex' },
   { k: 'vinyl', l: 'Винил', ...pct, g: 'tex' },
   { k: 'wow', l: 'Плёнка', ...pct, g: 'tex' },
@@ -1712,6 +1778,15 @@ function buildFX(c) {
   return F;
 }
 /* branches that are switched off are physically disconnected, so idle reverb/echo/chorus cost no CPU */
+let routedPitch = null;
+function routeInput(force) {
+  const F = E.fx; if (!F) return; const want = !!(FX.pitch && TK.pitch && !E.bypass);
+  if (!force && routedPitch === (want ? 'p' : E.bypass ? 'b' : 'd')) { if (want) TK.pitch.port.postMessage({ ratio: Math.pow(2, FX.pitch / 12) }); return; }
+  routedPitch = want ? 'p' : E.bypass ? 'b' : 'd';
+  F.input.disconnect(); if (TK.pitch) try { TK.pitch.disconnect(); } catch (e) {}
+  const target = E.bypass ? E.gain : F.tIn;
+  if (want) { TK.pitch.port.postMessage({ ratio: Math.pow(2, FX.pitch / 12) }); F.input.connect(TK.pitch); TK.pitch.connect(target); } else F.input.connect(target);
+}
 function curBpm() { const t = typeof curT === 'function' ? curT() : null; const b = t && +t.bpm; return b >= 60 && b <= 200 ? b : 120; }
 const TRICK_SRC = `class KT extends AudioWorkletProcessor {
   constructor() { super(); this.n = Math.floor(sampleRate * 4); this.b = [new Float32Array(this.n), new Float32Array(this.n)]; this.w = 0; this.m = 0; this.len = 0; this.st = 0; this.r = 0; this.p = 0; this.g = 0;
@@ -1730,7 +1805,25 @@ const TRICK_SRC = `class KT extends AudioWorkletProcessor {
     return true;
   }
 }
-registerProcessor('kmp-trick', KT);`;
+registerProcessor('kmp-trick', KT);
+class KP extends AudioWorkletProcessor {
+  constructor() { super(); this.N = 16384; this.b = [new Float32Array(this.N), new Float32Array(this.N)]; this.w = 0; this.r = 1; this.W = Math.floor(sampleRate * .045); this.d = 0; this.port.onmessage = e => { this.r = e.data.ratio || 1; }; }
+  process(ins, outs) {
+    const i = ins[0], o = outs[0], L = i && i[0], Rr = i && (i[1] || i[0]), n = o[0].length, N = this.N, W = this.W, rt = this.r, b0 = this.b[0], b1 = this.b[1];
+    for (let k = 0; k < n; k++) {
+      b0[this.w] = L ? L[k] : 0; b1[this.w] = Rr ? Rr[k] : 0;
+      this.d += 1 - rt; if (this.d < 0) this.d += W; if (this.d >= W) this.d -= W;
+      const s1 = Math.sin(Math.PI * this.d / W), g1 = s1 * s1, g2 = 1 - g1;
+      let x1 = this.w - this.d - 2, x2 = this.w - ((this.d + W / 2) % W) - 2; if (x1 < 0) x1 += N; if (x2 < 0) x2 += N;
+      const i1 = x1 | 0, f1 = x1 - i1, j1 = (i1 + 1) % N, i2 = x2 | 0, f2 = x2 - i2, j2 = (i2 + 1) % N;
+      o[0][k] = (b0[i1] + (b0[j1] - b0[i1]) * f1) * g1 + (b0[i2] + (b0[j2] - b0[i2]) * f2) * g2;
+      if (o[1]) o[1][k] = (b1[i1] + (b1[j1] - b1[i1]) * f1) * g1 + (b1[i2] + (b1[j2] - b1[i2]) * f2) * g2;
+      this.w = (this.w + 1) % N;
+    }
+    return true;
+  }
+}
+registerProcessor('kmp-pitch', KP);`;
 const TK = { node: null, on: null, rateT: 0 };
 async function initTricks(c, F) {
   if (!c.audioWorklet || typeof AudioWorkletNode === 'undefined') return;
@@ -1739,6 +1832,7 @@ async function initTricks(c, F) {
     await c.audioWorklet.addModule(url);
     TK.node = new AudioWorkletNode(c, 'kmp-trick', { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
     F.tIn.connect(TK.node); TK.node.connect(F.tWet);
+    try { TK.pitch = new AudioWorkletNode(c, 'kmp-pitch', { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] }); routeInput(); } catch (e) { TK.pitch = null; }
   } catch (e) { TK.node = null; }
 }
 const TRICKS = [
@@ -1831,11 +1925,12 @@ function applyFX(force) {
   sp(F.rvWet.gain, FX.reverb / 100 * .9); sp(F.dry.gain, 1 - FX.reverb / 100 * .35);
   if (lastRoom !== FX.room && (FX.reverb > 0 || lastRoom == null)) { const first = lastRoom == null; lastRoom = FX.room; clearTimeout(irT); irT = setTimeout(() => { F.conv.buffer = makeIR(c, FX.room); }, first ? 0 : 160); }
   sp(F.echoWet.gain, FX.echo / 100 * .55); sp(F.dlFb.gain, .25 + FX.echo / 100 * .4);
+  routeInput();
   setRate();
 }
 function setBypass(on) {
   E.bypass = on;
-  if (E.fx) { const F = E.fx; F.input.disconnect(); F.input.connect(on ? E.gain : F.tIn); link(F, 'vin', FX.vinyl > 0 && !on, F.vinGain, F.pre); }
+  if (E.fx) { const F = E.fx; routeInput(true); link(F, 'vin', FX.vinyl > 0 && !on, F.vinGain, F.pre); }
   setRate();
 }
 const MC = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 1, 44100);
@@ -2171,7 +2266,7 @@ function libraryHTML() {
   const ids = sortedIds();
   const chip = (v, l) => `<button class="chip press" data-act="filter" data-v="${v}" aria-pressed="${S.filter === v}">${l}</button>`;
   return headHTML('', 'Вся музыка', `${tracksWord(ids.length)}, ${fmtLong(tot(ids))}`, playBtns('lib') + `<button class="btn press" data-act="upload">${ic('upload')}Добавить</button>`)
-    + `<div class="chips" style="margin-top:14px">${chip('all', 'Всё')}${chip('upload', 'Мои загрузки')}${chip('demo', 'Демо')}${store.get('demoHidden', []).length ? `<button class="chip press" data-act="demo-restore">${ic('repeat')}Вернуть демо</button>` : ''}</div>`
+    + `<div class="chips" style="margin-top:14px">${chip('all', 'Всё')}${chip('upload', 'Мои загрузки')}${chip('demo', 'Демо')}<button class="chip press" data-go="history">${ic('history')}История</button>${store.get('demoHidden', []).length ? `<button class="chip press" data-act="demo-restore">${ic('repeat')}Вернуть демо</button>` : ''}</div>`
     + `<div style="margin-top:14px">${ids.length ? listHTML(ids, 'lib') : emptyHTML('Здесь будут твои треки', 'Нажми «Добавить» или перетащи файлы в окно.')}</div>`;
 }
 function likedHTML() {
@@ -2711,6 +2806,7 @@ const Cloud = {
       addEventListener('online', () => { if (this.user) { this.sync(); this.pump(); } });
     } catch (e) { this.err = e.message || String(e); }
     this.ready = true; markAccount(); if (S.view === 'me' || S.view === 'feed') renderView();
+    try { const rc = new URL(location.href).searchParams.get('room'); if (rc && this.sb && !ROOM.ch) setTimeout(() => roomJoin(rc, false), 300); } catch (e) {}
   },
   async setUser(u) {
     const prev = this.user && this.user.id;
@@ -2866,7 +2962,7 @@ const Cloud = {
   dataChanged() { if (!this.user) return; store.set('udStamp', Date.now()); clearTimeout(this.pushT); this.pushT = setTimeout(() => this.pushData(), 1500); },
   snapshot() {
     const stats = Object.assign({}, S.statsRemote, { [S.devId]: S.stats });
-    return { liked: [...S.liked], pls: S.pls, presets: userPresets, plays: S.plays, moments: S.moments, trackFx: S.trackFx, labs: S.labs, stats, scene: S.scene };
+    return { liked: [...S.liked], pls: S.pls, presets: userPresets, plays: S.plays, moments: S.moments, trackFx: S.trackFx, labs: S.labs, stats, scene: S.scene, hist: S.hist.slice(-500) };
   },
   statsT: 0,
   statsChanged() { if (!this.user || this.statsT) return; this.statsT = setTimeout(() => { this.statsT = 0; this.pushData(); }, 60000); },
@@ -2885,7 +2981,7 @@ const Cloud = {
     if (!this.user || this.pushing) return; this.pushing = true;
     try {
       const { data: row } = await this.sb.from('user_data').select('data,updated_at').eq('user_id', this.user.id).maybeSingle();
-      if (row) { const rt = Date.parse(row.updated_at), d = row.data || {}; mergeStats(d.stats); if (rt > store.get('udStamp', 0)) { this.applyRemote(d, rt); this.refreshViews(); } }
+      if (row) { const rt = Date.parse(row.updated_at), d = row.data || {}; mergeStats(d.stats); histMerge(d.hist); if (rt > store.get('udStamp', 0)) { this.applyRemote(d, rt); this.refreshViews(); } }
       const { error } = await this.sb.from('user_data').upsert({ user_id: this.user.id, data: this.snapshot(), updated_at: new Date(store.get('udStamp', Date.now())).toISOString() });
       if (error) throw error;
     } catch (e) { this.err = 'Не удалось сохранить данные. Попробую позже'; }
@@ -2895,7 +2991,7 @@ const Cloud = {
   async pullData() {
     const { data, error } = await this.sb.from('user_data').select('data,updated_at').eq('user_id', this.user.id).maybeSingle();
     if (error) throw error;
-    const local = store.get('udStamp', 0), sch = data ? mergeStats((data.data || {}).stats) : false;
+    const local = store.get('udStamp', 0), sch = data ? mergeStats((data.data || {}).stats) : false; if (data && histMerge((data.data || {}).hist) && S.view === 'history') renderView();
     if (data && Date.parse(data.updated_at) > local) { this.applyRemote(data.data || {}, Date.parse(data.updated_at)); this.refreshViews(); }
     else if (!data || local > Date.parse(data.updated_at)) { if (!local) store.set('udStamp', Date.now()); await this.pushData(); }
     else if (sch && S.view === 'labs') renderView();
@@ -3041,7 +3137,7 @@ setInterval(() => { if (document.hidden) tickStats(performance.now(), true); }, 
 function tickStats(ts, bg) {
   const dt = statLast ? Math.min(bg ? 6 : 1, (ts - statLast) / 1000) : 0; statLast = ts;
   if (!E.playing || (document.hidden && !bg)) return;
-  statAcc += dt; statTrack += dt;
+  statAcc += dt; statTrack += dt; histTick(dt);
   if (statAcc >= 5) {
     const k = dayKey(0), t = curT();
     S.stats.days[k] = (S.stats.days[k] || 0) + statAcc;
@@ -3185,6 +3281,7 @@ function renderView() {
   else if (v === 'labs') html = labsHTML();
   else if (v === 'feed') html = feedHTML();
   else if (v === 'me') html = meHTML();
+  else if (v === 'history') html = historyHTML();
   else if (v.startsWith('pl:')) html = playlistHTML(v.slice(3));
   else html = homeHTML();
   $('#view').innerHTML = html;
@@ -3250,6 +3347,7 @@ function renderNow() {
   $$('[data-act=shuffle]').forEach(b => b.setAttribute('aria-pressed', S.shuffle));
   $$('.rep').forEach(b => { b.setAttribute('aria-pressed', S.repeat !== 'off'); b.querySelector('.one').hidden = S.repeat !== 'one'; });
   ensurePalette(t).then(p => { if (cur() === t) { PAL.target = p; applyScene(); } });
+  roomNudgeSoon();
   applyScene(); if (S.lyricsOn && FULL) loadLyrics(t); if (S.artMode === 'vinyl') { const vl = $('#vnLabel'); if (vl && vl.getAttribute('src') !== t.cover) vl.src = t.cover; }
   if ('mediaSession' in navigator) { try { navigator.mediaSession.metadata = new MediaMetadata({ title: t.title, artist: t.artist, album: t.album || 'KMP', artwork: [{ src: t.cover, sizes: '360x360', type: 'image/jpeg' }] }); } catch (e) {} }
   if (FULL) renderQueue();
@@ -3349,7 +3447,7 @@ function placeMenu(anchor, align, wide) {
   const x = align === 'left' ? r.left : r.right - mw;
   menu.style.left = Math.max(12, Math.min(x, innerWidth - mw - 12)) + 'px'; menu.style.top = Math.max(12, y) + 'px';
 }
-const closeMenu = () => { if (menu.hidden) return; menu.hidden = true; $('#menuBg').hidden = true; if (ddOpenBtn) { ddOpenBtn.setAttribute('aria-expanded', 'false'); ddOpenBtn = null; } };
+const closeMenu = () => { if (menu.hidden) return; menu.hidden = true; menu.dataset.room = ''; $('#menuBg').hidden = true; if (ddOpenBtn) { ddOpenBtn.setAttribute('aria-expanded', 'false'); ddOpenBtn = null; } };
 menu.addEventListener('click', e => {
   const ddo = e.target.closest('[data-ddo]');
   if (ddo) { const k = menu.dataset.dd, btn = ddOpenBtn; closeMenu(); DD[k].set(ddo.dataset.ddo); syncDD(); if (btn) btn.focus({ preventScroll: true }); return; }
@@ -3446,6 +3544,15 @@ document.addEventListener('click', e => {
       case 'xy-hold': XY.hold = !XY.hold; a.setAttribute('aria-pressed', XY.hold); toast(XY.hold ? 'Звук остаётся там, где отпустишь палец' : 'После касания звук возвращается'); break;
       case 'dk-tone': S.keepTone = !S.keepTone; store.set('keepTone', S.keepTone); setRate(); syncDock(); toast(S.keepTone ? 'Скорость меняется, тон остаётся прежним' : 'Скорость меняет и тон, как на пластинке'); break;
       case 'dk-rec': recToggle(); break;
+      case 'dk-pitch': { const v = Math.max(-6, Math.min(6, FX.pitch + +a.dataset.d)); if (v === FX.pitch) break; FX.pitch = v; fxChanged(); if (!TK.pitch) toast('Смена тональности не поддерживается в этом браузере'); break; }
+      case 'room-open': openRoomPanel(a); break;
+      case 'room-create': roomJoin(roomCode(), true); closeMenu(); break;
+      case 'room-join': { const v = ($('#roomCodeIn') || {}).value || ''; if (v.trim().length < 4) { toast('Введи код комнаты'); break; } roomJoin(v, false); closeMenu(); break; }
+      case 'room-leave': roomLeave(); closeMenu(); break;
+      case 'room-share': roomShare(); break;
+      case 'room-react': roomReact(a.dataset.e); break;
+      case 'room-tap': { a.remove(); ROOM.userPaused = false; ac(); if (ROOM.last) { const p = ROOM.last; ROOM.applying = true; const t = cur(); if (t && ROOM.idMap[p.id] === t.id) { play(); seek(p.pos + .3); } else roomOnState(p); setTimeout(() => { ROOM.applying = false; }, 80); } break; }
+      case 'hist-play': histPlay(+a.dataset.i); break;
       case 'scene-pick': openScenePicker(a); break;
       case 'upd-reload': location.reload(); break;
       case 'install': if (installPrompt) { installPrompt.prompt(); installPrompt.userChoice.finally(() => { installPrompt = null; if (S.view === 'labs') renderView(); }); } break;
@@ -3921,6 +4028,7 @@ const DKF = { speed: v => (v / 100).toFixed(2).replace('.', ',') + '×', bass: v
 function syncDock() {
   $$('.dk-r').forEach(r => { const k = r.dataset.dk, v = FX[k]; if (+r.value !== v) r.value = v; const mn = +r.min, mx = +r.max; r.style.setProperty('--v', ((v - mn) / (mx - mn) * 100) + '%'); const o = $('#dkv-' + k); if (o) o.textContent = DKF[k](v); r.closest('.dk').classList.toggle('on', v !== FX_DEF[k]); });
   $$('[data-act=dk-tone]').forEach(b => b.setAttribute(b.classList.contains('switch') ? 'aria-checked' : 'aria-pressed', !!S.keepTone));
+  const pv = $('#dkv-pitch'); if (pv) { pv.textContent = 'Тон ' + (FX.pitch > 0 ? '+' : FX.pitch < 0 ? '−' : '') + Math.abs(FX.pitch); pv.parentNode.classList.toggle('on', !!FX.pitch); }
 }
 document.addEventListener('input', e => { const r = e.target.closest && e.target.closest('.dk-r'); if (!r) return; FX[r.dataset.dk] = +r.value; fxChanged(); });
 document.addEventListener('dblclick', e => { const d = e.target.closest && e.target.closest('.dk'); if (!d) return; const k = d.dataset.dkk; FX[k] = FX_DEF[k]; fxChanged(); });
@@ -4027,6 +4135,192 @@ async function recSave(blob) {
   await importFiles([file], { title: (t ? t.title : 'Запись') + ' (ремикс)', artist: t ? t.artist : '', album: 'Ремиксы KMP', coverImg });
   const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 30000);
   toast('Ремикс сохранён в библиотеку и скачан');
+}
+
+/* ================= listen together (realtime rooms) ================= */
+const ROOM = { ch: null, code: '', host: false, peers: {}, idMap: {}, refCache: {}, applying: false, userPaused: false, hb: 0, nudgeT: 0, hostSeen: 0 };
+const roomCode = () => Array.from({ length: 5 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.random() * 32 | 0]).join('');
+function roomMe() { return { id: S.devId, name: (Cloud.profile && Cloud.profile.name) || store.get('feedName', '') || 'Гость', host: ROOM.host, ava: (Cloud.profile && Cloud.profile.avatar_url) || '' }; }
+async function roomJoin(code, host) {
+  if (!Cloud.sb) { toast(Cloud.cfg() ? 'Подключаюсь, попробуй через пару секунд' : 'Совместное прослушивание пока недоступно'); return; }
+  code = String(code).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6); if (code.length < 4) return;
+  roomLeave(true);
+  ROOM.code = code; ROOM.host = host; ROOM.idMap = {}; ROOM.userPaused = false; ROOM.hostSeen = Date.now();
+  const ch = Cloud.sb.channel('kmp-room-' + code, { config: { broadcast: { self: false }, presence: { key: S.devId } } });
+  ROOM.ch = ch;
+  ch.on('broadcast', { event: 'state' }, m => roomOnState(m.payload))
+    .on('broadcast', { event: 'react' }, m => showReaction(m.payload.e, m.payload.n))
+    .on('broadcast', { event: 'hello' }, () => { if (ROOM.host) roomSend(true); })
+    .on('presence', { event: 'sync' }, () => { try { ROOM.peers = ch.presenceState(); } catch (e) {} roomUI(); });
+  ch.subscribe(async st => {
+    if (ROOM.ch !== ch) return;
+    if (st === 'SUBSCRIBED') { try { await ch.track(roomMe()); } catch (e) {} if (host) roomSend(true); else ch.send({ type: 'broadcast', event: 'hello', payload: {} }); roomUI(); toast(host ? `Комната ${code} открыта. Отправь код или ссылку друзьям` : `Ты в комнате ${code}`); }
+    else if (st === 'CHANNEL_ERROR' || st === 'TIMED_OUT') { toast('Не получилось подключиться к комнате'); roomLeave(true); }
+  });
+  try { const u = new URL(location.href); u.searchParams.set('room', code); history.replaceState(null, '', u); } catch (e) {}
+  clearInterval(ROOM.hb); if (host) ROOM.hb = setInterval(() => roomSend(), 4000);
+  roomUI();
+}
+function roomLeave(silent) {
+  if (!ROOM.ch) return;
+  const ch = ROOM.ch; ROOM.ch = null; try { ch.untrack(); } catch (e) {} try { Cloud.sb.removeChannel(ch); } catch (e) {}
+  clearInterval(ROOM.hb); ROOM.code = ''; ROOM.host = false; ROOM.peers = {}; ROOM.last = null; const rt = $('#roomTap'); if (rt) rt.remove();
+  try { const u = new URL(location.href); u.searchParams.delete('room'); history.replaceState(null, '', u); } catch (e) {}
+  roomUI(); if (!silent) toast('Ты вышел из комнаты');
+}
+async function roomRef(t) {
+  if (ROOM.refCache[t.id] && ROOM.refCache[t.id].exp > Date.now()) return ROOM.refCache[t.id].r;
+  const r = trackRef(t); delete r.peaks; if (r.cover && !/^https?:/.test(r.cover)) delete r.cover;
+  if (r.src === 'local' || r.src === 'itunes') { try { const u = await srcFor(t); if (/^https?:/.test(u) && !/\/api\//.test(u)) { r.src = 'url'; r.url = u; } } catch (e) {} }
+  ROOM.refCache[t.id] = { r, exp: Date.now() + 3 * 3600e3 }; return r;
+}
+async function roomSend(force) {
+  if (!ROOM.ch || !ROOM.host) return; const t = cur(); if (!t) return;
+  const ref = await roomRef(t);
+  try { ROOM.ch.send({ type: 'broadcast', event: 'state', payload: { id: t.id, ref, pos: curTime(), playing: E.playing } }); } catch (e) {}
+}
+function roomNudge() { if (!ROOM.ch || !ROOM.host) return; clearTimeout(ROOM.nudgeT); ROOM.nudgeT = setTimeout(() => roomSend(true), 180); }
+async function roomOnState(p) {
+  if (ROOM.host || !p || !p.ref) return; ROOM.hostSeen = Date.now(); ROOM.last = p;
+  let id = ROOM.idMap[p.id];
+  if (!id || !T.has(id)) {
+    const r = p.ref;
+    id = r.src === 'url' ? tempTrack({ src: 'url', id: 'room:' + p.id, title: r.title, artist: r.artist, duration: r.duration, cover: r.cover || '', audio: r.url }) : resolveRef(r);
+    if (!id) { roomUI(`Сейчас у ведущего «${r.title}», этот трек есть только на его устройстве`); return; }
+    ROOM.idMap[p.id] = id;
+  }
+  roomUI();
+  if (ROOM.userPaused) return;
+  ROOM.applying = true;
+  try {
+    const t = cur();
+    if (!t || t.id !== id) { S.queue = [id]; S.qi = 0; await playAt(0, p.playing); if (p.playing) seek(p.pos + .4); else seek(p.pos); }
+    else {
+      if (p.playing && !E.playing) play(); else if (!p.playing && E.playing) pause();
+      const exp = p.pos + (p.playing ? .15 : 0); if (Math.abs(curTime() - exp) > .75) seek(exp);
+    }
+  } finally { setTimeout(() => { ROOM.applying = false; }, 60); }
+  setTimeout(() => { const need = ROOM.ch && !ROOM.host && ROOM.last && ROOM.last.playing && !E.playing && !ROOM.userPaused; let b = $('#roomTap'); if (need && !b) { b = document.createElement('button'); b.id = 'roomTap'; b.className = 'room-tap press'; b.dataset.act = 'room-tap'; b.innerHTML = `${ic('play')}<span>Нажми, чтобы слушать вместе</span>`; document.body.appendChild(b); } else if (!need && b && (E.playing || !ROOM.ch || ROOM.userPaused)) b.remove(); }, 1200);
+}
+function roomPeers() { return Object.values(ROOM.peers || {}).map(a => a && a[0]).filter(Boolean); }
+function roomUI(note) {
+  const on = !!ROOM.ch; document.body.classList.toggle('room-on', on);
+  let pill = $('#roomPill');
+  if (!on) { if (pill) pill.remove(); $$('.react-bar').forEach(b => b.hidden = true); $$('[data-act=room-open]').forEach(b => b.classList.remove('on')); return; }
+  const peers = roomPeers(), n = Math.max(1, peers.length);
+  if (!pill) { pill = document.createElement('button'); pill.id = 'roomPill'; pill.className = 'room-pill glass-strong press'; pill.dataset.act = 'room-open'; document.body.appendChild(pill); }
+  const hostGone = !ROOM.host && peers.length && !peers.some(x => x.host);
+  pill.innerHTML = `<i class="rp-dot"></i><b>Вместе</b><span>${ROOM.code}</span><span class="rp-n">${ic('users')}${n}</span>`;
+  pill.classList.toggle('warn', !!hostGone);
+  $$('.react-bar').forEach(b => b.hidden = false); $$('[data-act=room-open]').forEach(b => b.classList.add('on'));
+  if (note) toast(note);
+  if (!menu.hidden && menu.dataset.room) openRoomPanel(null, true);
+}
+function openRoomPanel(anchor, refresh) {
+  const on = !!ROOM.ch, peers = roomPeers();
+  const av = x => `<span class="rm-ava" style="background:${avaColor(x.id || x.name)}">${x.ava ? `<img src="${esc(x.ava)}" alt="">` : esc((x.name || '?').slice(0, 1).toUpperCase())}</span>`;
+  menu.innerHTML = on ? `<div class="rm">
+      <p class="m-label">${ROOM.host ? 'Ты ведущий комнаты' : 'Ты слушаешь вместе'}</p>
+      <div class="rm-code">${ROOM.code.split('').map(ch => `<b>${ch}</b>`).join('')}</div>
+      <button class="btn btn-accent press rm-wide" data-act="room-share">${ic('share')}Пригласить друзей</button>
+      <p class="m-label">В комнате · ${Math.max(1, peers.length)}</p>
+      <div class="rm-peers">${(peers.length ? peers : [roomMe()]).map(x => `<div class="rm-peer">${av(x)}<b>${esc(x.name)}</b>${x.host ? '<em>ведущий</em>' : ''}${x.id === S.devId ? '<em>ты</em>' : ''}</div>`).join('')}</div>
+      <p class="rm-note">${ROOM.host ? 'Всё, что включаешь ты, сразу играет у друзей: трек, пауза, перемотка.' : 'Музыкой управляет ведущий. Эффекты и громкость у каждого свои.'}</p>
+      <button class="btn press rm-wide" data-act="room-leave">${ic('close')}Выйти из комнаты</button></div>`
+    : `<div class="rm">
+      <p class="m-label">Слушать вместе</p>
+      <p class="rm-lead">Включай музыку друзьям в реальном времени. У всех играет одно и то же, секунда в секунду, а реакции летят на экран.</p>
+      <button class="btn btn-accent press rm-wide" data-act="room-create">${ic('users')}Создать комнату</button>
+      <div class="rm-join"><input id="roomCodeIn" maxlength="6" placeholder="Код друга" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="btn press" data-act="room-join">Войти</button></div></div>`;
+  menu.dataset.id = ''; menu.dataset.dd = ''; menu.dataset.pid = ''; menu.dataset.room = '1'; menu.hidden = false;
+  if (!refresh) placeMenu(anchor || $('#roomPill') || document.body, 'right', true);
+}
+menu.addEventListener('click', e => {
+  const b = e.target.closest('.rm [data-act]'); if (!b) return; e.stopPropagation();
+  const a = b.dataset.act;
+  if (a === 'room-create') { closeMenu(); roomJoin(roomCode(), true); }
+  else if (a === 'room-join') { const v = ($('#roomCodeIn') || {}).value || ''; if (v.trim().length < 4) { toast('Введи код комнаты'); return; } closeMenu(); roomJoin(v, false); }
+  else if (a === 'room-leave') { closeMenu(); roomLeave(); }
+  else if (a === 'room-share') roomShare();
+}, true);
+menu.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'roomCodeIn') { e.preventDefault(); const v = e.target.value; if (v.trim().length >= 4) { closeMenu(); roomJoin(v, false); } } });
+async function roomShare() {
+  const u = new URL(location.origin + location.pathname); u.searchParams.set('room', ROOM.code);
+  const text = `Слушай со мной в KMP, комната ${ROOM.code}`;
+  if (navigator.share && IS_MOBILE) { try { await navigator.share({ title: 'KMP', text, url: u.href }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(u.href); toast('Ссылка скопирована'); } catch (e) { toast('Код комнаты: ' + ROOM.code); }
+}
+const REACTS = ['🔥', '❤️', '😂', '🤯', '👏', '💃'];
+function roomReact(e) {
+  if (!REACTS.includes(e)) return; const n = roomMe().name;
+  showReaction(e, n); if (ROOM.ch) try { ROOM.ch.send({ type: 'broadcast', event: 'react', payload: { e, n } }); } catch (er) {}
+}
+function showReaction(e, n) {
+  if (!REACTS.includes(e)) return;
+  let layer = $('#reactLayer'); if (!layer) { layer = document.createElement('div'); layer.id = 'reactLayer'; document.body.appendChild(layer); }
+  const el = document.createElement('div'); el.className = 'rx'; el.innerHTML = `<span>${e}</span><small>${esc(String(n || '').slice(0, 18))}</small>`;
+  el.style.left = (62 + Math.random() * 30) + '%'; el.style.setProperty('--dx', (Math.random() * 80 - 40) + 'px'); layer.appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+
+/* ================= full listening history ================= */
+S.hist = store.get('hist', []);
+const HIST = { cur: null, saveT: 0 };
+function histTick(dt) {
+  const t = cur(); if (!t || !E.playing) return;
+  if (!HIST.cur || HIST.cur.i !== t.id) { histFlush(); HIST.cur = { i: t.id, t: t.title, a: t.artist, at: Date.now(), s: 0 }; }
+  HIST.cur.s += dt;
+}
+function histFlush() {
+  const c = HIST.cur; HIST.cur = null; if (!c || c.s < 20) return;
+  S.hist.push({ i: c.i, t: c.t, a: c.a, at: c.at, s: Math.round(c.s) }); if (S.hist.length > 3000) S.hist = S.hist.slice(-3000);
+  clearTimeout(HIST.saveT); HIST.saveT = setTimeout(() => { store.set('hist', S.hist); try { Cloud.statsChanged(); } catch (e) {} if (S.view === 'history') renderView(); }, 400);
+}
+function histMerge(list) {
+  if (!Array.isArray(list) || !list.length) return false; const have = new Set(S.hist.map(h => h.i + '@' + h.at)); let ch = false;
+  for (const h of list) if (h && h.i && h.at && !have.has(h.i + '@' + h.at)) { S.hist.push(h); ch = true; }
+  if (ch) { S.hist.sort((a, b) => a.at - b.at); if (S.hist.length > 3000) S.hist = S.hist.slice(-3000); store.set('hist', S.hist); }
+  return ch;
+}
+S.histQ = '';
+function dayLabel(ts) {
+  const d = new Date(ts), t0 = new Date(); t0.setHours(0, 0, 0, 0); const diff = Math.round((t0 - new Date(d.getFullYear(), d.getMonth(), d.getDate())) / 864e5);
+  if (diff === 0) return 'Сегодня'; if (diff === 1) return 'Вчера';
+  return d.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long', year: d.getFullYear() !== t0.getFullYear() ? 'numeric' : undefined });
+}
+function histCover(h) { const t = T.get(h.i); return t ? t.cover : makeCover({ id: h.i, title: h.t, hue: rng(h.i)() * 360 | 0 }); }
+function historyHTML() {
+  const live = HIST.cur && HIST.cur.s >= 20 ? [{ ...HIST.cur, s: Math.round(HIST.cur.s), k: -1, live: true }] : [];
+  const q = S.histQ.trim().toLowerCase(), all = [...S.hist.map((h, i) => ({ ...h, k: i })), ...live].reverse();
+  const list = q ? all.filter(h => (h.t + ' ' + h.a).toLowerCase().includes(q)) : all;
+  const totalMin = Math.round(S.hist.reduce((a, h) => a + (h.s || 0), 0) / 60);
+  let back = '';
+  if (!q) {
+    const now = Date.now(), cards = [];
+    for (const [days, label] of [[7, 'Неделю назад'], [30, 'Месяц назад'], [365, 'Год назад']]) {
+      const c = now - days * 864e5, hit = S.hist.filter(h => Math.abs(h.at - c) < 864e5 * .6).sort((a, b) => b.s - a.s)[0];
+      if (hit) cards.push(`<button class="hb-card press" data-act="hist-play" data-i="${S.hist.indexOf(hit)}"><img src="${histCover(hit)}" alt=""><span><small>${label} ты слушал</small><b>${esc(hit.t)}</b><em>${esc(hit.a)}</em></span>${ic('play')}</button>`);
+    }
+    if (cards.length) back = `<div class="hb">${cards.join('')}</div>`;
+  }
+  let body = '', lastDay = '';
+  for (const h of list.slice(0, 400)) {
+    const dl = dayLabel(h.at); if (dl !== lastDay) { body += `<p class="h-day">${dl}</p>`; lastDay = dl; }
+    const tm = new Date(h.at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }), gone = !T.has(h.i);
+    body += `<button class="h-row press ${gone ? 'gone' : ''}" data-act="hist-play" data-i="${h.k}"><span class="h-tm">${tm}</span><img src="${histCover(h)}" alt="" loading="lazy"><span class="h-m"><b>${esc(h.t)}</b><em>${esc(h.a)}</em></span><span class="h-s">${h.live ? '<i class="h-live"></i>сейчас' : h.s >= 60 ? Math.round(h.s / 60) + ' мин' : h.s + ' с'}</span></button>`;
+  }
+  if (!S.hist.length) body = `<div class="empty">${ic('history')}<h3>Здесь будет вся твоя история</h3><p>Каждый трек, который ты слушаешь дольше 20 секунд, попадёт сюда с датой и временем. Даже через год сможешь найти ту самую песню.</p></div>`;
+  else if (!list.length) body = `<p class="net-note">Ничего не нашлось</p>`;
+  return headHTML('', 'История', S.hist.length ? `${S.hist.length} ${plural(S.hist.length, 'прослушивание', 'прослушивания', 'прослушиваний')} · ${totalMin >= 60 ? (totalMin / 60).toFixed(1).replace('.', ',') + ' ч' : totalMin + ' мин'}` : 'Всё, что ты слушал', '')
+    + (S.hist.length ? `<label class="h-search">${ic('search')}<input id="histQ" type="search" placeholder="Найти в истории: песня или артист" value="${esc(S.histQ)}" autocomplete="off"></label>` : '') + back + `<div class="h-list">${body}</div>`;
+}
+document.addEventListener('input', e => { if (e.target.id !== 'histQ') return; S.histQ = e.target.value; const pos = e.target.selectionStart; renderView(); const n = $('#histQ'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (er) {} } });
+function histPlay(i) {
+  if (i === -1) { openFull(true); return; }
+  const h = S.hist[i]; if (!h) return;
+  let id = T.has(h.i) ? h.i : (trackObjs(S.order).find(t => (t.title + '|' + t.artist).toLowerCase() === (h.t + '|' + h.a).toLowerCase()) || {}).id;
+  if (!id) { toast('Этого трека больше нет в библиотеке'); return; }
+  const ids = S.order.includes(id) ? S.order : [id]; playList(ids, id);
 }
 
 /* ================= story card ================= */
@@ -4201,7 +4495,7 @@ async function boot() {
   renderView(); syncVolUI();
   requestAnimationFrame(loop);
 }
-addEventListener('pagehide', () => { savePos(); if (statAcc) { S.stats.days[dayKey(0)] = (S.stats.days[dayKey(0)] || 0) + statAcc; store.set('stats', S.stats); } });
+addEventListener('pagehide', () => { histFlush(); savePos(); if (statAcc) { S.stats.days[dayKey(0)] = (S.stats.days[dayKey(0)] || 0) + statAcc; store.set('stats', S.stats); } });
 boot();
 })();
 </script>
