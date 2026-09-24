@@ -504,6 +504,54 @@ img.ava{object-fit:cover}
 .room-top.on,.m-icon.room-m.on{background:#2fd36b;color:#06120a;border-color:#2fd36b}
 @media (max-width:1100px){.room-top span{display:none}.room-top{padding:0;width:50px;justify-content:center}}
 @media (max-width:760px){.room-top{display:none!important}}
+/* music pet */
+.pet-nav{position:relative}
+.pet-nav.need::after{content:"";position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:#ff4d4f;border:2px solid var(--glass-strong)}
+.pet-svg{width:100%;height:100%;overflow:visible;display:block}
+.pet-bod{transform-origin:100px 186px;transition:transform .09s linear}
+.pet-egg{animation:petWobble 3s ease-in-out infinite;transform-origin:100px 180px}
+@keyframes petWobble{0%,70%,100%{rotate:0deg}78%{rotate:-6deg}86%{rotate:5deg}93%{rotate:-2deg}}
+.mood-happy .pet-bod,.mood-sleep .pet-bod{animation:petBreath 3.4s ease-in-out infinite}
+@keyframes petBreath{50%{scale:1.03 .97}}
+.mood-dance .pet-arm-l{animation:petArmL .5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 0}
+.mood-dance .pet-arm-r{animation:petArmR .5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 0}
+@keyframes petArmL{to{rotate:28deg}}@keyframes petArmR{to{rotate:-28deg}}
+.pet-z{animation:petZ 2.4s ease-in-out infinite}@keyframes petZ{0%{opacity:0;translate:0 6px}40%{opacity:1}100%{opacity:0;translate:6px -12px}}
+.pet-bub{animation:petBub 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:0 100%}@keyframes petBub{50%{scale:1.08}}
+.mood-sick .pet-bod{animation:petShiver .25s linear infinite}@keyframes petShiver{50%{translate:1.5px 0}}
+.pet-home{display:grid;grid-template-columns:84px minmax(0,1fr) auto;align-items:center;gap:16px;width:100%;margin:22px 0 22px;padding:12px 18px 12px 12px;border-radius:24px;background:var(--surface);border:1px solid var(--line);text-align:left;box-shadow:var(--shadow)}
+.pet-home.hungry{border-color:color-mix(in srgb,#f5a524 60%,transparent);background:color-mix(in srgb,#f5a524 9%,var(--surface))}
+.pet-home.sick{border-color:color-mix(in srgb,#2fd36b 60%,transparent);background:color-mix(in srgb,#2fd36b 8%,var(--surface))}
+.ph-art{width:84px;height:84px;border-radius:20px;background:var(--hover);padding:4px}
+.ph-t{display:flex;flex-direction:column;gap:4px;min-width:0}
+.ph-t small{font-size:12px;font-weight:700;color:var(--muted)}.ph-t b{font:400 24px/1.1 var(--f-display)}
+.ph-t em{font-style:normal;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ph-bar,.pet-bar{display:block;height:6px;border-radius:3px;background:var(--hover);overflow:hidden;max-width:320px}
+.ph-bar i,.pet-bar i{display:block;height:100%;border-radius:3px;background:var(--accent);transition:width .6s var(--ease)}
+.hungry .ph-bar i,.pet-stage.hungry .pet-bar i{background:#f5a524}.sick .ph-bar i,.pet-stage.sick .pet-bar i{background:#2fd36b}
+.pet-home>.ic{width:20px;height:20px;color:var(--muted)}
+.pet-wrap{display:flex;flex-direction:column;gap:18px}
+.pet-stage{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:28px;align-items:center;padding:24px;border-radius:30px;background:radial-gradient(120% 100% at 20% 10%,color-mix(in srgb,var(--accent) 14%,var(--surface)),var(--surface));border:1px solid var(--line)}
+.pet-art{aspect-ratio:1;width:100%;max-width:340px;justify-self:center}
+.pet-info{display:flex;flex-direction:column;gap:12px;align-items:flex-start;min-width:0}
+.pet-k{margin:0;font-size:13px;font-weight:700;color:var(--muted)}
+.pet-info h2{margin:0;font:300 clamp(40px,5vw,60px)/1 var(--f-display);letter-spacing:-.03em}
+.pet-name{font:inherit;color:inherit;border-bottom:2px dashed transparent;padding:0}.pet-name:hover{border-color:var(--line)}
+.pet-pill{font-size:13px;font-weight:700;padding:5px 12px;border-radius:12px;background:var(--hover)}
+.pet-pill.hungry{background:#f5a524;color:#231600}.pet-pill.sick{background:#2fd36b;color:#06120a}
+.pet-task{display:flex;flex-direction:column;gap:8px;width:100%;max-width:420px}.pet-task p{margin:0;font-size:15px;line-height:1.4}.pet-task small{font-size:12.5px;color:var(--muted);font-weight:600}
+.pet-live{display:flex;align-items:center;gap:8px;margin:0;font-size:14px;font-weight:600;color:var(--accent)}.pet-live .ic{width:18px;height:18px}
+.pet-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 0;width:100%;max-width:420px}
+.pet-stats div{padding:10px 12px;border-radius:14px;background:var(--hover);min-width:0}.pet-stats dt{font-size:11.5px;font-weight:700;color:var(--muted)}.pet-stats dd{margin:2px 0 0;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pet-how{padding:18px 20px;border-radius:24px;background:var(--surface);border:1px solid var(--line)}
+.pet-how h3{margin:0 0 10px;font:400 20px var(--f-display)}
+.pet-how ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.pet-how li{display:flex;gap:10px;font-size:13.5px;line-height:1.45;color:var(--muted)}.pet-how li .ic{width:18px;height:18px;flex:none;color:var(--accent);margin-top:1px}
+.pet-col{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.pc-pet{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:20px;background:var(--surface);border:1px solid var(--line);min-width:0}
+.pc-pet span{aspect-ratio:1;border-radius:14px;background:var(--hover);padding:6px}
+.pc-pet b{font:400 20px var(--f-display);margin-top:4px}.pc-pet small{font-size:12px;color:var(--muted)}.pc-pet em{font-style:normal;font-size:12px;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:760px){#fFrom{visibility:hidden}.pet-stage{grid-template-columns:1fr;padding:18px;gap:14px}.pet-art{max-width:260px}.pet-home{grid-template-columns:72px minmax(0,1fr) auto;margin-top:18px}.ph-art{width:72px;height:72px}.pet-col{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* recap stories */
 .recap{position:fixed;inset:0;z-index:99;color:#fff;overflow:hidden;background:var(--r0,#111);user-select:none;-webkit-user-select:none}
 .recap[hidden]{display:none}
@@ -615,6 +663,8 @@ body.noscroll .room-pill{display:none}
 .room-inv div{display:flex;flex-direction:column;min-width:0}.room-inv b{font-size:14px}.room-inv small{font-size:12px;color:var(--muted);letter-spacing:.08em}
 .room-inv .btn{height:38px;flex:none}
 @media (max-width:760px){.room-inv{flex-wrap:wrap;justify-content:flex-end}.room-inv div{flex:1 1 60%}}
+.rm-sw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:14px;background:var(--hover)}
+.rm-sw div{display:flex;flex-direction:column;min-width:0}.rm-sw b{font-size:14px}.rm-sw small{font-size:12px;color:var(--muted)}
 /* history */
 .h-search{display:flex;align-items:center;gap:10px;height:48px;padding:0 16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);margin:4px 0 16px;max-width:560px}
 .h-search .ic{width:18px;height:18px;color:var(--muted)}.h-search input{flex:1;min-width:0;border:0;background:none;outline:none;font:500 15px var(--f-body);color:var(--ink)}
@@ -1176,6 +1226,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     <symbol id="i-blend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 17c4 0 6-10 9-10s5 10 9 10"/><path d="M3 7c4 0 6 10 9 10s5-10 9-10" opacity=".5"/></symbol>
     <symbol id="i-rain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 14a4 4 0 0 1 .5-8 5 5 0 0 1 9.5 1.5A3.3 3.3 0 0 1 17 14z"/><path d="M8 17.5 7 20M12 17.5 11 20M16 17.5l-1 2.5"/></symbol>
     <symbol id="i-feed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-7l-4.5 3.5V16.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5z"/><path d="M8 10h8M8 13h5"/></symbol>
+    <symbol id="i-paw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11.5c-3 0-5.5 3.6-5.5 6 0 1.6 1.3 2.5 2.8 2.5 1.2 0 1.8-.6 2.7-.6s1.5.6 2.7.6c1.5 0 2.8-.9 2.8-2.5 0-2.4-2.5-6-5.5-6z"/><ellipse cx="7" cy="9" rx="1.8" ry="2.3"/><ellipse cx="17" cy="9" rx="1.8" ry="2.3"/><ellipse cx="10" cy="5.5" rx="1.7" ry="2.2"/><ellipse cx="14" cy="5.5" rx="1.7" ry="2.2"/></symbol>
     <symbol id="i-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></symbol>
     <symbol id="i-layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="3"/><path d="M12 4v16M12 11h8.5"/></symbol>
     <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.8-3.3 3.2-5 6-5s5.2 1.7 6 5"/><circle cx="16.8" cy="9.3" r="2.5"/><path d="M16.5 14.3c2.3.1 4 1.5 4.6 4.2"/></symbol>
@@ -1207,17 +1258,15 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     <button class="logo press" data-go="home" aria-label="KMP, на главную"><span>kmp<i></i></span></button>
     <nav class="rail-pill glass-strong">
       <button class="nav-btn press" data-go="home" data-tip="Главная" aria-label="Главная"><svg class="ic"><use href="#i-home"/></svg></button>
-      <button class="nav-btn press" data-act="focus-search" data-tip="Поиск" aria-label="Поиск"><svg class="ic"><use href="#i-search"/></svg></button>
       <button class="nav-btn press" data-go="library" data-tip="Вся музыка" aria-label="Вся музыка"><svg class="ic"><use href="#i-library"/></svg></button>
       <button class="nav-btn press" data-go="history" data-tip="История" aria-label="История"><svg class="ic"><use href="#i-history"/></svg></button>
       <button class="nav-btn press" data-go="liked" data-tip="Любимое" aria-label="Любимое"><svg class="ic"><use href="#i-heart"/></svg></button>
       <button class="nav-btn press" data-go="feed" data-tip="Лента" aria-label="Лента"><svg class="ic"><use href="#i-feed"/></svg></button>
       <button class="nav-btn press" data-go="mixer" data-tip="Микшер" aria-label="Микшер"><svg class="ic"><use href="#i-sliders"/></svg></button>
+      <button class="nav-btn press pet-nav" data-go="pet" data-tip="Питомец" aria-label="Питомец"><svg class="ic"><use href="#i-paw"/></svg></button>
       <button class="nav-btn press" data-go="labs" data-tip="Лаборатория" aria-label="Лаборатория"><svg class="ic"><use href="#i-flask"/></svg></button>
     </nav>
     <div class="rail-pill glass-strong">
-      <button class="nav-btn acct-btn press" data-go="me" data-tip="Аккаунт" aria-label="Аккаунт"><svg class="ic"><use href="#i-user"/></svg></button>
-      <button class="nav-btn press" data-act="upload" data-tip="Добавить треки" aria-label="Добавить треки"><svg class="ic"><use href="#i-upload"/></svg></button>
       <button class="nav-btn press" data-act="new-pl" data-tip="Новый плейлист" aria-label="Новый плейлист"><svg class="ic"><use href="#i-plus"/></svg></button>
       <button class="nav-btn press" data-act="theme" data-tip="Тема" aria-label="Сменить тему"><svg class="ic"><use href="#i-moon"/></svg></button>
     </div>
@@ -1229,7 +1278,6 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
       <span class="m-title" id="mTitle"></span>
       <button class="m-icon acct-btn press" data-go="me" aria-label="Аккаунт"><svg class="ic"><use href="#i-user"/></svg></button>
       <button class="m-icon press room-m" data-act="room-open" aria-label="Слушать вместе"><svg class="ic"><use href="#i-users"/></svg></button>
-      <button class="m-icon press" data-go="search" aria-label="Поиск"><svg class="ic"><use href="#i-search"/></svg></button>
       <button class="pill pill-ghost press" data-go="library"><svg class="ic"><use href="#i-library"/></svg>Вся музыка</button>
       <div class="search-pill glass-strong">
         <label class="seg seg-search"><svg class="ic"><use href="#i-search"/></svg><span class="seg-text"><small>Поиск</small><input id="q" type="search" placeholder="Трек, артист или альбом" autocomplete="off"></span></label>
@@ -1943,7 +1991,8 @@ const TRICKS = [
   { k: 'rise', l: 'Подъём', d: 'Нарастание перед дропом', key: '7', g: '<path d="M3 19c6 0 9-4 11-9s4-6 7-6"/><path d="M16.5 4H21v4.5"/>' },
   { k: 'drop', l: 'Бас-дроп', d: 'Отпусти, и бас бьёт в полную', key: '8', g: '<path d="M12 4v12M6.5 11l5.5 5.5 5.5-5.5M5 20.5h14"/>' }
 ];
-function trickOn(k) {
+function trickOn(k, remote) {
+  if (!remote && ROOM.ch && ROOM.host) try { ROOM.ch.send({ type: 'broadcast', event: 'trick', payload: { k, on: 1 } }); } catch (e) {}
   const F = E.fx; if (!F || TK.on === k) return; if (TK.on) trickOff(TK.on);
   const c = E.ctx, t = c.currentTime, beat = 60 / curBpm(); TK.on = k;
   document.querySelectorAll(`[data-trick="${k}"]`).forEach(b => b.classList.add('on'));
@@ -1965,7 +2014,8 @@ function trickOn(k) {
     F.lp.frequency.cancelScheduledValues(t); F.lp.frequency.setTargetAtTime(260, t, .05); F.lp.Q.setTargetAtTime(5, t, .05); F.tIn.gain.setTargetAtTime(.8, t, .05);
   }
 }
-function trickOff(k) {
+function trickOff(k, remote) {
+  if (!remote && ROOM.ch && ROOM.host && TK.on === k) try { ROOM.ch.send({ type: 'broadcast', event: 'trick', payload: { k, on: 0 } }); } catch (e) {}
   const F = E.fx; if (!F || !k || TK.on !== k) return; TK.on = null;
   document.querySelectorAll(`[data-trick="${k}"]`).forEach(b => b.classList.remove('on'));
   const c = E.ctx, t = c.currentTime;
@@ -2049,13 +2099,17 @@ function matchPreset() {
   for (const p of userPresets) if (sameFX(presetParams(p.p), FX)) return p.id;
   return 'custom';
 }
+function fxName() { const p = [...PRESETS, ...userPresets].find(x => x.id === FXP); return p ? p.name : FXP === 'flat' ? 'Оригинал' : 'Свои настройки'; }
 function fxChanged() {
+  if (ROOM.ch && !ROOM.host && ROOM.follow && ROOM.savedFx && !ROOM.applyingFx) { ROOM.follow = false; ROOM.savedFx = null; store.set('roomFx', false); toast('Теперь у тебя свой звук. Вернуть звук ведущего можно в меню комнаты'); }
+  if (ROOM.ch && ROOM.host) roomNudgeSoon();
   FXP = matchPreset();
   const id = S.queue[S.qi];
   if (id && S.trackFx[id]) { S.trackFx[id] = clone(FX); store.set('trackFx', S.trackFx); try { Cloud.dataChanged(); } catch (e) {} } else store.set('fx', FX);
   applyFX(); syncMirror(); syncMixerUI(); markFXBtn();
 }
 function applyTrackFx(t, silent) {
+  if (ROOM.ch && !ROOM.host && ROOM.follow && ROOM.savedFx) return;
   const bound = t && S.trackFx[t.id];
   const P = presetParams(bound || store.get('fx', {}));
   if (sameFX(P, FX)) return;
@@ -2339,6 +2393,7 @@ function homeHTML() {
       <div class="st-wave"><span id="stCur">0:00</span><canvas class="wave" id="stWave" aria-label="Перемотка"></canvas><span id="stDur">0:00</span></div>
     </div>
   </section>
+  ${petHomeHTML()}
   <section class="block">
     <div class="block-head"><h2>Недавно добавленные</h2><button class="link" data-go="library">Вся музыка, ${tracksWord(all.length)} ${ic('arrow')}</button></div>
     <div class="shelf" data-list="recent">${recent.map(cardHTML).join('')}</div>
@@ -3062,7 +3117,7 @@ const Cloud = {
   dataChanged() { if (!this.user) return; store.set('udStamp', Date.now()); clearTimeout(this.pushT); this.pushT = setTimeout(() => this.pushData(), 1500); },
   snapshot() {
     const stats = Object.assign({}, S.statsRemote, { [S.devId]: S.stats });
-    return { liked: [...S.liked], pls: S.pls, presets: userPresets, plays: S.plays, moments: S.moments, trackFx: S.trackFx, labs: S.labs, stats, scene: S.scene, hist: S.hist.slice(-500) };
+    return { liked: [...S.liked], pls: S.pls, presets: userPresets, plays: S.plays, moments: S.moments, trackFx: S.trackFx, labs: S.labs, stats, scene: S.scene, hist: S.hist.slice(-500), pet: S.pet, petCol: S.petCol };
   },
   statsT: 0,
   statsChanged() { if (!this.user || this.statsT) return; this.statsT = setTimeout(() => { this.statsT = 0; this.pushData(); }, 60000); },
@@ -3081,7 +3136,7 @@ const Cloud = {
     if (!this.user || this.pushing) return; this.pushing = true;
     try {
       const { data: row } = await this.sb.from('user_data').select('data,updated_at').eq('user_id', this.user.id).maybeSingle();
-      if (row) { const rt = Date.parse(row.updated_at), d = row.data || {}; mergeStats(d.stats); histMerge(d.hist); if (rt > store.get('udStamp', 0)) { this.applyRemote(d, rt); this.refreshViews(); } }
+      if (row) { const rt = Date.parse(row.updated_at), d = row.data || {}; mergeStats(d.stats); histMerge(d.hist); petMerge(d); if (rt > store.get('udStamp', 0)) { this.applyRemote(d, rt); this.refreshViews(); } }
       const { error } = await this.sb.from('user_data').upsert({ user_id: this.user.id, data: this.snapshot(), updated_at: new Date(store.get('udStamp', Date.now())).toISOString() });
       if (error) throw error;
     } catch (e) { this.err = 'Не удалось сохранить данные. Попробую позже'; }
@@ -3091,7 +3146,7 @@ const Cloud = {
   async pullData() {
     const { data, error } = await this.sb.from('user_data').select('data,updated_at').eq('user_id', this.user.id).maybeSingle();
     if (error) throw error;
-    const local = store.get('udStamp', 0), sch = data ? mergeStats((data.data || {}).stats) : false; if (data && histMerge((data.data || {}).hist) && S.view === 'history') renderView();
+    const local = store.get('udStamp', 0), sch = data ? mergeStats((data.data || {}).stats) : false; if (data && histMerge((data.data || {}).hist) && S.view === 'history') renderView(); if (data) petMerge(data.data || {});
     if (data && Date.parse(data.updated_at) > local) { this.applyRemote(data.data || {}, Date.parse(data.updated_at)); this.refreshViews(); }
     else if (!data || local > Date.parse(data.updated_at)) { if (!local) store.set('udStamp', Date.now()); await this.pushData(); }
     else if (sch && S.view === 'labs') renderView();
@@ -3186,7 +3241,7 @@ function meHTML() {
       <div class="card-s wide danger-zone"><h3>Удаление аккаунта</h3><p>Удалит профиль, все треки из облака, посты, комментарии и лайки. Треки на этом устройстве останутся.</p><button class="btn btn-danger press" data-act="acct-delete" style="align-self:flex-start">${ic('trash')}<span>Удалить аккаунт</span></button></div>
     </div>`;
 }
-if (window.KMP_DEBUG) window.__kmp = { get ROOM() { return ROOM; }, Cloud, T, S, E, synth, ensureBuffer, srcFor, statsAll, TK, trickOn, trickOff, applyFX, get VN() { return VN; }, get FX() { return FX; } };
+if (window.KMP_DEBUG) window.__kmp = { petTick: (...a) => petTick(...a), petCheck: () => petCheck(), get ROOM() { return ROOM; }, get TKo() { return TK.on; }, Cloud, T, S, E, synth, ensureBuffer, srcFor, statsAll, TK, trickOn, trickOff, applyFX, get VN() { return VN; }, get FX() { return FX; } };
 /* ================= labs ================= */
 const LABS = [
   { k: 'oneplayer', t: 'Один плеер', d: 'Если KMP открыт в двух окнах, играет только одно. Защищает от двойного звука.' },
@@ -3238,7 +3293,7 @@ setInterval(() => { if (document.hidden) tickStats(performance.now(), true); }, 
 function tickStats(ts, bg) {
   const dt = statLast ? Math.min(bg ? 6 : 1, (ts - statLast) / 1000) : 0; statLast = ts;
   if (!E.playing || (document.hidden && !bg)) return;
-  statAcc += dt; statTrack += dt; histTick(dt);
+  statAcc += dt; statTrack += dt; histTick(dt); try { petTick(dt); } catch (e) {}
   if (statAcc >= 5) {
     const k = dayKey(0), t = curT();
     S.stats.days[k] = (S.stats.days[k] || 0) + statAcc;
@@ -3383,6 +3438,7 @@ function renderView() {
   else if (v === 'feed') html = feedHTML();
   else if (v === 'me') html = meHTML();
   else if (v === 'history') html = historyHTML();
+  else if (v === 'pet') html = petHTML();
   else if (v.startsWith('pl:')) html = playlistHTML(v.slice(3));
   else html = homeHTML();
   $('#view').innerHTML = html;
@@ -3646,6 +3702,7 @@ document.addEventListener('click', e => {
       case 'dk-tone': S.keepTone = !S.keepTone; store.set('keepTone', S.keepTone); setRate(); syncDock(); toast(S.keepTone ? 'Скорость меняется, тон остаётся прежним' : 'Скорость меняет и тон, как на пластинке'); break;
       case 'dk-rec': recToggle(); break;
       case 'recap': openRecap(30); break;
+      case 'pet-rename': openModal({ title: 'Как зовут питомца?', ph: 'Имя', btn: 'Сохранить', max: 20, value: S.pet.name }, v => { v = String(v || '').trim().slice(0, 20); if (!v) return; S.pet.name = v; petSave(true); renderView(); }); break;
       case 'full-layout': setFullLayout(S.fullLayout === 'min' ? 'full' : 'min', true); break;
       case 'dock-open': { const f = $('#full'); f.classList.toggle('dock-open'); break; }
       case 'dk-pitch': { const v = Math.max(-6, Math.min(6, FX.pitch + +a.dataset.d)); if (v === FX.pitch) break; FX.pitch = v; fxChanged(); if (!TK.pitch) toast('Смена тональности не поддерживается в этом браузере'); break; }
@@ -4243,7 +4300,7 @@ async function recSave(blob) {
 }
 
 /* ================= listen together (realtime rooms) ================= */
-const ROOM = { ch: null, code: '', host: false, peers: {}, idMap: {}, refCache: {}, applying: false, userPaused: false, hb: 0, nudgeT: 0, hostSeen: 0 };
+const ROOM = { follow: true, ch: null, code: '', host: false, peers: {}, idMap: {}, refCache: {}, applying: false, userPaused: false, hb: 0, nudgeT: 0, hostSeen: 0 };
 const roomCode = () => Array.from({ length: 5 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.random() * 32 | 0]).join('');
 function roomMe() { return { id: S.devId, name: (Cloud.profile && Cloud.profile.name) || store.get('feedName', '') || 'Гость', host: ROOM.host, ava: (Cloud.profile && Cloud.profile.avatar_url) || '' }; }
 async function roomJoin(code, host) {
@@ -4251,11 +4308,12 @@ async function roomJoin(code, host) {
   code = String(code).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6); if (code.length < 4) return;
   roomLeave(true);
   if (host) store.set('myRoom', code);
-  ROOM.code = code; ROOM.host = host; ROOM.idMap = {}; ROOM.userPaused = false; ROOM.hostSeen = Date.now();
+  ROOM.follow = store.get('roomFx', true); ROOM.code = code; ROOM.host = host; ROOM.idMap = {}; ROOM.userPaused = false; ROOM.hostSeen = Date.now();
   const ch = Cloud.sb.channel('kmp-room-' + code, { config: { broadcast: { self: false }, presence: { key: S.devId } } });
   ROOM.ch = ch;
   ch.on('broadcast', { event: 'state' }, m => roomOnState(m.payload))
     .on('broadcast', { event: 'react' }, m => showReaction(m.payload.e, m.payload.n))
+    .on('broadcast', { event: 'trick' }, m => { if (ROOM.host || !ROOM.follow || !E.playing || !m.payload) return; if (m.payload.on) trickOn(m.payload.k, true); else trickOff(m.payload.k, true); })
     .on('broadcast', { event: 'hello' }, () => { if (ROOM.host) roomSend(true); })
     .on('presence', { event: 'sync' }, () => { try { ROOM.peers = ch.presenceState(); } catch (e) {} roomUI(); });
   ch.subscribe(async st => {
@@ -4277,7 +4335,7 @@ function roomInvite(code) {
 function roomLeave(silent) {
   if (!ROOM.ch) return;
   const ch = ROOM.ch; ROOM.ch = null; try { ch.untrack(); } catch (e) {} try { Cloud.sb.removeChannel(ch); } catch (e) {}
-  clearInterval(ROOM.hb); ROOM.code = ''; ROOM.host = false; ROOM.peers = {}; ROOM.last = null; const rt = $('#roomTap'); if (rt) rt.remove();
+  roomRestoreFx(); clearInterval(ROOM.hb); ROOM.code = ''; ROOM.host = false; ROOM.peers = {}; ROOM.last = null; const rt = $('#roomTap'); if (rt) rt.remove();
   try { const u = new URL(location.href); u.searchParams.delete('room'); history.replaceState(null, '', u); } catch (e) {}
   roomUI(); if (!silent) toast('Ты вышел из комнаты');
 }
@@ -4297,11 +4355,12 @@ async function roomRef(t) {
 async function roomSend(force) {
   if (!ROOM.ch || !ROOM.host) return; const t = cur(); if (!t) return;
   const ref = await roomRef(t);
-  try { ROOM.ch.send({ type: 'broadcast', event: 'state', payload: { id: t.id, ref, pos: curTime(), playing: E.playing } }); } catch (e) {}
+  try { ROOM.ch.send({ type: 'broadcast', event: 'state', payload: { id: t.id, ref, pos: curTime(), playing: E.playing, fx: FX, kt: !!S.keepTone, fxn: fxName() } }); } catch (e) {}
 }
 function roomNudge() { if (!ROOM.ch || !ROOM.host) return; clearTimeout(ROOM.nudgeT); ROOM.nudgeT = setTimeout(() => roomSend(true), 180); }
 async function roomOnState(p) {
   if (ROOM.host || !p || !p.ref) return; ROOM.hostSeen = Date.now(); ROOM.last = p;
+  roomApplyFx(p);
   let id = ROOM.idMap[p.id];
   if (!id || !T.has(id)) {
     const r = p.ref;
@@ -4321,6 +4380,17 @@ async function roomOnState(p) {
     }
   } finally { setTimeout(() => { ROOM.applying = false; }, 60); }
   setTimeout(() => { const need = ROOM.ch && !ROOM.host && ROOM.last && ROOM.last.playing && !E.playing && !ROOM.userPaused; let b = $('#roomTap'); if (need && !b) { b = document.createElement('button'); b.id = 'roomTap'; b.className = 'room-tap press'; b.dataset.act = 'room-tap'; b.innerHTML = `${ic('play')}<span>Нажми, чтобы слушать вместе</span>`; document.body.appendChild(b); } else if (!need && b && (E.playing || !ROOM.ch || ROOM.userPaused)) b.remove(); }, 1200);
+}
+function roomApplyFx(p) {
+  if (!ROOM.follow || !p || !p.fx) return;
+  const next = presetParams(p.fx); if (sameFX(next, FX) && S.keepTone === !!p.kt) return;
+  if (!ROOM.savedFx) ROOM.savedFx = { fx: clone(FX), kt: S.keepTone };
+  ROOM.applyingFx = true; FX = next; S.keepTone = !!p.kt; FXP = matchPreset(); applyFX(); syncMirror(); syncMixerUI(); markFXBtn(); ROOM.applyingFx = false;
+  if (ROOM.fxn !== p.fxn) { ROOM.fxn = p.fxn; if (p.fxn && p.fxn !== 'Оригинал') toast('Ведущий включил звук: ' + p.fxn); }
+}
+function roomRestoreFx() {
+  if (!ROOM.savedFx) return; FX = presetParams(ROOM.savedFx.fx); S.keepTone = ROOM.savedFx.kt; ROOM.savedFx = null; ROOM.fxn = null;
+  FXP = matchPreset(); applyFX(); syncMirror(); syncMixerUI(); markFXBtn();
 }
 function roomPeers() { return Object.values(ROOM.peers || {}).map(a => a && a[0]).filter(Boolean); }
 function roomUI(note) {
@@ -4345,7 +4415,8 @@ function openRoomPanel(anchor, refresh) {
       <button class="btn btn-accent press rm-wide" data-act="room-share">${ic('share')}Пригласить друзей</button>
       <p class="m-label">В комнате · ${Math.max(1, peers.length)}</p>
       <div class="rm-peers">${(peers.length ? peers : [roomMe()]).map(x => `<div class="rm-peer">${av(x)}<b>${esc(x.name)}</b>${x.host ? '<em>ведущий</em>' : ''}${x.id === S.devId ? '<em>ты</em>' : ''}</div>`).join('')}</div>
-      <p class="rm-note">${ROOM.host ? 'Всё, что включаешь ты, сразу играет у друзей: трек, пауза, перемотка.' : 'Музыкой управляет ведущий. Эффекты и громкость у каждого свои.'}</p>
+      ${ROOM.host ? '' : `<div class="rm-sw"><div><b>Звук как у ведущего</b><small>Эффекты, скорость и трюки ведущего</small></div><button class="switch" role="switch" aria-checked="${ROOM.follow}" data-act="room-fx" aria-label="Звук как у ведущего"></button></div>`}
+      <p class="rm-note">${ROOM.host ? 'Всё, что включаешь ты, сразу играет у друзей: трек, пауза, перемотка, эффекты и трюки.' : 'Музыкой управляет ведущий. Громкость у каждого своя.'}</p>
       <button class="btn press rm-wide" data-act="room-leave">${ic('close')}Выйти из комнаты</button></div>`
     : `<div class="rm">
       <p class="m-label">Слушать вместе</p>
@@ -4362,6 +4433,7 @@ menu.addEventListener('click', e => {
   else if (a === 'room-join') { const v = ($('#roomCodeIn') || {}).value || ''; if (v.trim().length < 4) { toast('Введи код комнаты'); return; } closeMenu(); roomJoin(v, false); }
   else if (a === 'room-leave') { closeMenu(); roomLeave(); }
   else if (a === 'room-share') roomShare();
+  else if (a === 'room-fx') { ROOM.follow = !ROOM.follow; store.set('roomFx', ROOM.follow); b.setAttribute('aria-checked', ROOM.follow); if (ROOM.follow) { if (ROOM.last) roomApplyFx(ROOM.last); toast('Звук как у ведущего'); } else { roomRestoreFx(); toast('Включён твой звук'); } }
 }, true);
 menu.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'roomCodeIn') { e.preventDefault(); const v = e.target.value; if (v.trim().length >= 4) { closeMenu(); roomJoin(v, false); } } });
 async function roomShare() {
@@ -4552,6 +4624,141 @@ async function shareRecap() {
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 30000); toast('Итог сохранён в загрузки');
 }
 
+/* ================= music pet ================= */
+const PET_NAMES = ['Бублик', 'Пиксель', 'Луна', 'Моти', 'Кекс', 'Эхо', 'Басик', 'Нота', 'Ритм', 'Фанк', 'Тоша', 'Зефир', 'Бит', 'Соня', 'Грув', 'Вайб', 'Лофи', 'Мятка', 'Тембр', 'Шорох'];
+const PET_ST = [{ n: 'Яйцо', at: 0 }, { n: 'Малыш', at: 10 }, { n: 'Ребёнок', at: 70 }, { n: 'Подросток', at: 250 }, { n: 'Взрослый', at: 600 }];
+const PET_MEAL_H = 6, PET_FEED = 15, PET_CURE = 30, PET_ADULT_DAYS = 4;
+function petNew() { const seed = Math.random().toString(36).slice(2, 9), now = Date.now(); return { id: 'p' + seed, seed, name: PET_NAMES[Math.random() * PET_NAMES.length | 0], born: now, stage: 0, grow: 0, hunger: { on: false, got: 0, since: 0 }, sick: { on: false, got: 0, since: 0 }, nextMeal: 0, lastCheck: now, fav: {}, u: now }; }
+S.pet = store.get('pet', null) || petNew(); S.petCol = store.get('petCol', []);
+let petSaveT = 0;
+function petSave(sync) { S.pet.u = Date.now(); store.set('pet', S.pet); if (sync) { clearTimeout(petSaveT); petSaveT = setTimeout(() => { try { Cloud.statsChanged(); } catch (e) {} }, 500); } petBadge(); }
+function petMood(P = S.pet) { if (P.stage === 0) return 'egg'; if (P.sick.on) return 'sick'; if (P.hunger.on) return 'hungry'; if (E.playing) return 'dance'; const h = new Date().getHours(); return h < 7 ? 'sleep' : 'happy'; }
+function petDays(P = S.pet) { return Math.floor((Date.now() - P.born) / 864e5); }
+function petCheck() {
+  const P = S.pet, now = Date.now();
+  if (P.stage >= 1) {
+    if (!P.hunger.on && P.nextMeal && now >= P.nextMeal) { P.hunger = { on: true, got: 0, since: now }; toast(`${P.name} проголодался. Включи музыку на ${PET_FEED} минут, чтобы покормить`); }
+    const hrs = Math.min(48, Math.max(0, (now - P.lastCheck) / 3600e3));
+    if (!P.sick.on && hrs > 0) { let pr = 1 - Math.pow(1 - .02, hrs); if (P.hunger.on && now - P.hunger.since > 24 * 3600e3) pr = 1; if (Math.random() < pr) { P.sick = { on: true, got: 0, since: now }; toast(`${P.name} заболел. ${PET_CURE} минут музыки его вылечат`); } }
+  }
+  P.lastCheck = now; petSave(); if (S.view === 'pet') paintPet();
+}
+function petTick(dt) {
+  const P = S.pet, t = cur(), m = dt / 60; if (!t) return;
+  const f = P.fav[t.id] || (P.fav[t.id] = { t: t.title, a: t.artist, s: 0 }); f.s += dt;
+  if (P.sick.on) { P.sick.got += m; if (P.sick.got >= PET_CURE) { P.sick = { on: false, got: 0, since: 0 }; toast(`${P.name} выздоровел! Музыка лечит`); } }
+  else if (P.hunger.on) { P.hunger.got += m; if (P.hunger.got >= PET_FEED) { P.hunger = { on: false, got: 0, since: 0 }; P.nextMeal = Date.now() + PET_MEAL_H * 3600e3; toast(`${P.name} наелся и доволен`); } }
+  else {
+    P.grow += m;
+    const next = PET_ST[P.stage + 1];
+    if (next && P.grow >= next.at && (P.stage + 1 < 4 || petDays(P) >= PET_ADULT_DAYS)) {
+      P.stage++;
+      if (P.stage === 1) { P.nextMeal = Date.now() + PET_MEAL_H * 3600e3; toast(`Из яйца вылупился ${P.name}! Загляни к нему`); }
+      else if (P.stage === 4) { petGraduate(); return; }
+      else toast(`${P.name} подрос: теперь ${PET_ST[P.stage].n.toLowerCase()}`);
+    }
+  }
+  PET_TICK.acc += dt; if (PET_TICK.acc > 10) { PET_TICK.acc = 0; for (const k of Object.keys(P.fav)) if (P.fav[k].s < 30 && Object.keys(P.fav).length > 30) delete P.fav[k]; petSave(true); if (S.view === 'pet') paintPet(); }
+}
+const PET_TICK = { acc: 0 };
+function petFav(P) { const f = Object.values(P.fav || {}).sort((a, b) => b.s - a.s)[0]; return f || null; }
+function petGraduate() {
+  const P = S.pet, f = petFav(P);
+  S.petCol.push({ id: P.id, seed: P.seed, name: P.name, born: P.born, grown: Date.now(), min: Math.round(P.grow), fav: f ? f.t + (f.a ? ' · ' + f.a : '') : '' });
+  store.set('petCol', S.petCol);
+  const name = P.name; S.pet = petNew(); petSave(true);
+  toast(`${name} вырос и переехал в коллекцию! Тебя ждёт новое яйцо`);
+  if (S.view === 'pet') renderView();
+  try { for (let i = 0; i < 6; i++) setTimeout(() => showReaction('🎉', name), i * 180); } catch (e) {}
+}
+function petMerge(d) {
+  if (!d) return;
+  if (d.pet && d.pet.id && d.pet.u > (S.pet.u || 0)) { S.pet = d.pet; store.set('pet', S.pet); }
+  if (Array.isArray(d.petCol)) { const have = new Set(S.petCol.map(x => x.id)); let ch = false; for (const x of d.petCol) if (x && x.id && !have.has(x.id)) { S.petCol.push(x); ch = true; } if (ch) store.set('petCol', S.petCol); if (S.pet && S.petCol.some(x => x.id === S.pet.id)) { S.pet = petNew(); store.set('pet', S.pet); } }
+  petBadge();
+}
+function petBadge() { const need = S.pet.stage >= 1 && (S.pet.hunger.on || S.pet.sick.on); $$('.pet-nav').forEach(b => b.classList.toggle('need', need)); const hc = $('#petHome'); if (hc) hc.outerHTML = petHomeHTML(); }
+setInterval(petCheck, 60000); setTimeout(petCheck, 1500); addEventListener('visibilitychange', () => { if (!document.hidden) petCheck(); });
+
+function petSVG(seed, stage, mood, prog = 0) {
+  const r = rng('pet' + seed), h1 = r() * 360 | 0, h2 = (h1 + 30 + r() * 90) % 360 | 0, ears = r() * 6 | 0, pat = r() * 4 | 0, shp = r() * 3 | 0, uid = 'g' + seed + stage;
+  const sick = mood === 'sick', sat = sick ? 22 : 68, c1 = `hsl(${sick ? 95 : h1} ${sat}% ${sick ? 72 : 70}%)`, c2 = `hsl(${sick ? 110 : h2} ${sat}% ${sick ? 55 : 52}%)`, dark = `hsl(${h1} 30% 18%)`;
+  const defs = `<defs><linearGradient id="${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient><radialGradient id="${uid}s" cx=".35" cy=".3" r=".7"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>`;
+  if (stage === 0) {
+    const cracks = prog > .35 ? `<path d="M72 98l10 8 8-10 9 9 9-8 9 9 11-8" fill="none" stroke="${dark}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="${Math.min(1, (prog - .35) * 2.5)}"/>` : '';
+    return `<svg viewBox="0 0 200 200" class="pet-svg">${defs}<ellipse cx="100" cy="186" rx="44" ry="7" fill="rgba(0,0,0,.18)"/><g class="pet-bod pet-egg"><path d="M100 36c30 0 52 48 52 84 0 34-23 62-52 62s-52-28-52-62c0-36 22-84 52-84z" fill="url(#${uid})"/>${[[82, 80, 9], [118, 104, 7], [92, 140, 11], [124, 150, 6]].map(([x, y, rr]) => `<circle cx="${x}" cy="${y}" r="${rr}" fill="#fff" opacity=".35"/>`).join('')}<path d="M100 36c30 0 52 48 52 84 0 34-23 62-52 62s-52-28-52-62c0-36 22-84 52-84z" fill="url(#${uid}s)"/>${cracks}</g></svg>`;
+  }
+  const k = [0, .7, .82, .92, 1][stage], rx = [52, 46, 40][shp] * k, ry = [50, 56, 62][shp] * k, cy = 186 - ry - 6, top = cy - ry, eyeY = cy - ry * .18, ex = rx * .38, er = (stage === 1 ? 11 : 9) * (0.8 + k * .25);
+  const earCol = `url(#${uid})`;
+  const earsSvg = [
+    `<path d="M${100 - rx * .75} ${top + ry * .35} L${100 - rx * .55} ${top - ry * .35} L${100 - rx * .15} ${top + ry * .12}Z M${100 + rx * .75} ${top + ry * .35} L${100 + rx * .55} ${top - ry * .35} L${100 + rx * .15} ${top + ry * .12}Z" fill="${earCol}"/>`,
+    `<ellipse cx="${100 - rx * .35}" cy="${top - ry * .25}" rx="${rx * .16}" ry="${ry * .5}" fill="${earCol}"/><ellipse cx="${100 + rx * .35}" cy="${top - ry * .25}" rx="${rx * .16}" ry="${ry * .5}" fill="${earCol}"/>`,
+    `<path d="M${100 - rx * .25} ${top + 6} Q${100 - rx * .45} ${top - 22} ${100 - rx * .6} ${top - 28} M${100 + rx * .25} ${top + 6} Q${100 + rx * .45} ${top - 22} ${100 + rx * .6} ${top - 28}" stroke="${dark}" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="${100 - rx * .6}" cy="${top - 30}" r="6" fill="${c2}"/><circle cx="${100 + rx * .6}" cy="${top - 30}" r="6" fill="${c2}"/>`,
+    `<path d="M${100 - rx * .5} ${top + 10} q-6 -22 6 -30 q2 16 8 24Z M${100 + rx * .5} ${top + 10} q6 -22 -6 -30 q-2 16 -8 24Z" fill="#f7e7c9"/>`,
+    `<circle cx="${100 - rx * .62}" cy="${top + ry * .2}" r="${rx * .24}" fill="${earCol}"/><circle cx="${100 + rx * .62}" cy="${top + ry * .2}" r="${rx * .24}" fill="${earCol}"/>`,
+    `<path d="M100 ${top + 4} q-10 -20 4 -26 q-6 12 6 18" fill="${c2}"/>`][ears];
+  const patSvg = [``, [[-.35, .1, .12], [.3, .3, .1], [-.1, .5, .08]].map(([x, y, rr]) => `<circle cx="${100 + rx * x}" cy="${cy + ry * y}" r="${rx * rr}" fill="#fff" opacity=".28"/>`).join(''), `<ellipse cx="100" cy="${cy + ry * .38}" rx="${rx * .55}" ry="${ry * .45}" fill="#fff" opacity=".3"/>`, [0, 1, 2].map(i => `<path d="M${100 - rx * .8} ${cy + ry * (.15 + i * .22)} Q100 ${cy + ry * (.05 + i * .22)} ${100 + rx * .8} ${cy + ry * (.15 + i * .22)}" stroke="#fff" stroke-width="4" opacity=".22" fill="none"/>`).join('')][pat];
+  let eyes, mouth, extra = '';
+  const eL = 100 - ex, eR = 100 + ex, my = cy + ry * .22;
+  if (mood === 'dance' || mood === 'happy') {
+    eyes = mood === 'dance' ? `<path d="M${eL - er} ${eyeY + 2} q${er} -${er * 1.3} ${er * 2} 0 M${eR - er} ${eyeY + 2} q${er} -${er * 1.3} ${er * 2} 0" stroke="${dark}" stroke-width="4" fill="none" stroke-linecap="round"/>` : [eL, eR].map(x => `<circle cx="${x}" cy="${eyeY}" r="${er}" fill="${dark}"/><circle cx="${x + er * .35}" cy="${eyeY - er * .35}" r="${er * .35}" fill="#fff"/>`).join('');
+    mouth = `<path d="M${100 - 10 * k} ${my} q${10 * k} ${12 * k} ${20 * k} 0" stroke="${dark}" stroke-width="3.5" fill="${mood === 'dance' ? '#ff7b8a' : 'none'}" stroke-linecap="round"/>`;
+  } else if (mood === 'hungry') {
+    eyes = [eL, eR].map(x => `<circle cx="${x}" cy="${eyeY}" r="${er}" fill="${dark}"/><circle cx="${x + er * .2}" cy="${eyeY - er * .5}" r="${er * .38}" fill="#fff"/>`).join('');
+    mouth = `<ellipse cx="100" cy="${my + 4}" rx="${7 * k + 2}" ry="${9 * k + 2}" fill="${dark}"/><ellipse cx="100" cy="${my + 8}" rx="${5 * k}" ry="${4 * k}" fill="#ff7b8a"/>`;
+    extra = `<g class="pet-bub"><rect x="136" y="${Math.max(8, top - 38)}" width="54" height="34" rx="14" fill="#fff"/><path d="M146 ${Math.max(8, top - 38) + 32} l-8 10 16 -10z" fill="#fff"/><text x="163" y="${Math.max(8, top - 38) + 24}" text-anchor="middle" font-size="18">🎵</text></g>`;
+  } else if (mood === 'sick') {
+    eyes = [eL, eR].map(x => `<path d="M${x - er} ${eyeY} q${er} ${er * .8} ${er * 2} 0" stroke="${dark}" stroke-width="3.5" fill="none" stroke-linecap="round"/>`).join('');
+    mouth = `<path d="M${100 - 10 * k} ${my + 4} q5 -5 10 0 q5 5 10 0" stroke="${dark}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    extra = `<rect x="${100 + 6}" y="${my - 1}" width="${28 * k}" height="6" rx="3" fill="#fff" transform="rotate(18 ${106} ${my})"/><circle cx="${106 + 27 * k}" cy="${my + 9 * k}" r="4" fill="#ff4d4f"/><path d="M${100 + rx * .7} ${top + ry * .3} q6 10 0 14 q-6 -4 0 -14z" fill="#8fd3ff"/>`;
+  } else {
+    eyes = [eL, eR].map(x => `<path d="M${x - er} ${eyeY} h${er * 2}" stroke="${dark}" stroke-width="3.5" stroke-linecap="round"/>`).join('');
+    mouth = `<circle cx="100" cy="${my + 3}" r="${3.5 * k + 1}" fill="${dark}"/>`;
+    extra = `<text x="${100 + rx * .6}" y="${top - 6}" font-size="22" font-weight="700" fill="#fff" class="pet-z">z</text><text x="${100 + rx * .6 + 16}" y="${top - 22}" font-size="15" font-weight="700" fill="#fff" class="pet-z" style="animation-delay:.6s">z</text>`;
+  }
+  const phones = stage >= 3 ? `<path d="M${100 - rx * .92} ${cy - ry * .15} Q100 ${top - ry * .55} ${100 + rx * .92} ${cy - ry * .15}" stroke="#20242f" stroke-width="7" fill="none" stroke-linecap="round"/><rect x="${100 - rx - 9}" y="${cy - ry * .3}" width="18" height="${ry * .5}" rx="8" fill="#ff6a3c"/><rect x="${100 + rx - 9}" y="${cy - ry * .3}" width="18" height="${ry * .5}" rx="8" fill="#ff6a3c"/>` : '';
+  const arms = `<ellipse class="pet-arm pet-arm-l" cx="${100 - rx * .95}" cy="${cy + ry * .2}" rx="${9 * k + 3}" ry="${14 * k + 3}" fill="${c2}"/><ellipse class="pet-arm pet-arm-r" cx="${100 + rx * .95}" cy="${cy + ry * .2}" rx="${9 * k + 3}" ry="${14 * k + 3}" fill="${c2}"/>`;
+  const feet = `<ellipse cx="${100 - rx * .45}" cy="${cy + ry * .95}" rx="${13 * k + 3}" ry="${7 * k + 2}" fill="${c2}"/><ellipse cx="${100 + rx * .45}" cy="${cy + ry * .95}" rx="${13 * k + 3}" ry="${7 * k + 2}" fill="${c2}"/>`;
+  const crown = stage === 4 ? `<path d="M${100 - 16} ${top - 2} l6 -16 10 10 10 -10 6 16z" fill="#ffc83d" stroke="#e0a100" stroke-width="2" stroke-linejoin="round"/>` : '';
+  return `<svg viewBox="0 0 200 200" class="pet-svg mood-${mood}">${defs}<ellipse cx="100" cy="188" rx="${rx * .85}" ry="7" fill="rgba(0,0,0,.18)" class="pet-shadow"/><g class="pet-bod">${earsSvg}${arms}${feet}<ellipse cx="100" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#${uid})"/>${patSvg}<ellipse cx="100" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#${uid}s)"/><ellipse cx="${eL - er * .6}" cy="${my - 2}" rx="${8 * k}" ry="${5 * k}" fill="#ff8fa3" opacity=".6"/><ellipse cx="${eR + er * .6}" cy="${my - 2}" rx="${8 * k}" ry="${5 * k}" fill="#ff8fa3" opacity=".6"/>${eyes}${mouth}${phones}${crown}${extra}</g></svg>`;
+}
+function petStatus(P = S.pet) {
+  const mood = petMood(P);
+  if (mood === 'egg') { const need = PET_ST[1].at - P.grow; return { mood, label: 'греется', task: `Слушай музыку, и из яйца кто-то вылупится`, cur: P.grow, max: PET_ST[1].at, left: `ещё ${Math.max(1, Math.ceil(need))} мин музыки`, tone: 'grow' }; }
+  if (P.sick.on) return { mood, label: 'Заболел', task: 'Музыка лечит: включи что-нибудь и слушай', cur: P.sick.got, max: PET_CURE, left: `ещё ${Math.max(1, Math.ceil(PET_CURE - P.sick.got))} мин`, tone: 'sick' };
+  if (P.hunger.on) return { mood, label: 'Проголодался', task: 'Покорми музыкой: он питается твоими треками', cur: P.hunger.got, max: PET_FEED, left: `ещё ${Math.max(1, Math.ceil(PET_FEED - P.hunger.got))} мин`, tone: 'hungry' };
+  const next = PET_ST[P.stage + 1];
+  if (!next) return { mood, label: 'Взрослый', task: '', cur: 1, max: 1, left: '', tone: 'grow' };
+  const waitDays = P.stage + 1 === 4 && P.grow >= next.at ? PET_ADULT_DAYS - petDays(P) : 0;
+  return { mood, label: mood === 'dance' ? 'Танцует' : mood === 'sleep' ? 'Спит' : 'Счастлив', task: waitDays > 0 ? `Почти взрослый: осталось подождать ${waitDays} ${plural(waitDays, 'день', 'дня', 'дней')}` : `Растёт, пока играет музыка. Дальше: ${next.n.toLowerCase()}`, cur: P.grow - PET_ST[P.stage].at, max: next.at - PET_ST[P.stage].at, left: waitDays > 0 ? '' : `ещё ${Math.max(1, Math.ceil(next.at - P.grow))} мин`, tone: 'grow' };
+}
+function petHomeHTML() {
+  const P = S.pet, st = petStatus(P), pct = Math.min(100, st.cur / st.max * 100);
+  return `<button class="pet-home press ${st.tone}" id="petHome" data-go="pet"><span class="ph-art">${petSVG(P.seed, P.stage, st.mood, P.grow / PET_ST[1].at)}</span><span class="ph-t"><small>${PET_ST[P.stage].n} · ${st.label}</small><b>${esc(P.name)}</b><span class="ph-bar"><i style="width:${pct}%"></i></span><em>${st.tone === 'grow' ? st.left || st.task : st.task + ' · ' + st.left}</em></span>${ic('arrow')}</button>`;
+}
+function petHTML() {
+  const P = S.pet, st = petStatus(P), pct = Math.min(100, st.cur / st.max * 100), f = petFav(P);
+  const col = S.petCol.slice().reverse();
+  return headHTML('', 'Питомец', 'Растёт, пока ты слушаешь музыку', '')
+    + `<div class="pet-wrap"><section class="pet-stage ${st.tone}"><div class="pet-art" id="petArt">${petSVG(P.seed, P.stage, st.mood, P.grow / PET_ST[1].at)}</div>
+      <div class="pet-info"><p class="pet-k">${PET_ST[P.stage].n} · ${petDays(P)} ${plural(petDays(P), 'день', 'дня', 'дней')}</p>
+        <h2><button class="pet-name" data-act="pet-rename" aria-label="Переименовать">${esc(P.name)}</button></h2>
+        <span class="pet-pill ${st.tone}">${st.label}</span>
+        <div class="pet-task"><p>${st.task}</p>${st.max > 1 ? `<div class="pet-bar"><i style="width:${pct}%"></i></div><small>${st.left}</small>` : ''}</div>
+        ${!E.playing ? `<button class="btn btn-accent press" data-act="toggle">${ic('play')}Включить музыку</button>` : `<p class="pet-live">${ic('vol')}Музыка играет, ${esc(P.name)} ${st.tone === 'grow' ? 'растёт' : st.tone === 'hungry' ? 'кушает' : 'лечится'}</p>`}
+        <dl class="pet-stats"><div><dt>Вырос на музыке</dt><dd>${Math.round(P.grow)} мин</dd></div><div><dt>Любимый трек</dt><dd>${f ? esc(f.t) : '—'}</dd></div></dl>
+      </div></section>
+      <section class="pet-how"><h3>Как это работает</h3><ul><li>${ic('play')}<span>Питомец растёт, только когда играет музыка в KMP. Путь до взрослого — примерно ${PET_ST[4].at / 60} часов музыки и хотя бы ${PET_ADULT_DAYS} дня.</span></li><li>${ic('bassic')}<span>Раз в ${PET_MEAL_H} часов он голодает: ${PET_FEED} минут музыки его накормят.</span></li><li>${ic('heart')}<span>Иногда он болеет: вылечат ${PET_CURE} минут музыки. Пока голоден или болен, он не растёт.</span></li><li>${ic('sparkle')}<span>Взрослый питомец переезжает в коллекцию, а тебе достаётся новое яйцо.</span></li></ul></section>
+      <section class="block"><div class="block-head"><h2>Коллекция</h2><span class="link">${S.petCol.length} ${plural(S.petCol.length, 'питомец', 'питомца', 'питомцев')}</span></div>
+      ${col.length ? `<div class="pet-col">${col.map(x => `<div class="pc-pet"><span>${petSVG(x.seed, 4, 'happy')}</span><b>${esc(x.name)}</b><small>Вырос за ${Math.max(1, Math.round((x.grown - x.born) / 864e5))} ${plural(Math.max(1, Math.round((x.grown - x.born) / 864e5)), 'день', 'дня', 'дней')} · ${x.min} мин музыки</small>${x.fav ? `<em>♪ ${esc(x.fav)}</em>` : ''}</div>`).join('')}</div>` : `<p class="net-note">Здесь будут жить твои выросшие питомцы</p>`}</section></div>`;
+}
+function paintPet() { const a = $('#petArt'); if (!a) return; const P = S.pet, st = petStatus(P); const key = P.stage + st.mood + (P.stage === 0 ? Math.floor(P.grow / PET_ST[1].at * 4) : ''); if (a.dataset.k !== key) { a.dataset.k = key; a.innerHTML = petSVG(P.seed, P.stage, st.mood, P.grow / PET_ST[1].at); } const bar = $('.pet-bar i'); if (bar) bar.style.width = Math.min(100, st.cur / st.max * 100) + '%'; const sm = $('.pet-task small'); if (sm) sm.textContent = st.left; }
+function petDance() {
+  const els = $$('.pet-svg .pet-bod'); if (!els.length) return;
+  const b = E.playing ? SC.bass : 0, sy = 1 - b * .07, sx = 1 + b * .06, ty = -b * 16;
+  els.forEach(el => { el.style.transform = `translateY(${ty.toFixed(1)}px) scale(${sx.toFixed(3)},${sy.toFixed(3)})`; });
+}
+
 /* ================= story card ================= */
 const loadImg = src => new Promise(res => { if (!src) return res(null); const im = new Image(); if (/^https?:/.test(src) && !src.startsWith(location.origin)) im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
 function rrect(x, X, Y, W, H, R) { x.beginPath(); x.moveTo(X + R, Y); x.arcTo(X + W, Y, X + W, Y + H, R); x.arcTo(X + W, Y + H, X, Y + H, R); x.arcTo(X, Y + H, X, Y, R); x.arcTo(X, Y, X + W, Y, R); x.closePath(); }
@@ -4667,6 +4874,7 @@ function loop(ts) {
   const t = cur(), dur = E.buf ? E.buf.duration : (t?.duration || 0), ct = curTime(), p = dur ? ct / dur : 0;
   drawWave(pWave, p); if (stageW && stageVisible && !FULL) drawWave(stageW, p); if (FULL) drawWave(fWave, p);
   if (S.view === 'mixer' && !FULL) { drawEQ(); drawMeters(ts); }
+  if (!FULL && (S.view === 'pet' || S.view === 'home')) petDance();
   if (S.clip && E.playing) { if (S.view === 'feed') $$('.p-cv').forEach(drawPostWave); if (!$('#sheet').hidden) drawMomPick(); }
   const sec = Math.floor(ct);
   if (sec !== lastSec) { lastSec = sec; if (S.sleep) { updateSmartUI(); } tickFocus(); ['pCur', 'fCur', 'stCur'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = fmt(ct); }); ['pDur', 'fDur', 'stDur'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = fmt(dur); }); }
