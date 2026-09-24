@@ -490,6 +490,25 @@ img.ava{object-fit:cover}
   .full.vinyl-on .f-art .f-vinyl,.full.xy-on .f-art .f-xy{width:min(84vw,380px)}
   .full.vinyl-on .f-art .f-cover,.full.xy-on .f-art .f-cover{height:0}
 }
+/* full player: minimal layout */
+.dk-open{display:none}
+.full.min-ui .f-queue,.full.min-ui .f-tools,.full.min-ui .moms,.full.min-ui .f-vol,.full.min-ui [data-act=compose],.full.min-ui .full-top [data-go=mixer]{display:none!important}
+.full.min-ui .f-dock{display:none}
+.full.min-ui.dock-open .f-dock{display:flex;animation:dockIn .35s var(--ease) both}
+@keyframes dockIn{from{opacity:0;transform:translateY(-8px)}}
+.full.min-ui .dk-open{display:inline-flex;align-self:center;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:19px;font-size:13px;font-weight:600;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14)}
+.full.min-ui .dk-open .ic{width:16px;height:16px}.full.min-ui .dk-open .chev{transition:transform .3s}
+.full.min-ui.dock-open .dk-open .chev{transform:rotate(180deg)}
+.full.min-ui .react-bar{display:none!important}
+body.room-on .full.min-ui .react-bar:not([hidden]){display:flex!important}
+.full.min-ui .full-main{grid-template-columns:minmax(0,1fr);justify-items:center}
+.full.min-ui .f-stage{grid-template-columns:minmax(0,1fr);justify-items:center;width:min(100%,520px);gap:26px}
+.full.min-ui .f-art{width:min(46vh,440px)}
+.full.min-ui .f-cover,.full.min-ui .f-lyrics,.full.min-ui .f-vinyl,.full.min-ui .f-xy{width:100%}
+.full.min-ui .f-info{width:100%;gap:14px}
+.full.min-ui .f-title h2{font-size:clamp(26px,3vw,38px)}
+.full.min-ui .f-wave .wave{height:56px}
+@media (max-width:760px){.full.min-ui .f-art{width:min(84vw,380px)}.full.min-ui.lyr-on .f-art{width:calc(100vw - 32px)}}
 /* listen together */
 .room-pill{position:fixed;bottom:112px;left:50%;transform:translateX(-50%);z-index:75;display:flex;align-items:center;gap:8px;height:38px;padding:0 14px 0 12px;border-radius:19px;border:1px solid var(--line);box-shadow:0 10px 30px -12px rgba(0,0,0,.45);font-size:13px;color:var(--ink);animation:updIn .45s var(--spring,ease) both}
 .room-pill b{font-weight:700}.room-pill span{font-weight:700;letter-spacing:.12em;opacity:.7;font-variant-numeric:tabular-nums}
@@ -523,6 +542,11 @@ body.noscroll .room-pill{display:none}
 @keyframes rxUp{0%{transform:translate(0,30px) scale(.4);opacity:0}12%{transform:translate(0,0) scale(1.15);opacity:1}80%{opacity:1}100%{transform:translate(var(--dx),-55vh) scale(.9);opacity:0}}
 .room-tap{position:fixed;left:50%;bottom:calc(120px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:96;display:flex;align-items:center;gap:10px;height:54px;padding:0 24px 0 18px;border-radius:27px;background:#2fd36b;color:#06120a;font-weight:700;font-size:15px;box-shadow:0 16px 40px -10px rgba(47,211,107,.6);animation:updIn .4s var(--spring,ease) both}
 .room-tap .ic{width:20px;height:20px}
+.room-inv{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:97;display:flex;align-items:center;gap:12px;padding:10px 10px 10px 14px;border-radius:22px;border:1px solid var(--line);box-shadow:0 18px 50px -14px rgba(0,0,0,.5);color:var(--ink);max-width:calc(100vw - 24px);animation:updIn .45s var(--spring,ease) both}
+.room-inv .ri-ic{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#2fd36b;color:#06120a;flex:none}.room-inv .ri-ic .ic{width:20px;height:20px}
+.room-inv div{display:flex;flex-direction:column;min-width:0}.room-inv b{font-size:14px}.room-inv small{font-size:12px;color:var(--muted);letter-spacing:.08em}
+.room-inv .btn{height:38px;flex:none}
+@media (max-width:760px){.room-inv{flex-wrap:wrap;justify-content:flex-end}.room-inv div{flex:1 1 60%}}
 /* history */
 .h-search{display:flex;align-items:center;gap:10px;height:48px;padding:0 16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);margin:4px 0 16px;max-width:560px}
 .h-search .ic{width:18px;height:18px;color:var(--muted)}.h-search input{flex:1;min-width:0;border:0;background:none;outline:none;font:500 15px var(--f-body);color:var(--ink)}
@@ -1083,6 +1107,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     <symbol id="i-blend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 17c4 0 6-10 9-10s5 10 9 10"/><path d="M3 7c4 0 6 10 9 10s5-10 9-10" opacity=".5"/></symbol>
     <symbol id="i-rain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 14a4 4 0 0 1 .5-8 5 5 0 0 1 9.5 1.5A3.3 3.3 0 0 1 17 14z"/><path d="M8 17.5 7 20M12 17.5 11 20M16 17.5l-1 2.5"/></symbol>
     <symbol id="i-feed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-7l-4.5 3.5V16.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5z"/><path d="M8 10h8M8 13h5"/></symbol>
+    <symbol id="i-layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="3"/><path d="M12 4v16M12 11h8.5"/></symbol>
     <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.8-3.3 3.2-5 6-5s5.2 1.7 6 5"/><circle cx="16.8" cy="9.3" r="2.5"/><path d="M16.5 14.3c2.3.1 4 1.5 4.6 4.2"/></symbol>
     <symbol id="i-history" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3.5 4.5V9H8"/><path d="M12 8v4.5l3 2"/></symbol>
     <symbol id="i-bassic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12h2l2-6 3 12 3-9 2 5 2-2h4"/></symbol>
@@ -1182,7 +1207,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
     <div class="full-top">
       <button class="st-btn press" data-act="close-full" aria-label="Свернуть"><svg class="ic"><use href="#i-down"/></svg></button>
       <span id="fFrom">Сейчас играет</span>
-      <div class="grp"><button class="st-btn press room-btn" data-act="room-open" aria-label="Слушать вместе" data-tip="Вместе"><svg class="ic"><use href="#i-users"/></svg></button><button class="st-btn press" data-act="lyrics" id="lyrBtn" aria-pressed="false" aria-label="Текст песни" data-tip="Текст"><svg class="ic"><use href="#i-lyrics"/></svg></button><button class="st-btn press" data-act="scene-pick" aria-label="Фон" data-tip="Фон"><svg class="ic"><use href="#i-scene"/></svg></button><button class="st-btn press" data-act="compose" aria-label="Поделиться моментом"><svg class="ic"><use href="#i-share"/></svg></button><button class="st-btn press" data-go="mixer" aria-label="Микшер"><svg class="ic"><use href="#i-sliders"/></svg></button><button class="st-btn press" data-act="more-cur" aria-label="Ещё"><svg class="ic"><use href="#i-more"/></svg></button></div>
+      <div class="grp"><button class="st-btn press" data-act="full-layout" aria-label="Вид плеера" data-tip="Вид плеера"><svg class="ic"><use href="#i-layout"/></svg></button><button class="st-btn press room-btn" data-act="room-open" aria-label="Слушать вместе" data-tip="Вместе"><svg class="ic"><use href="#i-users"/></svg></button><button class="st-btn press" data-act="lyrics" id="lyrBtn" aria-pressed="false" aria-label="Текст песни" data-tip="Текст"><svg class="ic"><use href="#i-lyrics"/></svg></button><button class="st-btn press" data-act="scene-pick" aria-label="Фон" data-tip="Фон"><svg class="ic"><use href="#i-scene"/></svg></button><button class="st-btn press" data-act="compose" aria-label="Поделиться моментом"><svg class="ic"><use href="#i-share"/></svg></button><button class="st-btn press" data-go="mixer" aria-label="Микшер"><svg class="ic"><use href="#i-sliders"/></svg></button><button class="st-btn press" data-act="more-cur" aria-label="Ещё"><svg class="ic"><use href="#i-more"/></svg></button></div>
     </div>
     <div class="full-main">
       <section class="f-stage">
@@ -1199,6 +1224,7 @@ body:not(.is-playing) .f-cover{transform:scale(.94)}
             <button class="cbtn press" data-act="next" aria-label="Следующий"><svg class="ic"><use href="#i-next"/></svg></button>
             <button class="cbtn press rep" data-act="repeat" aria-label="Повтор" aria-pressed="false"><svg class="ic"><use href="#i-repeat"/></svg><span class="one" hidden>1</span></button>
           </div>
+          <button class="dk-open press" data-act="dock-open"><svg class="ic"><use href="#i-sliders"/></svg><span>Звук и эффекты</span><svg class="ic chev"><use href="#i-down"/></svg></button>
           <div class="react-bar" hidden><button class="press" data-act="room-react" data-e="🔥" aria-label="Реакция 🔥">🔥</button><button class="press" data-act="room-react" data-e="❤️" aria-label="Реакция ❤️">❤️</button><button class="press" data-act="room-react" data-e="😂" aria-label="Реакция 😂">😂</button><button class="press" data-act="room-react" data-e="🤯" aria-label="Реакция 🤯">🤯</button><button class="press" data-act="room-react" data-e="👏" aria-label="Реакция 👏">👏</button><button class="press" data-act="room-react" data-e="💃" aria-label="Реакция 💃">💃</button></div>
           <div class="f-dock" id="fDock">
             <div class="dk-grid">
@@ -2806,12 +2832,13 @@ const Cloud = {
       addEventListener('online', () => { if (this.user) { this.sync(); this.pump(); } });
     } catch (e) { this.err = e.message || String(e); }
     this.ready = true; markAccount(); if (S.view === 'me' || S.view === 'feed') renderView();
-    try { const rc = new URL(location.href).searchParams.get('room'); if (rc && this.sb && !ROOM.ch) setTimeout(() => roomJoin(rc, false), 300); } catch (e) {}
+    try { const u = new URL(location.href), rc = u.searchParams.get('room'); if (rc) { u.searchParams.delete('room'); history.replaceState(null, '', u); if (this.sb && !ROOM.ch) setTimeout(() => roomInvite(rc), 400); } } catch (e) {}
   },
   async setUser(u) {
     const prev = this.user && this.user.id;
     if (!u) { this.user = null; this.profile = null; Feed.user = null; markAccount(); if (prev && (S.view === 'me' || S.view === 'feed')) renderView(); return; }
     if (prev === u.id) return;
+    if (prev && prev !== u.id) try { roomLeave(true); } catch (e) {}
     this.user = { id: u.id, email: u.email }; S.authMode = 'in';
     await this.loadProfile();
     Feed.user = { id: u.id, name: this.profile.name };
@@ -2843,6 +2870,7 @@ const Cloud = {
     finally { if (btn.isConnected) btn.disabled = false; }
   },
   async signOut() {
+    try { roomLeave(true); } catch (e) {}
     const uid = this.user && this.user.id; await this.sb.auth.signOut(); S.statsRemote = {}; store.set('statsRemote', {});
     let n = 0; for (const t of [...T.values()]) if (t.cloud && t.owner === uid) { T.delete(t.id); DB.del(t.id); bufCache.delete(t.id); S.order = S.order.filter(x => x !== t.id); n++; }
     if (n) { S.queue = S.queue.filter(id => T.has(id)); if (!S.queue.length) { S.queue = [...S.order]; S.qi = 0; } S.qi = Math.min(S.qi, S.queue.length - 1); stopAll(); E.playing = false; E.buf = null; }
@@ -2995,7 +3023,8 @@ const Cloud = {
     if (data && Date.parse(data.updated_at) > local) { this.applyRemote(data.data || {}, Date.parse(data.updated_at)); this.refreshViews(); }
     else if (!data || local > Date.parse(data.updated_at)) { if (!local) store.set('udStamp', Date.now()); await this.pushData(); }
     else if (sch && S.view === 'labs') renderView();
-    if (data && !((data.data || {}).stats || {})[S.devId] && statSum(S.stats) > 0) await this.pushData();
+    const rh = (data && (data.data || {}).hist) || [], lastL = S.hist.length ? S.hist[S.hist.length - 1].at : 0, lastR = rh.length ? Math.max(...rh.map(h => h.at || 0)) : 0;
+    if (data && ((!((data.data || {}).stats || {})[S.devId] && statSum(S.stats) > 0) || lastL > lastR)) await this.pushData();
   },
   async deleteAccount(btn) {
     if (!btn.classList.contains('armed')) { btn.classList.add('armed'); btn.querySelector('span').textContent = 'Точно? Нажми ещё раз'; setTimeout(() => { if (btn.isConnected) { btn.classList.remove('armed'); btn.querySelector('span').textContent = 'Удалить аккаунт'; } }, 4000); return; }
@@ -3370,7 +3399,7 @@ function setFull(open) {
   $('#pCover').style.viewTransitionName = open ? 'none' : 'np-cover';
   $('#fCover').style.viewTransitionName = open ? 'np-cover' : 'none';
   document.body.classList.toggle('noscroll', open);
-  if (open) { sizeCanvas($('#fullCv')); sizeCanvas($('#fWave')); if (!fullGL) fullGL = makeGL($('#fullCv')); renderQueue(); updateLoopUI(); updateSmartUI(); applyScene(); S.artMode = S.artMode === 'cover' ? 'cover' : S.artMode; const m = S.artMode; S.artMode = null; setArtMode(m || 'cover'); syncDock(); }
+  if (open) { sizeCanvas($('#fullCv')); sizeCanvas($('#fWave')); if (!fullGL) fullGL = makeGL($('#fullCv')); renderQueue(); updateLoopUI(); updateSmartUI(); applyScene(); setFullLayout(S.fullLayout); S.artMode = S.artMode === 'cover' ? 'cover' : S.artMode; const m = S.artMode; S.artMode = null; setArtMode(m || 'cover'); syncDock(); }
 }
 function openFull(open) { if (open === FULL) return; vt(() => setFull(open)); }
 
@@ -3544,6 +3573,8 @@ document.addEventListener('click', e => {
       case 'xy-hold': XY.hold = !XY.hold; a.setAttribute('aria-pressed', XY.hold); toast(XY.hold ? 'Звук остаётся там, где отпустишь палец' : 'После касания звук возвращается'); break;
       case 'dk-tone': S.keepTone = !S.keepTone; store.set('keepTone', S.keepTone); setRate(); syncDock(); toast(S.keepTone ? 'Скорость меняется, тон остаётся прежним' : 'Скорость меняет и тон, как на пластинке'); break;
       case 'dk-rec': recToggle(); break;
+      case 'full-layout': setFullLayout(S.fullLayout === 'min' ? 'full' : 'min', true); break;
+      case 'dock-open': { const f = $('#full'); f.classList.toggle('dock-open'); break; }
       case 'dk-pitch': { const v = Math.max(-6, Math.min(6, FX.pitch + +a.dataset.d)); if (v === FX.pitch) break; FX.pitch = v; fxChanged(); if (!TK.pitch) toast('Смена тональности не поддерживается в этом браузере'); break; }
       case 'room-open': openRoomPanel(a); break;
       case 'room-create': roomJoin(roomCode(), true); closeMenu(); break;
@@ -3767,7 +3798,7 @@ function drawWave(W, prog) {
   if (!W) return;
   const cv = W.cv, w = cv.width, h = cv.height; if (!w || !h || !cv.offsetParent) return;
   const c = cv.getContext('2d'), d = cv._d || 1, t = cur(), col = W.tone === 'light' ? LIGHT : COL;
-  const key = `${t && t.id}|${Math.round((W.scrub != null ? W.scrub : prog) * w / 3)}|${W.hover}|${w}|${S.loop ? S.loop.a + ':' + S.loop.b : ''}|${t && t.peaksReal}|${t && S.moments[t.id] ? S.moments[t.id].length : 0}|${col.accent}`;
+  const key = `${t && t.id}|${Math.round((W.scrub != null ? W.scrub : prog) * w / 3)}|${W.hover}|${w}x${h}|${S.loop ? S.loop.a + ':' + S.loop.b : ''}|${t && t.peaksReal}|${t && S.moments[t.id] ? S.moments[t.id].length : 0}|${col.accent}`;
   if (W.key === key) return; W.key = key;
   c.clearRect(0, 0, w, h);
   if (S.loop && t && S.loop.id === t.id) { const D = E.buf ? E.buf.duration : t.duration || 1, x1 = S.loop.a / D * w, x2 = (S.loop.b != null ? S.loop.b : S.loop.a) / D * w; c.fillStyle = W.tone === 'light' ? 'rgba(255,255,255,.16)' : 'rgba(232,85,43,.15)'; c.fillRect(x1, 0, Math.max(2 * d, x2 - x1), h); }
@@ -4145,6 +4176,7 @@ async function roomJoin(code, host) {
   if (!Cloud.sb) { toast(Cloud.cfg() ? 'Подключаюсь, попробуй через пару секунд' : 'Совместное прослушивание пока недоступно'); return; }
   code = String(code).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6); if (code.length < 4) return;
   roomLeave(true);
+  if (host) store.set('myRoom', code);
   ROOM.code = code; ROOM.host = host; ROOM.idMap = {}; ROOM.userPaused = false; ROOM.hostSeen = Date.now();
   const ch = Cloud.sb.channel('kmp-room-' + code, { config: { broadcast: { self: false }, presence: { key: S.devId } } });
   ROOM.ch = ch;
@@ -4157,9 +4189,16 @@ async function roomJoin(code, host) {
     if (st === 'SUBSCRIBED') { try { await ch.track(roomMe()); } catch (e) {} if (host) roomSend(true); else ch.send({ type: 'broadcast', event: 'hello', payload: {} }); roomUI(); toast(host ? `Комната ${code} открыта. Отправь код или ссылку друзьям` : `Ты в комнате ${code}`); }
     else if (st === 'CHANNEL_ERROR' || st === 'TIMED_OUT') { toast('Не получилось подключиться к комнате'); roomLeave(true); }
   });
-  try { const u = new URL(location.href); u.searchParams.set('room', code); history.replaceState(null, '', u); } catch (e) {}
   clearInterval(ROOM.hb); if (host) ROOM.hb = setInterval(() => roomSend(), 4000);
   roomUI();
+}
+function roomInvite(code) {
+  code = String(code).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6); if (code.length < 4 || code === store.get('myRoom', '')) return;
+  const old = $('#roomInv'); if (old) old.remove();
+  const el = document.createElement('div'); el.id = 'roomInv'; el.className = 'room-inv glass-strong';
+  el.innerHTML = `<span class="ri-ic">${ic('users')}</span><div><b>Тебя пригласили послушать вместе</b><small>Комната ${code}</small></div><button class="btn btn-accent press" data-inv="yes">Присоединиться</button><button class="btn press" data-inv="no">Не сейчас</button>`;
+  el.addEventListener('click', e => { const b = e.target.closest('[data-inv]'); if (!b) return; el.remove(); if (b.dataset.inv === 'yes') { ac(); roomJoin(code, false); } });
+  document.body.appendChild(el);
 }
 function roomLeave(silent) {
   if (!ROOM.ch) return;
@@ -4265,16 +4304,19 @@ function showReaction(e, n) {
 
 /* ================= full listening history ================= */
 S.hist = store.get('hist', []);
+(() => { const hc = store.get('histCur', null); if (hc && hc.s >= 20 && !S.hist.some(h => h.i === hc.i && h.at === hc.at)) { S.hist.push({ i: hc.i, t: hc.t, a: hc.a, at: hc.at, s: Math.round(hc.s) }); store.set('hist', S.hist); } store.set('histCur', null); })();
 const HIST = { cur: null, saveT: 0 };
 function histTick(dt) {
   const t = cur(); if (!t || !E.playing) return;
   if (!HIST.cur || HIST.cur.i !== t.id) { histFlush(); HIST.cur = { i: t.id, t: t.title, a: t.artist, at: Date.now(), s: 0 }; }
   HIST.cur.s += dt;
+  if (HIST.cur.s >= 20 && Date.now() - (HIST.curSaved || 0) > 5000) { HIST.curSaved = Date.now(); store.set('histCur', HIST.cur); }
 }
 function histFlush() {
   const c = HIST.cur; HIST.cur = null; if (!c || c.s < 20) return;
-  S.hist.push({ i: c.i, t: c.t, a: c.a, at: c.at, s: Math.round(c.s) }); if (S.hist.length > 3000) S.hist = S.hist.slice(-3000);
-  clearTimeout(HIST.saveT); HIST.saveT = setTimeout(() => { store.set('hist', S.hist); try { Cloud.statsChanged(); } catch (e) {} if (S.view === 'history') renderView(); }, 400);
+  if (!S.hist.some(h => h.i === c.i && h.at === c.at)) S.hist.push({ i: c.i, t: c.t, a: c.a, at: c.at, s: Math.round(c.s) }); if (S.hist.length > 3000) S.hist = S.hist.slice(-3000);
+  store.set('hist', S.hist); store.set('histCur', null);
+  clearTimeout(HIST.saveT); HIST.saveT = setTimeout(() => { try { Cloud.statsChanged(); } catch (e) {} if (S.view === 'history') renderView(); }, 400);
 }
 function histMerge(list) {
   if (!Array.isArray(list) || !list.length) return false; const have = new Set(S.hist.map(h => h.i + '@' + h.at)); let ch = false;
@@ -4323,6 +4365,12 @@ function histPlay(i) {
   const ids = S.order.includes(id) ? S.order : [id]; playList(ids, id);
 }
 
+S.fullLayout = store.get('fullLayout', 'min');
+function setFullLayout(m, say) {
+  S.fullLayout = m; store.set('fullLayout', m); const f = $('#full'); f.classList.toggle('min-ui', m === 'min'); f.classList.remove('dock-open');
+  if (say) toast(m === 'min' ? 'Минималистичный вид' : 'Полный вид: звук, эффекты и очередь');
+  const rs = () => { sizeCanvas($('#fWave')); ['vnRing', 'xyCv'].forEach(id => sizeArtCanvas($('#' + id))); }; requestAnimationFrame(rs); setTimeout(rs, 350); setTimeout(rs, 900);
+}
 /* ================= story card ================= */
 const loadImg = src => new Promise(res => { if (!src) return res(null); const im = new Image(); if (/^https?:/.test(src) && !src.startsWith(location.origin)) im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
 function rrect(x, X, Y, W, H, R) { x.beginPath(); x.moveTo(X + R, Y); x.arcTo(X + W, Y, X + W, Y + H, R); x.arcTo(X + W, Y + H, X, Y + H, R); x.arcTo(X, Y + H, X, Y, R); x.arcTo(X, Y, X + W, Y, R); x.closePath(); }
